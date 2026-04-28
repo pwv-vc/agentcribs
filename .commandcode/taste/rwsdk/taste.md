@@ -1,0 +1,177 @@
+# Rwsdk
+- RedwoodSDK and rwsdk refer to the same framework; use them interchangeably. Confidence: 1.00
+- The npm package is published as `rwsdk`. Confidence: 1.00
+- The official documentation lives at docs.rwsdk.com. Confidence: 1.00
+- The framework was formerly known as RedwoodJS but rebranded to RedwoodSDK. Confidence: 0.90
+- Create a new project with `npx create-rwsdk my-project-name`. Confidence: 1.00
+- Install dependencies with `cd my-project-name && pnpm install`. Confidence: 1.00
+- Rename `"starter-minimal"` in `package.json` (name field) and HTML `<title>` to a descriptive project name. Confidence: 0.85
+- Start the dev server with `pnpm run dev` (runs Vite on http://localhost:5173). Confidence: 1.00
+- The worker entry point is `src/worker.tsx` — this is where you define your app. Confidence: 1.00
+- Deploy to Cloudflare with `pnpm run release`. Confidence: 0.95
+- Run `pnpm run types` (typecheck) after making code changes and fix any type errors before considering the task complete. Confidence: 0.85
+- Use pnpm as the package manager for all RedwoodSDK projects. Confidence: 1.00
+- Use TypeScript with strict mode enabled for all source files. Confidence: 1.00
+- Use Vite as the build tool configured via `vite.config.mts`. Confidence: 1.00
+- Use `"type": "module"` in package.json for native ESM support. Confidence: 1.00
+- Use Vitest with `@cloudflare/vitest-pool-workers` for testing in Cloudflare runtime. Confidence: 0.95
+- Use wrangler for Cloudflare Workers deployment configured via `wrangler.jsonc`. Confidence: 1.00
+- Run `pnpm generate` after modifying `wrangler.jsonc` to regenerate types. Confidence: 0.95
+- Use `pnpm run dev` to start the Vite development server. Confidence: 1.00
+- Use `pnpm run release` to build and deploy to Cloudflare. Confidence: 0.95
+- Pin React to the canary channel version required by rwsdk (e.g., `19.x`). Confidence: 0.95
+- Use `pnpm.onlyBuiltDependencies` in package.json to pre-approve native binary builds (esbuild, sharp, workerd). Confidence: 0.85
+- Place the worker entry at `src/worker.tsx` as the app root. Confidence: 1.00
+- Place the client entry at `src/client.tsx` for client-side hydration. Confidence: 1.00
+- Place the root HTML shell at `src/app/document.tsx`. Confidence: 1.00
+- Place security header middleware at `src/app/headers.ts`. Confidence: 0.95
+- Place global CSS and Tailwind imports at `src/app/styles.css`. Confidence: 0.95
+- Do NOT call `serverQuery` or `serverAction` from client components during initial render; fetch data in an async server component and pass it as props to the client component instead. Confidence: 0.65
+- Place page components under `src/app/pages/` organized by feature in folders. Confidence: 0.95
+- Place shared UI components in `src/app/components/`. Confidence: 0.95
+- Define reusable site-wide constants (ogImage, ogSiteName, ogLogo) in `src/app/shared/constants` instead of hardcoding them in SEO components. Confidence: 0.70
+- Place server actions in individual files under `src/app/actions/<name>.ts` (one file per action) instead of a single `src/app/functions/actions.ts`. Confidence: 0.75
+- Place server queries in individual files under `src/app/queries/<name>.ts` with `"use server"` directive. Confidence: 0.70
+- Place the typed link helper at `src/app/shared/links.ts`. Confidence: 0.95
+- Place reusable constants and configuration in `src/app/lib/`. Confidence: 0.85
+- Place static data files in `src/app/data/`. Confidence: 0.85
+- Place utility functions in `src/app/utils/`. Confidence: 0.85
+- Place tests in `src/tests/` directory. Confidence: 0.95
+- Place type declaration files in the `types/` root directory. Confidence: 0.95
+- Place static assets (images, fonts, favicons) in `public/`. Confidence: 0.95
+- Use kebab-case for file and folder names (e.g., `blog-list.tsx`, `theme-toggle.tsx`). Confidence: 0.95
+- Name page components `page.tsx` inside feature folders (e.g., `pages/home/page.tsx`). Confidence: 0.90
+- Name route definition files `routes.ts` or `routes.tsx`. Confidence: 0.90
+- Use `.tsx` for files containing JSX and `.ts` for pure TypeScript. Confidence: 1.00
+- Use `.mts` extension for Vite config file. Confidence: 0.95
+- Export `defineApp([...])` as the default export from `src/worker.tsx`. Confidence: 1.00
+- Place middleware before route handlers in the defineApp array. Confidence: 1.00
+- Wrap JSX-rendering routes inside `render(Document, [...])`. Confidence: 1.00
+- Place routes returning plain `Response` (APIs) outside `render()`. Confidence: 0.95
+- Export `AppContext` type from worker.tsx for context augmentation. Confidence: 0.95
+- Augment `DefaultAppContext` in `types/rw.d.ts` with the exported `AppContext`. Confidence: 0.95
+- Export `App` type in `types/rw.d.ts` as `typeof import("../src/worker").default`. Confidence: 0.95
+- Use `prefix("/path", routes)` to group routes under a shared path prefix. Confidence: 0.90
+- Use `layout(LayoutComponent, routes)` to wrap routes in a shared layout. Confidence: 0.90
+- Use `route(path, handler)` for static, param (`:id`), and wildcard (`*`) patterns. Confidence: 1.00
+- Use `route(path, { get, post, put, delete })` for HTTP method routing. Confidence: 0.95
+- Use `route(path, [middleware, handler])` for per-route interrupters (auth, validation). Confidence: 0.95
+- Return `Response` from route handlers for API endpoints. Confidence: 1.00
+- Return JSX from route handlers for server-rendered pages. Confidence: 1.00
+- Access route params via `params.id` and wildcard segments via `params.$0`. Confidence: 0.95
+- Access query parameters via `new URL(request.url).searchParams`. Confidence: 0.95
+- Use `except(handler)` for error interception in the route chain. Confidence: 0.85
+- Route handlers receive `{ request, params, ctx }` as arguments. Confidence: 1.00
+- Define middleware as functions receiving `{ request, ctx, rw, response, cf }`. Confidence: 1.00
+- Return a `Response` from middleware to short-circuit the chain (e.g., 401 Unauthorized). Confidence: 1.00
+- Use factory pattern for configurable middleware (e.g., `setCommonHeaders()`). Confidence: 0.90
+- Type middleware with `RouteMiddleware` from `rwsdk/router`. Confidence: 0.95
+- Middleware runs for both page requests and server action requests. Confidence: 0.95
+- Populate `ctx` in middleware for downstream handlers and components. Confidence: 1.00
+- Throw `ErrorResponse` from middleware to return typed error status codes. Confidence: 0.85
+- Populate `ctx` in middleware on a per-request basis. Confidence: 1.00
+- Extend `DefaultAppContext` in `types/rw.d.ts` for full TypeScript type safety. Confidence: 0.95
+- Access context in server functions via `requestInfo.ctx` or `getRequestInfo().ctx`. Confidence: 0.95
+- Prefer `getRequestInfo()` in server actions as it throws outside request lifecycle. Confidence: 0.85
+- Use `requestInfo` proxy when undefined-safe access is acceptable. Confidence: 0.85
+- All components are server components by default (rendered on server, streamed as HTML). Confidence: 1.00
+- Add `"use client"` directive at the top of files needing interactivity (state, events, effects). Confidence: 1.00
+- Server components can be async and directly fetch data or access databases. Confidence: 1.00
+- Wrap async server components in `<Suspense fallback={...}>` for loading states. Confidence: 0.95
+- Pass `ctx` prop from route handlers to server components that need request context. Confidence: 0.95
+- Keep client components small and focused — push logic to the server when possible. Confidence: 0.90
+- Import `serverQuery` and `serverAction` from `rwsdk/worker`, not from `rwsdk/server`. Confidence: 0.85
+- Place server functions in files with `"use server"` directive at the top. Confidence: 1.00
+- Use `serverAction()` for mutations (POST by default, triggers page re-render). Confidence: 1.00
+- Use `serverQuery()` for data fetching (GET by default, returns data only without re-render). Confidence: 1.00
+- Use `Response.redirect("/path", 303)` for redirects from server functions. Confidence: 0.95
+- Wrap server functions with middleware arrays: `serverAction([authMiddleware, handler])`. Confidence: 0.90
+- Place queries in individual files under `src/app/queries/<name>.ts` and actions in individual files under `src/app/actions/<name>.ts` (one file per query/action). Confidence: 0.70
+- Call server actions from client components via form `action` prop or direct invocation. Confidence: 0.95
+- Export a `Document` component from `src/app/document.tsx` as the root HTML wrapper. Confidence: 1.00
+- Include `<script>import("/src/client.tsx")</script>` in `<body>` for client hydration. Confidence: 1.00
+- Include `<link rel="modulepreload" href="/src/client.tsx" />` in `<head>` for preloading. Confidence: 0.95
+- Include charset (`utf-8`), viewport meta, and page title in `<head>`. Confidence: 1.00
+- Include stylesheet links and font preconnect hints in `<head>`. Confidence: 0.90
+- Use CSP meta tags or response headers for Content Security Policy. Confidence: 0.85
+- Include Open Graph and social meta tags for link previews. Confidence: 0.80
+- Call `initClientNavigation()` in `src/client.tsx` to enable RSC-based client-side navigation. Confidence: 1.00
+- Pass `handleResponse` and optionally `onHydrated` to `initClient()`. Confidence: 1.00
+- Use `<link rel="x-prefetch" href={...} />` for route prefetching. Confidence: 0.80
+- Use `linkFor<App>()` to create a typed link helper in `src/app/shared/links.ts`. Confidence: 1.00
+- Import `App` type from `rwsdk/worker` (augmented in `types/rw.d.ts`). Confidence: 0.95
+- Use `link("/path/:param", { param: value })` for type-safe route links. Confidence: 0.95
+- Use the link helper in both server and client components. Confidence: 0.95
+- Use TailwindCSS v4 with `@tailwindcss/vite` plugin. Confidence: 1.00
+- Import Tailwind in the global CSS file with `@import "tailwindcss"`. Confidence: 1.00
+- Use `@theme` blocks to define custom design tokens (colors, fonts, spacing). Confidence: 0.95
+- Use `@custom-variant dark (&:is(.dark *))` for dark mode support. Confidence: 0.90
+- Use `@plugin "@tailwindcss/typography"` for prose/content styling. Confidence: 0.85
+- Prefer Tailwind utility classes directly in JSX over custom CSS. Confidence: 0.95
+- Use `@apply` sparingly for reusable component patterns (e.g., `.btn-primary`). Confidence: 0.85
+- Use CSS custom properties (variables) for theme values that need JS access. Confidence: 0.85
+- Use `clamp()` for responsive typography sizing. Confidence: 0.85
+- Self-host fonts in `public/fonts/` for performance. Confidence: 0.85
+- Use `font-family` stacks via Tailwind theme variables (`--font-sans`, `--font-serif`, `--font-mono`). Confidence: 0.90
+- Use Tailwind's color system for consistent theming across light and dark modes. Confidence: 0.90
+- Create a `setCommonHeaders()` middleware factory for security headers. Confidence: 0.95
+- Set `Strict-Transport-Security` in production only (check `import.meta.env.VITE_IS_DEV_SERVER`). Confidence: 0.90
+- Set `X-Content-Type-Options: nosniff` on all responses. Confidence: 0.95
+- Set `Referrer-Policy: no-referrer` on all responses. Confidence: 0.90
+- Set `Permissions-Policy` to disable unused browser APIs (geolocation, microphone, camera). Confidence: 0.90
+- Set `Content-Security-Policy` with nonce from `rw.nonce` for script execution. Confidence: 0.90
+- Return `Response` with 401 status from interrupters for unauthorized requests. Confidence: 0.95
+- Place test files in `src/tests/` matching pattern `*.test.{ts,tsx}`. Confidence: 0.95
+- Use `vitestInvoke` from `rwsdk-community/test` for invoking test endpoints. Confidence: 0.90
+- Use `handleVitestRequest` from `rwsdk-community/worker` to set up test handlers. Confidence: 0.90
+- Register test routes under `/_test` path with POST method in defineApp. Confidence: 0.85
+- Configure Vitest with `@cloudflare/vitest-pool-workers` for Cloudflare runtime emulation. Confidence: 0.95
+- Point Vitest wrangler config to `./dist/worker/wrangler.json`. Confidence: 0.85
+- Configure worker name and bindings in `wrangler.jsonc`. Confidence: 1.00
+- Set `compatibility_flags: ["nodejs_compat"]` for Node.js API compatibility. Confidence: 0.95
+- Enable observability in wrangler config with `"observability": { "enabled": true }`. Confidence: 0.85
+- Set the worker entry point to `"main": "src/worker.tsx"`. Confidence: 1.00
+- Configure assets binding with `"assets": { "binding": "ASSETS" }`. Confidence: 0.90
+- Use environment-specific config via `env` blocks in wrangler.jsonc for staging/production. Confidence: 0.85
+- Add D1, KV, R2, Durable Objects bindings as needed in wrangler.jsonc. Confidence: 0.85
+- Export Durable Object classes from `src/worker.tsx` for wrangler to discover. Confidence: 0.80
+- Use `rwsdk` as the primary framework dependency. Confidence: 1.00
+- Use `react`, `react-dom`, `react-server-dom-webpack` at the version required by rwsdk. Confidence: 1.00
+- Use `tailwindcss` and `@tailwindcss/vite` for styling. Confidence: 1.00
+- Use `@cloudflare/vite-plugin` as a dev dependency for Cloudflare Vite integration. Confidence: 1.00
+- Use `@cloudflare/workers-types` as a dev dependency for Cloudflare type definitions. Confidence: 0.95
+- Use `wrangler` as a dev dependency for local dev and deployment. Confidence: 1.00
+- Use `rwsdk-community` as a dev dependency for testing utilities. Confidence: 0.85
+- Use `lucide-react` for icon components. Confidence: 0.85
+- Use `framer-motion` for animations. Confidence: 0.80
+- Use `@tailwindcss/typography` for prose/content styling. Confidence: 0.85
+- Use `marked` or `@mdx-js/mdx` for Markdown/MDX processing. Confidence: 0.75
+- Use `highlight.js` or `prism-react-renderer` for code syntax highlighting. Confidence: 0.75
+- Use `gray-matter` for frontmatter parsing in Markdown content. Confidence: 0.70
+- Use `prettier` for code formatting. Confidence: 0.85
+- Create a shared `Layout` component wrapping `Navbar`, page content, and `Footer`. Confidence: 0.90
+- Use `layout(Layout, [...routes])` in defineApp to apply layout to route groups. Confidence: 0.90
+- Define nav items as a typed array of `{ href, label }` objects. Confidence: 0.85
+- Use the typed `link()` helper for internal navigation hrefs. Confidence: 0.95
+- Support dark/light/system theme via cookie-based preference stored in ctx. Confidence: 0.80
+- Fetch data directly in async server components — no client-side data fetching libraries needed. Confidence: 0.95
+- Use `serverQuery` for client-initiated data fetching without page re-render. Confidence: 0.90
+- Use `serverAction` for client-initiated mutations that trigger page re-render. Confidence: 0.90
+- Use form `action` prop with server actions for progressive enhancement. Confidence: 0.90
+- Use `useTransition` in client components when calling server functions for pending state. Confidence: 0.85
+- Use `except(handler)` in the route chain for error interception. Confidence: 0.85
+- Throw `ErrorResponse` for typed HTTP error responses in middleware. Confidence: 0.85
+- Create a custom 404 page and use a wildcard route (`route("*", ...)`) as the last route. Confidence: 0.90
+- Use `renderToString` or `renderToStream` for rendering error pages with custom status codes. Confidence: 0.80
+- Organize features as "addons" with their own components, data, pages, and routes. Confidence: 0.80
+- Export routes from addon `routes.ts` files and mount with `prefix()` in worker. Confidence: 0.80
+- Co-locate addon components, data, and pages within the addon folder. Confidence: 0.80
+- Use barrel `index.ts` files to re-export addon routes and components. Confidence: 0.75
+- Colocate page-specific UI components under `pages/<name>/ui/<component>`. Confidence: 0.85
+- Always create reusable components rather than inlining markup directly in the page. Confidence: 0.85
+- Create a shared `SEO` component at `src/app/components/seo.tsx` with props for title, description, OG tags, Twitter card, structured data, canonical URL, and robots. Confidence: 0.75
+- Use the shared `SEO` component on every page to set per-page meta tags. Confidence: 0.75
+- Maintain an `AGENTS.md` file at the project root documenting the codebase structure and architecture, and keep it up to date, instead of re-exploring the codebase from scratch on each conversation. Confidence: 0.65
+- Use `pnpm check` (aliased as `pn check`) to run both code generation and type checking together as the standard build/validation command. Confidence: 0.70
+- Place cron/scheduled jobs in `src/app/jobs/` organized by purpose (one file per job or related jobs). Confidence: 0.70
+- Import `env` directly from `"cloudflare:workers"` to access Cloudflare bindings (R2, Queues, etc.) inside server actions and queries, rather than storing `env` on `globalThis`. Confidence: 0.75

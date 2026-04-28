@@ -1,0 +1,115 @@
+@import "tailwindcss";
+@import "@fontsource-variable/dm-sans";
+@import "@fontsource/dm-mono";
+
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+html {
+  scroll-behavior: smooth;
+}
+
+@theme {
+  /* 🎨 PWV brand colors */
+  --color-pwv-black: #000000;
+  --color-pwv-white: #ffffff;
+  --color-pwv-gray: #e4e4e4;
+  --color-pwv-green: #00d22e;
+  --color-pwv-teal: #00d2c8;
+
+  --color-pwv-soft-green: #85ffa0;
+  --color-pwv-soft-teal: #88fff8;
+  --color-pwv-soft-yellow: #ffef9e;
+  --color-pwv-soft-coral: #ffc4c4;
+  --color-pwv-soft-lavender: #e3c6ff;
+  --color-pwv-soft-periwinkle: #bdd4ff;
+
+  --color-pwv-light-green: #c4ffd1;
+  --color-pwv-light-teal: #cdfffc;
+  --color-pwv-light-yellow: #fff9da;
+  --color-pwv-light-coral: #ffd8d8;
+  --color-pwv-light-lavender: #ebd5ff;
+  --color-pwv-light-periwinkle: #d5e4ff;
+
+  /* 🔤 Fonts */
+  --font-sans: "DM Sans Variable", system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --font-serif: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  --font-mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  /* Light theme (default) */
+  --color-bg: #faf9f5;
+  --color-bg-secondary: #f0eee7;
+  --color-text: #1a1a1a;
+  --color-text-secondary: #5c5a52;
+  --color-accent: var(--color-pwv-green);
+  --color-accent-hover: #00b828;
+  --color-accent-text: #000000;
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-code-bg: #1b1b1b;
+  --color-code-text: var(--color-pwv-soft-green);
+  --color-status-pending-bg: var(--color-pwv-light-yellow);
+  --color-status-pending-text: #92400e;
+  --color-status-accepted-bg: var(--color-pwv-light-green);
+  --color-status-accepted-text: #065f46;
+  --color-status-rejected-bg: var(--color-pwv-light-coral);
+  --color-status-rejected-text: #991b1b;
+}
+
+.dark {
+  --color-bg: #0d0d0d;
+  --color-bg-secondary: #1a1a1a;
+  --color-text: #e5e5e5;
+  --color-text-secondary: #8f8d86;
+  --color-accent: var(--color-pwv-soft-green);
+  --color-accent-hover: #a8ffc0;
+  --color-accent-text: #000000;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-code-bg: #2a2a2a;
+  --color-code-text: var(--color-pwv-soft-green);
+  --color-status-pending-bg: #78350f;
+  --color-status-pending-text: #fde68a;
+  --color-status-accepted-bg: #064e3b;
+  --color-status-accepted-text: #a7f3d0;
+  --color-status-rejected-bg: #7f1d1d;
+  --color-status-rejected-text: #fecaca;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-serif;
+}
+
+.prose {
+  h1 {
+    @apply font-serif text-2xl font-medium lg:text-3xl;
+  }
+  h2 {
+    @apply text-xl font-medium lg:text-2xl;
+  }
+  h3 {
+    @apply text-lg font-medium lg:text-xl;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@utility animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
