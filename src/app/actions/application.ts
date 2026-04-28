@@ -12,6 +12,19 @@ export type ApplicationStatus =
   | "accepted"
   | "rejected";
 
+export interface GitHubProfile {
+  name?: string;
+  company?: string;
+  location?: string;
+  blog?: string;
+  bio?: string;
+  twitter_username?: string;
+  public_repos?: number;
+  followers?: number;
+  created_at?: string;
+  [key: string]: unknown;
+}
+
 export interface ApplicationData {
   id: string;
   firstName: string;
@@ -29,7 +42,7 @@ export interface ApplicationData {
   githubHandle?: string;
   githubId?: number;
   githubAvatarUrl?: string;
-  githubProfile?: Record<string, unknown>;
+  githubProfile?: GitHubProfile;
 }
 
 const KV_PREFIX = "app:";

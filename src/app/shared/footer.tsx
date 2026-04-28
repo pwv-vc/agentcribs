@@ -10,8 +10,14 @@ export function Footer() {
           community project.
         </p>
         <div className="flex items-center gap-6">
+          <a href="/terms" className="text-sm text-text-secondary no-underline underline-offset-2 transition-colors hover:text-text hover:underline">
+            Terms
+          </a>
+          <a href="/privacy" className="text-sm text-text-secondary no-underline underline-offset-2 transition-colors hover:text-text hover:underline">
+            Privacy
+          </a>
           <a href="mailto:agentcribs@pwv.com" className="text-sm text-text-secondary no-underline underline-offset-2 transition-colors hover:text-text hover:underline">
-            agentcribs@pwv.com
+            Contact
           </a>
         </div>
       </div>

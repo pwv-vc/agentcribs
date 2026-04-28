@@ -102,45 +102,43 @@ export function ApplicationDetail({ application }: { application: ApplicationDat
               {application.githubProfile && (
                 <div className="mt-2 space-y-1 text-text-secondary">
                   {application.githubProfile.name && (
-                    <p>Name: {application.githubProfile.name as string}</p>
+                    <p>Name: {application.githubProfile.name}</p>
                   )}
                   {application.githubProfile.company && (
-                    <p>Company: {application.githubProfile.company as string}</p>
+                    <p>Company: {application.githubProfile.company}</p>
                   )}
                   {application.githubProfile.location && (
-                    <p>Location: {application.githubProfile.location as string}</p>
+                    <p>Location: {application.githubProfile.location}</p>
                   )}
                   {application.githubProfile.blog && (
                     <p>
                       Blog:{" "}
                       <a
-                        href={application.githubProfile.blog as string}
+                        href={application.githubProfile.blog}
                         className="text-accent no-underline hover:underline"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {application.githubProfile.blog as string}
+                        {application.githubProfile.blog}
                       </a>
                     </p>
                   )}
                   {application.githubProfile.bio && (
                     <p className="italic">
-                      {application.githubProfile.bio as string}
+                      {application.githubProfile.bio}
                     </p>
                   )}
                   {application.githubProfile.twitter_username && (
                     <p>
                       Twitter: @
-                      {application.githubProfile.twitter_username as string}
+                      {application.githubProfile.twitter_username}
                     </p>
                   )}
                   <p className="pt-1 text-xs text-text-secondary/60">
-                    {application.githubProfile.public_repos as number} public repos &middot;{" "}
-                    {application.githubProfile.followers as number} followers &middot;{" "}
+                    {application.githubProfile.public_repos} public repos &middot;{" "}
+                    {application.githubProfile.followers} followers &middot;{" "}
                     GitHub since{" "}
-                    {new Date(
-                      application.githubProfile.created_at as string,
-                    ).getFullYear()}
+                    {application.githubProfile.created_at && new Date(application.githubProfile.created_at).getFullYear()}
                   </p>
                 </div>
               )}

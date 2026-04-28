@@ -1,42 +1,15 @@
 {
-  // Schema reference for wrangler configuration
   "$schema": "node_modules/wrangler/config-schema.json",
-  // Name of your worker
   "name": "agentcribs",
-  // Entry point for your worker
   "main": "src/worker.tsx",
-  // Compatibility settings
   "compatibility_date": "2025-08-21",
   "compatibility_flags": ["nodejs_compat"],
-  // Assets configuration
   "assets": {
     "binding": "ASSETS",
   },
-  // Observability settings
   "observability": {
     "enabled": true,
   },
-  // R2 bucket for durable application storage
-  "r2_buckets": [
-    {
-      "bucket_name": "agentcribs-applications",
-      "binding": "AGENTCRIBS_R2",
-    },
-  ],
-  // KV namespace for fast application lookups and email dedup
-  "kv_namespaces": [
-    {
-      "binding": "AGENTCRIBS_KV",
-      "id": "ba9c5eeaa10b4ce89ec84362d4510cd2",
-    },
-  ],
-  // Email sending for magic link verification
-  "send_email": [
-    {
-      "name": "SEND_EMAIL",
-    },
-  ],
-  // Environment variables (set via secrets in production)
   "secrets": {
     "required": [
       "ADMIN_PASSWORD",
@@ -47,5 +20,62 @@
       "SEND_EMAIL_FROM",
       "APP_URL",
     ],
+  },
+  // ---- Environments ----
+  "env": {
+    "production": {
+      "routes": [
+        {
+          "pattern": "agentcribs.com",
+          "custom_domain": true,
+        },
+        {
+          "pattern": "*.agentcribs.com",
+          "custom_domain": true,
+        },
+      ],
+      "r2_buckets": [
+        {
+          "bucket_name": "agentcribs-applications",
+          "binding": "AGENTCRIBS_R2",
+        },
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "AGENTCRIBS_KV",
+          "id": "ba9c5eeaa10b4ce89ec84362d4510cd2",
+        },
+      ],
+      "send_email": [
+        {
+          "name": "SEND_EMAIL",
+        },
+      ],
+    },
+    "staging": {
+      "routes": [
+        {
+          "pattern": "staging.agentcribs.com",
+          "custom_domain": true,
+        },
+      ],
+      "r2_buckets": [
+        {
+          "bucket_name": "agentcribs-applications",
+          "binding": "AGENTCRIBS_R2",
+        },
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "AGENTCRIBS_KV",
+          "id": "ba9c5eeaa10b4ce89ec84362d4510cd2",
+        },
+      ],
+      "send_email": [
+        {
+          "name": "SEND_EMAIL",
+        },
+      ],
+    },
   },
 }

@@ -14,6 +14,7 @@ export async function sendMagicLink({
     from: env.SEND_EMAIL_FROM || "agentcribs@agentcribs.com",
     to: email,
     subject: "Verify your email for AgentCribs",
+    text: `Verify your email for AgentCribs\n\nClick this link to verify: ${verifyUrl}\n\nThis link expires in 1 hour. If you didn't apply to AgentCribs, you can safely ignore this email.`,
     html: `<!DOCTYPE html>
 <html>
 <head>

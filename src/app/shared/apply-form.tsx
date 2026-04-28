@@ -63,6 +63,7 @@ export const ApplyForm = ({
   const [githubAvatarUrl, setGithubAvatarUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const urlCleaned = useRef(false);
 
@@ -309,9 +310,31 @@ export const ApplyForm = ({
         )}
       </div>
 
+      <label className="flex items-start gap-3">
+        <input
+          name="acceptedTerms"
+          type="checkbox"
+          required
+          checked={acceptedTerms}
+          onChange={(e) => setAcceptedTerms(e.target.checked)}
+          className="mt-0.5 h-4 w-4 rounded border-border accent-accent"
+        />
+        <span className="text-sm leading-relaxed text-text-secondary">
+          I accept the{" "}
+          <a
+            href="/terms"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent underline decoration-border underline-offset-2 transition-colors hover:text-accent-hover"
+          >
+            Terms and Conditions
+          </a>
+        </span>
+      </label>
+
       <button
         type="submit"
-        disabled={isPending}
+        disabled={isPending || !acceptedTerms}
         className="block w-full rounded-lg bg-accent px-6 py-3 text-center text-base font-bold text-accent-text no-underline transition-colors hover:bg-accent-hover disabled:opacity-50 sm:inline-block sm:w-auto sm:px-10 sm:py-3.5 sm:text-lg"
       >
         {isPending ? "Submitting..." : "Submit application"}

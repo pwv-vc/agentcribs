@@ -14,6 +14,8 @@ import { Apply } from "@/app/pages/apply";
 import { ThankYou } from "@/app/pages/thank-you";
 import { VerifySuccess } from "@/app/pages/verify-success";
 import { VerifyError } from "@/app/pages/verify-error";
+import { Terms } from "@/app/pages/terms";
+import { Privacy } from "@/app/pages/privacy";
 import { Home } from "@/app/pages/home";
 
 export type AppContext = {};
@@ -29,6 +31,8 @@ export default defineApp([
   render(Document, [
     layout(Layout, [
       route("/", Home),
+      route("/terms", Terms),
+      route("/privacy", Privacy),
       route("/apply", Apply),
       route("/apply/thank-you", ThankYou),
       route("/apply/github/callback", handleGitHubCallback),
