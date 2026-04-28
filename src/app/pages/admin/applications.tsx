@@ -24,7 +24,7 @@ export const AdminApplications = async () => {
     <main className="mx-auto max-w-[1200px] px-6 py-16 sm:px-8 sm:py-20">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-serif text-3xl font-bold sm:text-4xl">
+          <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
             Applications
           </h1>
           <p className="mt-1 text-sm text-text-secondary">
@@ -40,32 +40,32 @@ export const AdminApplications = async () => {
           No applications yet.
         </p>
       ) : (
-        <div className="mt-8 overflow-x-auto">
+        <div className="mt-8 overflow-x-auto rounded-lg border border-border bg-bg-soft">
           <table className="w-full text-left text-sm sm:text-base">
             <thead>
               <tr className="border-b border-border">
-                <th className="px-3 py-2 font-semibold">Name</th>
-                <th className="px-3 py-2 font-semibold">Email</th>
-                <th className="hidden px-3 py-2 font-semibold sm:table-cell">
+                <th className="px-4 py-3 font-semibold">Name</th>
+                <th className="px-4 py-3 font-semibold">Email</th>
+                <th className="hidden px-4 py-3 font-semibold sm:table-cell">
                   GitHub
                 </th>
-                <th className="hidden px-3 py-2 font-semibold lg:table-cell">
+                <th className="hidden px-4 py-3 font-semibold lg:table-cell">
                   Organization
                 </th>
-                <th className="hidden px-3 py-2 font-semibold lg:table-cell">
+                <th className="hidden px-4 py-3 font-semibold lg:table-cell">
                   Topics
                 </th>
-                <th className="px-3 py-2 font-semibold">Status</th>
-                <th className="px-3 py-2 font-semibold">Applied</th>
+                <th className="px-4 py-3 font-semibold">Status</th>
+                <th className="px-4 py-3 font-semibold">Applied</th>
               </tr>
             </thead>
             <tbody>
               {applications.map((app) => (
                 <tr
                   key={app.id}
-                  className="border-b border-border transition-colors hover:bg-bg-secondary"
+                  className="border-b border-border transition-colors last:border-0 hover:bg-bg-muted/50"
                 >
-                  <td className="px-3 py-3">
+                  <td className="px-4 py-3">
                     <a
                       href={`/admin/applications/${app.id}`}
                       className="font-medium text-text no-underline underline-offset-2 transition-colors hover:text-accent hover:underline"
@@ -73,10 +73,10 @@ export const AdminApplications = async () => {
                       {app.firstName} {app.lastName}
                     </a>
                   </td>
-                  <td className="px-3 py-3 text-text-secondary">
+                  <td className="px-4 py-3 text-text-secondary">
                     {app.email}
                   </td>
-                  <td className="hidden px-3 py-3 text-text-secondary sm:table-cell">
+                  <td className="hidden px-4 py-3 text-text-secondary sm:table-cell">
                     {app.githubHandle ? (
                       <a
                         href={`https://github.com/${app.githubHandle}`}
@@ -90,16 +90,16 @@ export const AdminApplications = async () => {
                       "\u2014"
                     )}
                   </td>
-                  <td className="hidden px-3 py-3 text-text-secondary lg:table-cell">
+                  <td className="hidden px-4 py-3 text-text-secondary lg:table-cell">
                     {app.organization || "\u2014"}
                   </td>
-                  <td className="hidden max-w-[300px] truncate px-3 py-3 text-text-secondary lg:table-cell">
+                  <td className="hidden max-w-[300px] truncate px-4 py-3 text-text-secondary lg:table-cell">
                     {formatTopics(app.topics)}
                   </td>
-                  <td className="px-3 py-3">
+                  <td className="px-4 py-3">
                     <StatusBadge status={app.status} />
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3 text-text-secondary">
+                  <td className="whitespace-nowrap px-4 py-3 text-text-secondary">
                     {formatDate(app.createdAt)}
                     {app.editedAt && (
                       <span className="ml-1 text-xs opacity-60">(edited)</span>

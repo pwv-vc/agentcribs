@@ -53,7 +53,7 @@
 - Export `App` type in `types/rw.d.ts` as `typeof import("../src/worker").default`. Confidence: 0.95
 - Use `prefix("/path", routes)` to group routes under a shared path prefix. Confidence: 0.90
 - Use `layout(LayoutComponent, routes)` to wrap routes in a shared layout. Confidence: 0.90
-- Pass `layout(...)` directly inside `render(Document, [...])` without spreading it — `layout()` returns a compatible route element, not an array to be spread. Confidence: 0.65
+- Pass `layout(...)` directly inside `render(Document, [...])` without spreading it — `layout()` returns a compatible route element, not an array to be spread. Confidence: 0.70
 - Use `route(path, handler)` for static, param (`:id`), and wildcard (`*`) patterns. Confidence: 1.00
 - Use `route(path, { get, post, put, delete })` for HTTP method routing. Confidence: 0.95
 - Use `route(path, [middleware, handler])` for per-route interrupters (auth, validation). Confidence: 0.95

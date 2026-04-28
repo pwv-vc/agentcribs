@@ -64,6 +64,7 @@ export const ApplyForm = ({
   const [error, setError] = useState<string | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const urlCleaned = useRef(false);
 
   // Check URL params on mount for OAuth callback
   useEffect(() => {
@@ -99,8 +100,9 @@ export const ApplyForm = ({
       setError(ERROR_MESSAGES[err]);
     }
 
-    // Clean URL
-    if (state || err) {
+    // Clean URL — only once per navigation
+    if ((state || err) && !urlCleaned.current) {
+      urlCleaned.current = true;
       window.history.replaceState({}, "", "/apply");
     }
   }, []);
@@ -150,10 +152,10 @@ export const ApplyForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} ref={formRef} className="mt-8 space-y-6">
+    <form onSubmit={handleSubmit} ref={formRef} className="mt-8 space-y-8">
       <div className="grid gap-6 sm:grid-cols-2">
         <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold">
+          <span className="text-sm font-semibold text-text">
             First name <span className="text-accent">*</span>
           </span>
           <input
@@ -161,12 +163,12 @@ export const ApplyForm = ({
             required
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            className="rounded-lg border border-border bg-bg-secondary px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
+            className="rounded-lg border border-border bg-bg-soft px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
             placeholder="Jane"
           />
         </label>
         <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold">
+          <span className="text-sm font-semibold text-text">
             Last name <span className="text-accent">*</span>
           </span>
           <input
@@ -174,14 +176,14 @@ export const ApplyForm = ({
             required
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            className="rounded-lg border border-border bg-bg-secondary px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
+            className="rounded-lg border border-border bg-bg-soft px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
             placeholder="Doe"
           />
         </label>
       </div>
 
       <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-semibold">
+        <span className="text-sm font-semibold text-text">
           Email <span className="text-accent">*</span>
         </span>
         <input
@@ -190,34 +192,34 @@ export const ApplyForm = ({
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="rounded-lg border border-border bg-bg-secondary px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
+          className="rounded-lg border border-border bg-bg-soft px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
           placeholder="jane@example.com"
         />
       </label>
 
       <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-semibold">
+        <span className="text-sm font-semibold text-text">
           Organization <span className="text-text-secondary">(optional)</span>
         </span>
         <input
           name="organization"
           value={organization}
           onChange={(e) => setOrganization(e.target.value)}
-          className="rounded-lg border border-border bg-bg-secondary px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
+          className="rounded-lg border border-border bg-bg-soft px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
           placeholder="Company, school, project, etc."
         />
       </label>
 
       <fieldset>
-        <legend className="text-sm font-semibold">
+        <legend className="text-sm font-semibold text-text">
           Areas of interest{" "}
           <span className="text-text-secondary">(select all that apply)</span>
         </legend>
-        <div className="mt-3 space-y-2.5">
+        <div className="mt-4 space-y-3">
           {topics.map((topic) => (
             <label
               key={topic.id}
-              className="flex items-start gap-3 rounded-lg border border-border bg-bg-secondary px-4 py-3 transition-colors has-[:checked]:border-accent has-[:checked]:bg-accent/5"
+              className="flex items-start gap-3 rounded-lg border border-border bg-bg-soft px-4 py-3 transition-colors has-[:checked]:border-accent has-[:checked]:bg-accent/5"
             >
               <input
                 name="topics"
@@ -236,7 +238,7 @@ export const ApplyForm = ({
       </fieldset>
 
       <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-semibold">
+        <span className="text-sm font-semibold text-text">
           Tell us more{" "}
           <span className="text-text-secondary">(optional)</span>
         </span>
@@ -245,19 +247,19 @@ export const ApplyForm = ({
           rows={3}
           value={otherTopic}
           onChange={(e) => setOtherTopic(e.target.value)}
-          className="rounded-lg border border-border bg-bg-secondary px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
+          className="rounded-lg border border-border bg-bg-soft px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
           placeholder="What are you building with AI agents?"
         />
       </label>
 
       {/* GitHub verification — moved to bottom */}
       <div className="border-t border-border pt-6">
-        <p className="mb-1 text-sm font-semibold">Connect GitHub</p>
-        <p className="mb-4 text-xs text-text-secondary">
+        <p className="mb-1 text-sm font-semibold text-text">Connect GitHub</p>
+        <p className="mb-4 text-sm text-text-secondary">
           Verifying your GitHub helps us get to know you and what you're building. It's optional but recommended.
         </p>
         {githubHandle ? (
-          <div className="flex items-center gap-3 rounded-lg border border-green-500/30 bg-green-500/5 px-4 py-3">
+          <div className="flex items-center gap-3 rounded-lg border border-accent/30 bg-accent/5 px-4 py-3">
             {githubAvatarUrl && (
               <img
                 src={githubAvatarUrl}
@@ -265,10 +267,10 @@ export const ApplyForm = ({
                 className="h-6 w-6 rounded-full"
               />
             )}
-            <span className="text-sm">
+            <span className="text-sm text-text">
               Verified as <span className="font-semibold">@{githubHandle}</span>
             </span>
-            <span className="ml-auto text-xs font-medium text-green-500">
+            <span className="ml-auto text-xs font-medium text-accent">
               Connected
             </span>
           </div>
@@ -278,7 +280,7 @@ export const ApplyForm = ({
               type="button"
               onClick={handleGitHubConnect}
               disabled={!email || isVerifying}
-              className="flex items-center gap-2 rounded-lg border border-border bg-bg-secondary px-4 py-2.5 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+              className="flex items-center gap-2 rounded-lg border border-border bg-bg-soft px-4 py-2.5 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
             >
               {isVerifying ? (
                 "Connecting..."
@@ -296,10 +298,10 @@ export const ApplyForm = ({
               )}
             </button>
             {error && (
-              <p className="mt-2 text-xs text-red-500">{error}</p>
+              <p className="mt-2 text-sm text-red-600">{error}</p>
             )}
             {!email && (
-              <p className="mt-2 text-xs text-text-secondary">
+              <p className="mt-2 text-sm text-text-secondary">
                 Enter your email first to verify with GitHub.
               </p>
             )}
