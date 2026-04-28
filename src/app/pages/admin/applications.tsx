@@ -47,6 +47,9 @@ export const AdminApplications = async () => {
                 <th className="px-3 py-2 font-semibold">Name</th>
                 <th className="px-3 py-2 font-semibold">Email</th>
                 <th className="hidden px-3 py-2 font-semibold sm:table-cell">
+                  GitHub
+                </th>
+                <th className="hidden px-3 py-2 font-semibold lg:table-cell">
                   Organization
                 </th>
                 <th className="hidden px-3 py-2 font-semibold lg:table-cell">
@@ -74,6 +77,20 @@ export const AdminApplications = async () => {
                     {app.email}
                   </td>
                   <td className="hidden px-3 py-3 text-text-secondary sm:table-cell">
+                    {app.githubHandle ? (
+                      <a
+                        href={`https://github.com/${app.githubHandle}`}
+                        className="text-accent no-underline hover:underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        @{app.githubHandle}
+                      </a>
+                    ) : (
+                      "\u2014"
+                    )}
+                  </td>
+                  <td className="hidden px-3 py-3 text-text-secondary lg:table-cell">
                     {app.organization || "\u2014"}
                   </td>
                   <td className="hidden max-w-[300px] truncate px-3 py-3 text-text-secondary lg:table-cell">

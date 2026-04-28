@@ -30,8 +30,22 @@
       "id": "ba9c5eeaa10b4ce89ec84362d4510cd2",
     },
   ],
-  // Environment variables (ADMIN_PASSWORD and ADMIN_COOKIE_NAME should be a secret in production)
+  // Email sending for magic link verification
+  "send_email": [
+    {
+      "name": "SEND_EMAIL",
+    },
+  ],
+  // Environment variables (set via secrets in production)
   "secrets": {
-    "required": ["ADMIN_PASSWORD", "ADMIN_COOKIE_NAME"],
+    "required": [
+      "ADMIN_PASSWORD",
+      "ADMIN_COOKIE_NAME",
+      "GITHUB_CLIENT_ID",
+      "GITHUB_CLIENT_SECRET",
+      "GITHUB_CALLBACK_URL",
+      "SEND_EMAIL_FROM",
+      "APP_URL",
+    ],
   },
 }

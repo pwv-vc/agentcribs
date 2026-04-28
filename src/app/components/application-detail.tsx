@@ -85,6 +85,68 @@ export function ApplicationDetail({ application }: { application: ApplicationDat
       </div>
 
       <dl className="divide-y divide-border">
+        {application.githubHandle && (
+          <div className="flex gap-4 py-3">
+            <dt className="w-32 shrink-0 text-sm font-medium text-text-secondary">
+              GitHub
+            </dt>
+            <dd className="space-y-1 text-sm">
+              <a
+                href={`https://github.com/${application.githubHandle}`}
+                className="font-medium text-accent no-underline hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                @{application.githubHandle}
+              </a>
+              {application.githubProfile && (
+                <div className="mt-2 space-y-1 text-text-secondary">
+                  {application.githubProfile.name && (
+                    <p>Name: {application.githubProfile.name as string}</p>
+                  )}
+                  {application.githubProfile.company && (
+                    <p>Company: {application.githubProfile.company as string}</p>
+                  )}
+                  {application.githubProfile.location && (
+                    <p>Location: {application.githubProfile.location as string}</p>
+                  )}
+                  {application.githubProfile.blog && (
+                    <p>
+                      Blog:{" "}
+                      <a
+                        href={application.githubProfile.blog as string}
+                        className="text-accent no-underline hover:underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {application.githubProfile.blog as string}
+                      </a>
+                    </p>
+                  )}
+                  {application.githubProfile.bio && (
+                    <p className="italic">
+                      {application.githubProfile.bio as string}
+                    </p>
+                  )}
+                  {application.githubProfile.twitter_username && (
+                    <p>
+                      Twitter: @
+                      {application.githubProfile.twitter_username as string}
+                    </p>
+                  )}
+                  <p className="pt-1 text-xs text-text-secondary/60">
+                    {application.githubProfile.public_repos as number} public repos &middot;{" "}
+                    {application.githubProfile.followers as number} followers &middot;{" "}
+                    GitHub since{" "}
+                    {new Date(
+                      application.githubProfile.created_at as string,
+                    ).getFullYear()}
+                  </p>
+                </div>
+              )}
+            </dd>
+          </div>
+        )}
         <div className="flex gap-4 py-3">
           <dt className="w-32 text-sm font-medium text-text-secondary">Organization</dt>
           <dd className="text-sm">{application.organization || "\u2014"}</dd>

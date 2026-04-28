@@ -14,8 +14,12 @@ export const ThankYou = () => {
         Application received
       </h1>
       <p className="mt-6 text-base leading-relaxed sm:text-lg">
-        Thanks for applying to join AgentCribs. We'll review your application
-        and be in touch at the email you provided.
+        Thanks for applying to join AgentCribs!
+      </p>
+      <p className="mt-4 text-sm leading-relaxed text-text-secondary sm:text-base">
+        We've sent a verification link to your email. Click it to confirm your
+        application and make it visible to our review team. The link expires in
+        1 hour.
       </p>
       <p className="mt-4 text-sm leading-relaxed text-text-secondary sm:text-base">
         If you're selected for the May 6 event in San Francisco, you'll receive
