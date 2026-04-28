@@ -5,6 +5,7 @@ import { env } from "cloudflare:workers";
 interface OAuthState {
   email: string;
   createdAt: string;
+  formStateId?: string;
 }
 
 interface VerificationResult {
@@ -31,7 +32,10 @@ function authorizeUrl(state: string): string {
   return `https://github.com/login/oauth/authorize?${params}`;
 }
 
-export async function startGitHubOAuth(email: string): Promise<string> {
+export async function startGitHubOAuth(
+  email: string,
+  formState?: Record<string, unknown>,
+): Promise<string> {
   log("startGitHubOAuth called", { email });
 
   if (!email) {
@@ -39,7 +43,19 @@ export async function startGitHubOAuth(email: string): Promise<string> {
   }
 
   const nonce = crypto.randomUUID();
-  const state: OAuthState = { email, createdAt: new Date().toISOString() };
+  let formStateId: string | undefined;
+
+  // Save form state to KV so it survives cross-origin redirect through GitHub
+  if (formState) {
+    formStateId = crypto.randomUUID();
+    await saveOAuthFormState(formStateId, formState);
+  }
+
+  const state: OAuthState = {
+    email,
+    createdAt: new Date().toISOString(),
+    ...(formStateId ? { formStateId } : {}),
+  };
 
   await env.AGENTCRIBS_KV.put(
     `oauth:state:${nonce}`,

@@ -136,7 +136,7 @@ export const handleGitHubCallback: RouteMiddleware = async (requestInfo) => {
     );
   }
 
-  const { email: storedEmail } = JSON.parse(stateRaw);
+  const { email: storedEmail, formStateId } = JSON.parse(stateRaw);
   log("state valid", { storedEmail });
 
   try {
@@ -198,7 +198,7 @@ export const handleGitHubCallback: RouteMiddleware = async (requestInfo) => {
     await env.AGENTCRIBS_KV.put(
       `oauth:verify:${verifyNonce}`,
       JSON.stringify(verification),
-      { expirationTtl: 1800 },
+      { expirationTtl: 600 },
     );
 
     // Clean up state
@@ -206,10 +206,11 @@ export const handleGitHubCallback: RouteMiddleware = async (requestInfo) => {
 
     log("verification stored, redirecting to apply with state", { verifyNonce: verifyNonce.slice(0, 8) });
 
-    return Response.redirect(
-      `${url.origin}/apply?github_state=${verifyNonce}`,
-      303,
-    );
+    const redirectUrl = formStateId
+      ? `${url.origin}/apply?github_state=${verifyNonce}&form_state=${formStateId}`
+      : `${url.origin}/apply?github_state=${verifyNonce}`;
+
+    return Response.redirect(redirectUrl, 303);
   } catch (err) {
     log("error during GitHub OAuth callback:", err);
     await env.AGENTCRIBS_KV.delete(`oauth:state:${state}`);

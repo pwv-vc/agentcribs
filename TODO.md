@@ -11,3 +11,4 @@
 - [x] privacy, terms and consent
 - [ ] on form submit AI driven tell us what interests you
 - [x] to apply have to accept terms of service (apply shows what get and do, accept then form)
+- [ ] inform maybe via email or slack of a new application to approve

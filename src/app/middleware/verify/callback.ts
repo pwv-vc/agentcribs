@@ -1,6 +1,6 @@
 import type { RouteMiddleware } from "rwsdk/router";
 import { env } from "cloudflare:workers";
-import { kvKey } from "@/app/actions/application";
+import { kvKey, r2Meta } from "@/app/actions/application";
 import type { ApplicationData } from "@/app/actions/application";
 
 export const handleVerificationCallback: RouteMiddleware = async (
@@ -44,6 +44,7 @@ export const handleVerificationCallback: RouteMiddleware = async (
     env.AGENTCRIBS_R2.put(
       `applications/${applicationId}.json`,
       serialized,
+      r2Meta(app),
     ),
     env.AGENTCRIBS_KV.delete(`verify:${token}`),
   ]);

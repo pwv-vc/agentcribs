@@ -5,12 +5,10 @@ import { submitApplication } from "../actions/application";
 import {
   startGitHubOAuth,
   getGitHubVerification,
-  saveOAuthFormState,
   restoreOAuthFormState,
 } from "../actions/github";
 
 const SESSION_KEY = "agentcribs-apply-form";
-const FORM_STATE_ID_KEY = "agentcribs-form-state-id";
 
 const ERROR_MESSAGES: Record<string, string> = {
   expired: "Verification expired. Please try again.",
@@ -74,32 +72,36 @@ export const ApplyForm = ({
     const params = new URLSearchParams(window.location.search);
     const state = params.get("github_state");
     const err = params.get("github_error");
+    const formStateId = params.get("form_state");
 
-    const restoreSaved = (saved: Record<string, unknown>) => {
-      setEmail((saved.email as string) ?? "");
-      setFirstName((saved.firstName as string) ?? "");
-      setLastName((saved.lastName as string) ?? "");
-      setOrganization((saved.organization as string) ?? "");
-      setOtherTopic((saved.otherTopic as string) ?? "");
-      if (saved.topics) {
-        setSelectedTopics(new Set(saved.topics as string[]));
-      }
-      setAcceptedTerms((saved.acceptedTerms as unknown as boolean) ?? false);
-    };
-
-    // Try KV restore first (works across origins in production), fall back to sessionStorage
-    const formStateId = sessionStorage.getItem(FORM_STATE_ID_KEY);
+    // Restore saved form state from KV (survives cross-origin redirect through GitHub)
     if (formStateId) {
-      sessionStorage.removeItem(FORM_STATE_ID_KEY);
       restoreOAuthFormState(formStateId).then((saved) => {
         if (saved) {
-          restoreSaved(saved);
+          setEmail((saved.email as string) ?? "");
+          setFirstName((saved.firstName as string) ?? "");
+          setLastName((saved.lastName as string) ?? "");
+          setOrganization((saved.organization as string) ?? "");
+          setOtherTopic((saved.otherTopic as string) ?? "");
+          if (saved.topics) {
+            setSelectedTopics(new Set(saved.topics as string[]));
+          }
+          setAcceptedTerms((saved.acceptedTerms as unknown as boolean) ?? false);
         }
       });
     } else {
+      // Fallback to sessionStorage (same-origin navigations)
       const saved = restoreFormState();
       if (saved) {
-        restoreSaved(saved);
+        setEmail((saved.email as string) ?? "");
+        setFirstName((saved.firstName as string) ?? "");
+        setLastName((saved.lastName as string) ?? "");
+        setOrganization((saved.organization as string) ?? "");
+        setOtherTopic((saved.otherTopic as string) ?? "");
+        if (saved.topics) {
+          setSelectedTopics(new Set(saved.topics as string[]));
+        }
+        setAcceptedTerms((saved.acceptedTerms as unknown as boolean) ?? false);
         sessionStorage.removeItem(SESSION_KEY);
       }
     }
@@ -117,14 +119,6 @@ export const ApplyForm = ({
     if (err && err in ERROR_MESSAGES) {
       setError(ERROR_MESSAGES[err]);
     }
-
-    // Clean URL — only once per page load (use sessionStorage to survive remounts)
-    if ((state || err) && !sessionStorage.getItem("agentcribs-url-cleaned")) {
-      sessionStorage.setItem("agentcribs-url-cleaned", "1");
-      window.history.replaceState(null, "", "/apply");
-    } else if (!state && !err) {
-      sessionStorage.removeItem("agentcribs-url-cleaned");
-    }
   }, []);
 
   const handleGitHubConnect = async () => {
@@ -133,23 +127,16 @@ export const ApplyForm = ({
     setIsVerifying(true);
     setError(null);
 
-    // Save current form state to KV and store the reference ID in sessionStorage
-    // KV persists across origins (production GitHub OAuth redirect), sessionStorage
-    // on the same origin is the fallback
-    const formStateId = crypto.randomUUID();
-    sessionStorage.setItem(FORM_STATE_ID_KEY, formStateId);
-    await saveOAuthFormState(formStateId, {
-      email,
-      firstName,
-      lastName,
-      organization,
-      otherTopic,
-      topics: [...selectedTopics],
-      acceptedTerms,
-    });
-
     try {
-      const url = await startGitHubOAuth(email);
+      const url = await startGitHubOAuth(email, {
+        email,
+        firstName,
+        lastName,
+        organization,
+        otherTopic,
+        topics: [...selectedTopics],
+        acceptedTerms,
+      });
       window.location.href = url;
     } catch {
       setError("Failed to start GitHub verification. Please try again.");

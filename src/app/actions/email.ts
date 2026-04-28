@@ -35,7 +35,7 @@ export async function sendMagicLink({
               <p style="font-size: 14px; color: #555555; margin: 0 0 24px;">
                 Verify your email address to complete your application.
               </p>
-              <a href="${verifyUrl}" style="display: inline-block; padding: 12px 24px; background: #85ffa0; color: #000000; text-decoration: none; font-weight: 700; font-size: 14px; border-radius: 8px;">
+              <a href="${verifyUrl}" style="display: inline-block; padding: 12px 24px; background: #000000; color: #ffffff; text-decoration: none; font-weight: 700; font-size: 14px; border-radius: 8px;">
                 Verify email
               </a>
               <p style="font-size: 12px; color: #777777; margin: 24px 0 0;">

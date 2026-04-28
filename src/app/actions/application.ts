@@ -66,6 +66,26 @@ export function emailIndexKey(email: string) {
   return `${EMAIL_INDEX_PREFIX}${email.toLowerCase().trim()}`;
 }
 
+/** Build R2 custom metadata for browse-ability in the Cloudflare dashboard. */
+export function r2Meta(app: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+}) {
+  return {
+    customMetadata: {
+      name: `${app.firstName} ${app.lastName}`,
+      email: app.email,
+      status: app.status,
+      created: app.createdAt,
+      updated: app.updatedAt,
+    },
+  };
+}
+
 export const submitApplication = serverAction(async (formData: FormData) => {
   const firstName = formData.get("firstName") as string;
   const lastName = formData.get("lastName") as string;
@@ -241,6 +261,7 @@ export const verifyApplication = serverAction(
       env.AGENTCRIBS_R2.put(
         `${R2_KEY_PREFIX}${applicationId}.json`,
         JSON.stringify(app),
+        r2Meta(app),
       ),
       env.AGENTCRIBS_KV.delete(`verify:${token}`),
     ]);

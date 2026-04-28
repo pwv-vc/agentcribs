@@ -1,6 +1,6 @@
 import { env } from "cloudflare:workers";
 import { sendMagicLink } from "@/app/actions/email";
-import { kvKey, emailIndexKey, R2_KEY_PREFIX } from "@/app/actions/application";
+import { kvKey, emailIndexKey, R2_KEY_PREFIX, r2Meta } from "@/app/actions/application";
 import type { ApplicationData, ApplicationPayload } from "@/app/actions/application";
 
 export async function handleProcessApplication(payload: ApplicationPayload): Promise<void> {
@@ -19,6 +19,7 @@ export async function handleProcessApplication(payload: ApplicationPayload): Pro
   await env.AGENTCRIBS_R2.put(
     `${R2_KEY_PREFIX}${application.id}.json`,
     raw,
+    r2Meta(application),
   );
 
   // Set email index

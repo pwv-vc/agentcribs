@@ -1,6 +1,6 @@
-import { initClient, initClientNavigation } from "rwsdk/client";
+import { initClient } from "rwsdk/client";
 
-// RedwoodSDK uses RSC RPC to emulate client side navigation.
-// https://docs.rwsdk.com/guides/frontend/client-side-nav/
-const { handleResponse, onHydrated } = initClientNavigation();
-initClient({ handleResponse, onHydrated });
+// No client-side navigation — use regular full-page loads with <a href> tags.
+// This avoids the browser's history.replaceState rate limit that occurs with
+// scroll-position saving during SPA-style navigation.
+initClient({});
