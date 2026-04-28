@@ -175,3 +175,4 @@
 - Use `pnpm check` (aliased as `pn check`) to run both code generation and type checking together as the standard build/validation command. Confidence: 0.70
 - Place cron/scheduled jobs in `src/app/jobs/` organized by purpose (one file per job or related jobs). Confidence: 0.70
 - Import `env` directly from `"cloudflare:workers"` to access Cloudflare bindings (R2, Queues, etc.) inside server actions and queries, rather than storing `env` on `globalThis`. Confidence: 0.75
+- Store cookie names and similar configurable constants as environment variables rather than hardcoded `const` values, and prefix them with the environment name (e.g., `agentcribs-dev-` for dev). Confidence: 0.65
