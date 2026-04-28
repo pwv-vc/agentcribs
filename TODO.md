@@ -7,3 +7,4 @@
 * [ ] luma event integration
 * [ ] images, branding, look and feel, content
 * [ ] privacy, terms and consent
+* [ ] on form submit AI driven tell us what interests you
