@@ -2,7 +2,7 @@
 
 * [ ] send emails (verification, submit, accept, reject)
 * [ ] agent cribs video list
-* [ ] blog (content collections)
+* [ ] blog (content collections) - content should match data topics
 * [ ] newsletter
 * [ ] luma event integration
 * [ ] images, branding, look and feel, content
