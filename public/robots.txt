@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Allow ChatGPT search discovery
+User-agent: OAI-SearchBot
+Allow: /
+
+# Opt out of OpenAI training use
+User-agent: GPTBot
+Disallow: /
+
+Sitemap: https://agentcribs.com/sitemap.xml
