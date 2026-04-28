@@ -11,8 +11,11 @@ Apply at [agentcribs.com](https://agentcribs.com/).
 ### Prerequisites
 
 - Node.js 22+
-- [Wrangler](https://developers.cloudflare.com/workers/wrangler/) CLI (`npm install -g wrangler`)
 - A Cloudflare account with Workers, KV, R2, and Email Send enabled
+
+This is a [RedwoodSDK](https://rwsdk.com) app. Wrangler is already included as a dev dependency via `rwsdk` — no global install needed.
+
+Learn more: [rwsdk.com](https://rwsdk.com) · [docs.rwsdk.com](https://docs.rwsdk.com)
 
 ### Cloudflare Bindings
 
