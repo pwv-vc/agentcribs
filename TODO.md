@@ -1,8 +1,8 @@
 # TODO
 
 - [x] send emails (verification)
-- [ ] send emails submit
-- [ ] send emails on accept, reject
+- [x] send emails submit
+- [x] send emails on accept, reject
 - [ ] agent cribs video list
 - [ ] blog (content collections) - content should match data topics
 - [ ] newsletter
@@ -11,4 +11,6 @@
 - [x] privacy, terms and consent
 - [ ] on form submit AI driven tell us what interests you
 - [x] to apply have to accept terms of service (apply shows what get and do, accept then form)
-- [ ] inform maybe via email or slack of a new application to approve
+- [ ] inform via email of new email to review
+- [ ] inform via slack of a new application to review
+- [x] use react email and templates

@@ -49,6 +49,13 @@ export const handleVerificationCallback: RouteMiddleware = async (
     env.AGENTCRIBS_KV.delete(`verify:${token}`),
   ]);
 
+  // Notify user their application is pending review, and notify admin
+  await env.NOTIFICATION_QUEUE.send({
+    type: "pending-review",
+    email: app.email,
+    name: `${app.firstName} ${app.lastName}`,
+  });
+
   return new Response(null, {
     status: 302,
     headers: { Location: "/apply/verify/success" },

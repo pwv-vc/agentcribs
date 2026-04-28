@@ -266,6 +266,13 @@ export const verifyApplication = serverAction(
       env.AGENTCRIBS_KV.delete(`verify:${token}`),
     ]);
 
+    // Notify user their application is pending review, and notify admin
+    await env.NOTIFICATION_QUEUE.send({
+      type: "pending-review",
+      email,
+      name: `${app.firstName} ${app.lastName}`,
+    });
+
     return new Response(null, {
       status: 303,
       headers: { Location: "/apply/verify/success" },
@@ -301,5 +308,14 @@ export const setApplicationStatus = serverAction(
       env.AGENTCRIBS_KV.put(kvKey(id), serialized),
       env.AGENTCRIBS_R2.put(`${R2_KEY_PREFIX}${id}.json`, serialized),
     ]);
+
+    // Enqueue notification email
+    if (status === "accepted" || status === "rejected") {
+      await env.NOTIFICATION_QUEUE.send({
+        type: status as "accepted" | "rejected",
+        email: app.email,
+        name: `${app.firstName} ${app.lastName}`,
+      });
+    }
   },
 );

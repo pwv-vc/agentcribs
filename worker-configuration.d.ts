@@ -12,6 +12,7 @@ declare namespace Cloudflare {
     SEND_EMAIL: SendEmail;
     PROCESS_APPLICATION_QUEUE: Queue;
     SEND_EMAIL_QUEUE: Queue;
+    NOTIFICATION_QUEUE: Queue;
     ADMIN_PASSWORD: string;
     ADMIN_COOKIE_NAME: string;
     GITHUB_CLIENT_ID: string;

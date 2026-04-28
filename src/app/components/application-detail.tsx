@@ -1,57 +1,97 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import type { ApplicationData, ApplicationStatus } from "@/app/actions/application";
 import { setApplicationStatus } from "@/app/actions/application";
 import { StatusBadge } from "@/app/shared/status-badge";
 
 function ReviewActions({ application }: { application: ApplicationData }) {
   const [isPending, startTransition] = useTransition();
+  const [confirm, setConfirm] = useState<ApplicationStatus | null>(null);
 
   const updateStatus = (status: ApplicationStatus) => {
+    setConfirm(status);
+  };
+
+  const confirmAction = () => {
+    if (!confirm) return;
     startTransition(async () => {
-      await setApplicationStatus(application.id, status);
+      await setApplicationStatus(application.id, confirm);
+      setConfirm(null);
     });
   };
 
+  const cancelConfirm = () => setConfirm(null);
+
   return (
-    <div className="flex items-center gap-3">
-      {application.status === "pending" && (
-        <>
-          <button
-            onClick={() => updateStatus("accepted")}
-            disabled={isPending}
-            className="rounded-lg bg-status-accepted-text px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-status-accepted-text/80 disabled:opacity-50"
-          >
-            Accept
-          </button>
+    <div className="space-y-3">
+      {confirm && (
+        <div className="rounded-lg border border-border bg-bg p-4">
+          <p className="mb-3 text-sm">
+            {confirm === "accepted"
+              ? "Send welcome email and accept this applicant into AgentCribs?"
+              : "Send rejection notice? They can re-apply later with the same email."}
+          </p>
+          <div className="flex gap-2">
+            <button
+              onClick={confirmAction}
+              disabled={isPending}
+              className={`rounded-lg px-4 py-2 text-sm font-semibold text-white transition-colors disabled:opacity-50 ${
+                confirm === "accepted"
+                  ? "bg-status-accepted-text hover:bg-status-accepted-text/80"
+                  : "bg-status-rejected-text hover:bg-status-rejected-text/80"
+              }`}
+            >
+              {isPending ? "Sending..." : `Yes, ${confirm === "accepted" ? "accept" : "reject"}`}
+            </button>
+            <button
+              onClick={cancelConfirm}
+              disabled={isPending}
+              className="rounded-lg border border-border bg-bg px-4 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-bg-soft disabled:opacity-50"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+      <div className="flex items-center gap-3">
+        {application.status === "pending" && (
+          <>
+            <button
+              onClick={() => updateStatus("accepted")}
+              disabled={isPending || !!confirm}
+              className="rounded-lg bg-status-accepted-text px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-status-accepted-text/80 disabled:opacity-50"
+            >
+              Accept
+            </button>
+            <button
+              onClick={() => updateStatus("rejected")}
+              disabled={isPending || !!confirm}
+              className="rounded-lg bg-status-rejected-text px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-status-rejected-text/80 disabled:opacity-50"
+            >
+              Reject
+            </button>
+          </>
+        )}
+        {application.status === "accepted" && (
           <button
             onClick={() => updateStatus("rejected")}
-            disabled={isPending}
+            disabled={isPending || !!confirm}
             className="rounded-lg bg-status-rejected-text px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-status-rejected-text/80 disabled:opacity-50"
           >
-            Reject
+            Move to rejected
           </button>
-        </>
-      )}
-      {application.status === "accepted" && (
-        <button
-          onClick={() => updateStatus("rejected")}
-          disabled={isPending}
-          className="rounded-lg bg-status-rejected-text px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-status-rejected-text/80 disabled:opacity-50"
-        >
-          Move to rejected
-        </button>
-      )}
-      {application.status === "rejected" && (
-        <button
-          onClick={() => updateStatus("accepted")}
-          disabled={isPending}
-          className="rounded-lg bg-status-accepted-text px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-status-accepted-text/80 disabled:opacity-50"
-        >
-          Move to accepted
-        </button>
-      )}
+        )}
+        {application.status === "rejected" && (
+          <button
+            onClick={() => updateStatus("accepted")}
+            disabled={isPending || !!confirm}
+            className="rounded-lg bg-status-accepted-text px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-status-accepted-text/80 disabled:opacity-50"
+          >
+            Move to accepted
+          </button>
+        )}
+      </div>
     </div>
   );
 }

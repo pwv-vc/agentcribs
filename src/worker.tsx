@@ -17,7 +17,7 @@ import { VerifyError } from "@/app/pages/verify-error";
 import { Terms } from "@/app/pages/terms";
 import { Privacy } from "@/app/pages/privacy";
 import { Home } from "@/app/pages/home";
-import { handleProcessApplication, handleSendEmail } from "@/app/actions/queue";
+import { handleProcessApplication, handleSendEmail, handleSendNotification } from "@/app/actions/queue";
 import type { ApplicationPayload } from "@/app/actions/application";
 
 export type AppContext = {};
@@ -70,6 +70,16 @@ export default {
           applicationId: string;
         };
         await handleSendEmail(payload);
+        message.ack();
+      }
+    } else if (batch.queue === "agentcribs-notifications") {
+      for (const message of batch.messages) {
+        const payload = message.body as {
+          type: "pending-review" | "accepted" | "rejected";
+          email: string;
+          name: string;
+        };
+        await handleSendNotification(payload);
         message.ack();
       }
     }

@@ -37,6 +37,10 @@
         "binding": "SEND_EMAIL_QUEUE",
         "queue": "agentcribs-send-email",
       },
+      {
+        "binding": "NOTIFICATION_QUEUE",
+        "queue": "agentcribs-notifications",
+      },
     ],
     "consumers": [
       {
@@ -46,6 +50,11 @@
       },
       {
         "queue": "agentcribs-send-email",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5,
+      },
+      {
+        "queue": "agentcribs-notifications",
         "max_batch_size": 10,
         "max_batch_timeout": 5,
       },

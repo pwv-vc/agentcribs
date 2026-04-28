@@ -1,7 +1,17 @@
 import { env } from "cloudflare:workers";
-import { sendMagicLink } from "@/app/actions/email";
+import {
+  sendMagicLink,
+  sendPendingReviewEmail,
+  sendAdminNotificationEmail,
+  sendAcceptedEmail,
+  sendRejectedEmail,
+} from "@/app/actions/email";
 import { kvKey, emailIndexKey, R2_KEY_PREFIX, r2Meta } from "@/app/actions/application";
 import type { ApplicationData, ApplicationPayload } from "@/app/actions/application";
+
+function sendEmailFrom() {
+  return env.SEND_EMAIL_FROM || "agentcribs@agentcribs.com";
+}
 
 export async function handleProcessApplication(payload: ApplicationPayload): Promise<void> {
   const { kvKey: applicationKvKey, email, token, isUpdate } = payload;
@@ -46,8 +56,59 @@ export async function handleSendEmail(payload: {
 
   console.log(`[queue/email] Sending magic link to ${email}`);
 
+  const baseUrl = env.APP_URL || "http://localhost:5173";
+
   // Properly await email delivery — no fire-and-forget
-  await sendMagicLink({ email, token });
+  await sendMagicLink({
+    sendEmail: env.SEND_EMAIL,
+    from: sendEmailFrom(),
+    baseUrl,
+    email,
+    token,
+  });
 
   console.log(`[queue/email] Magic link sent to ${email}`);
+}
+
+export async function handleSendNotification(payload: {
+  type: "pending-review" | "accepted" | "rejected";
+  email: string;
+  name: string;
+}): Promise<void> {
+  const { type, email, name } = payload;
+
+  if (type === "pending-review") {
+    console.log(`[queue/notification] Sending pending-review email to ${email}`);
+    await sendPendingReviewEmail({
+      sendEmail: env.SEND_EMAIL,
+      from: sendEmailFrom(),
+      email,
+      name,
+    });
+    // Also notify admin
+    await sendAdminNotificationEmail({
+      sendEmail: env.SEND_EMAIL,
+      from: sendEmailFrom(),
+      name,
+      email,
+    });
+  } else if (type === "accepted") {
+    console.log(`[queue/notification] Sending accepted email to ${email}`);
+    await sendAcceptedEmail({
+      sendEmail: env.SEND_EMAIL,
+      from: sendEmailFrom(),
+      email,
+      name,
+    });
+  } else if (type === "rejected") {
+    console.log(`[queue/notification] Sending rejected email to ${email}`);
+    await sendRejectedEmail({
+      sendEmail: env.SEND_EMAIL,
+      from: sendEmailFrom(),
+      email,
+      name,
+    });
+  }
+
+  console.log(`[queue/notification] ${type} email sent to ${email}`);
 }
