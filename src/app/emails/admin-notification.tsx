@@ -36,6 +36,14 @@ export default function AdminNotificationEmail({
           <Button href={applicationUrl} style={button}>
             Review application
           </Button>
+          <Text style={fallbackLink}>
+            If the button doesn't work, copy and paste this link into your
+            browser:
+            <br />
+            <Link href={applicationUrl} style={linkStyle}>
+              {applicationUrl}
+            </Link>
+          </Text>
         </Container>
       </Body>
     </Html>
@@ -98,4 +106,10 @@ const button = {
 
 const linkStyle = {
   color: "#000000",
+};
+
+const fallbackLink = {
+  fontSize: "12px",
+  color: "#777777",
+  margin: "16px 0 0",
 };

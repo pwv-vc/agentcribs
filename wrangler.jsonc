@@ -41,6 +41,10 @@
         "binding": "NOTIFICATION_QUEUE",
         "queue": "agentcribs-notifications",
       },
+      {
+        "binding": "SLACK_QUEUE",
+        "queue": "agentcribs-slack",
+      },
     ],
     "consumers": [
       {
@@ -55,6 +59,11 @@
       },
       {
         "queue": "agentcribs-notifications",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5,
+      },
+      {
+        "queue": "agentcribs-slack",
         "max_batch_size": 10,
         "max_batch_timeout": 5,
       },

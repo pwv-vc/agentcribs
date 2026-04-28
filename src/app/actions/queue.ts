@@ -105,13 +105,16 @@ export async function handleSendNotification(payload: {
   type: "pending-review" | "accepted" | "rejected";
   email: string;
   name: string;
+  applicationId: string;
 }): Promise<void> {
-  const { type, email, name } = payload;
+  const { type, email, name, applicationId } = payload;
+
+  console.log(
+    `[queue/notification] Starting: type=${type} email=${email} name=${name} appId=${applicationId}`,
+  );
 
   if (type === "pending-review") {
-    console.log(
-      `[queue/notification] Sending pending-review email to ${email}`,
-    );
+    console.log(`[queue/notification] Sending pending-review email to ${email}`);
     await sendPendingReviewEmail({
       sendEmail: env.SEND_EMAIL,
       from: sendEmailFrom(),
@@ -119,11 +122,13 @@ export async function handleSendNotification(payload: {
       name,
     });
     // Also notify admin
+    const baseUrl = env.APP_URL || "https://agentcribs.com";
     await sendAdminNotificationEmail({
       sendEmail: env.SEND_EMAIL,
       from: sendEmailFrom(),
       name,
       email,
+      applicationUrl: `${baseUrl}/admin/applications/${applicationId}`,
     });
   } else if (type === "accepted") {
     console.log(`[queue/notification] Sending accepted email to ${email}`);
@@ -143,5 +148,42 @@ export async function handleSendNotification(payload: {
     });
   }
 
-  console.log(`[queue/notification] ${type} email sent to ${email}`);
+  // Send Slack notification as a separate queue message
+  console.log(`[queue/notification] Enqueuing Slack notification for ${applicationId}`);
+  await env.SLACK_QUEUE.send({
+    type,
+    email,
+    name,
+    applicationId,
+  });
+
+  console.log(`[queue/notification] Done: ${type} email sent to ${email}`);
+}
+
+export async function handleSendSlack(payload: {
+  type: "pending-review" | "accepted" | "rejected";
+  email: string;
+  name: string;
+  applicationId: string;
+}): Promise<void> {
+  const { type, email, name, applicationId } = payload;
+
+  console.log(`[queue/slack] Starting: type=${type} name=${name} appId=${applicationId}`);
+
+  const baseUrl = env.APP_URL || "https://agentcribs.com";
+  const appUrl = `${baseUrl}/admin/applications/${applicationId}`;
+
+  const appRaw = await env.AGENTCRIBS_KV.get(kvKey(applicationId));
+  if (!appRaw) {
+    console.error(`[queue/slack] Application not found in KV: ${applicationId}`);
+    return;
+  }
+
+  const app: ApplicationData = JSON.parse(appRaw);
+  const org = app.organization || "no org";
+  const slackText = `${type}: ${name} <${email}> (${org}) — status: ${app.status} — View: ${appUrl}`;
+
+  console.log(`[queue/slack] Posting to Slack: ${slackText}`);
+  await sendSlackNotification(slackText);
+  console.log(`[queue/slack] Done: Slack notification sent for ${applicationId}`);
 }

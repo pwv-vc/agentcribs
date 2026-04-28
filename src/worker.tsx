@@ -17,7 +17,7 @@ import { VerifyError } from "@/app/pages/verify-error";
 import { Terms } from "@/app/pages/terms";
 import { Privacy } from "@/app/pages/privacy";
 import { Home } from "@/app/pages/home";
-import { handleProcessApplication, handleSendEmail, handleSendNotification } from "@/app/actions/queue";
+import { handleProcessApplication, handleSendEmail, handleSendNotification, handleSendSlack } from "@/app/actions/queue";
 import type { ApplicationPayload } from "@/app/actions/application";
 
 export type AppContext = {};
@@ -81,6 +81,17 @@ export default {
           applicationId: string;
         };
         await handleSendNotification(payload);
+        message.ack();
+      }
+    } else if (batch.queue === "agentcribs-slack") {
+      for (const message of batch.messages) {
+        const payload = message.body as {
+          type: "pending-review" | "accepted" | "rejected";
+          email: string;
+          name: string;
+          applicationId: string;
+        };
+        await handleSendSlack(payload);
         message.ack();
       }
     }
