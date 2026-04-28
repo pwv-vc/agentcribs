@@ -78,6 +78,7 @@ export default {
           type: "pending-review" | "accepted" | "rejected";
           email: string;
           name: string;
+          applicationId: string;
         };
         await handleSendNotification(payload);
         message.ack();

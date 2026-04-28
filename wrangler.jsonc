@@ -69,6 +69,7 @@
       "GITHUB_CALLBACK_URL",
       "SEND_EMAIL_FROM",
       "APP_URL",
+      "SLACK_WEBHOOK_URL",
     ],
   },
   // ---- Environments ----

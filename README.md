@@ -62,7 +62,7 @@ The dev server runs on `http://localhost:5173` by default. For local testing of 
 1. Create the KV namespace: `wrangler kv namespace create AGENTCRIBS_KV` (update `id` in `wrangler.jsonc`)
 2. Create the R2 bucket: `wrangler r2 bucket create agentcribs-applications`
 3. [Create a GitHub OAuth App](https://github.com/settings/developers) with the callback URL set to your `GITHUB_CALLBACK_URL`
-4. Set all required secrets with `wrangler secret put <NAME>`
+5. (Optional) Set up Slack notifications: Create a [Slack webhook](https://api.slack.com/messaging/webhooks) and set it as `SLACK_WEBHOOK_URL` secret
 
 ### Deploy
 

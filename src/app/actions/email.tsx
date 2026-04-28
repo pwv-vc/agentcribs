@@ -58,18 +58,20 @@ export async function sendAdminNotificationEmail({
   from,
   name,
   email: applicantEmail,
+  applicationUrl,
 }: {
   sendEmail: SendEmail;
   from: string;
   name: string;
   email: string;
+  applicationUrl: string;
 }): Promise<void> {
   await sendEmail.send({
     from,
     to: "dt@pwv.com",
     subject: `New AgentCribs application to review: ${name}`,
-    text: adminNotificationText({ name, email: applicantEmail }),
-    html: await render(<AdminNotificationEmail name={name} email={applicantEmail} />),
+    text: adminNotificationText({ name, email: applicantEmail, applicationUrl }),
+    html: await render(<AdminNotificationEmail name={name} email={applicantEmail} applicationUrl={applicationUrl} />),
   });
 }
 

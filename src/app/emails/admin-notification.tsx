@@ -12,9 +12,11 @@ import * as React from "react";
 export default function AdminNotificationEmail({
   name,
   email,
+  applicationUrl,
 }: {
   name: string;
   email: string;
+  applicationUrl: string;
 }) {
   return (
     <Html>
@@ -31,8 +33,8 @@ export default function AdminNotificationEmail({
           <Text style={paragraph}>
             Their application is ready for review.
           </Text>
-          <Button href="https://agentcribs.com/admin/applications" style={button}>
-            Review applications
+          <Button href={applicationUrl} style={button}>
+            Review application
           </Button>
         </Container>
       </Body>
@@ -43,13 +45,15 @@ export default function AdminNotificationEmail({
 export function adminNotificationText({
   name,
   email,
+  applicationUrl,
 }: {
   name: string;
   email: string;
+  applicationUrl: string;
 }) {
   return `New application from ${name} (${email}) is ready for review.
 
-Go to https://agentcribs.com/admin/applications`;
+${applicationUrl}`;
 }
 
 const body = {

@@ -20,6 +20,7 @@ declare namespace Cloudflare {
     GITHUB_CALLBACK_URL: string;
     SEND_EMAIL_FROM: string;
     APP_URL: string;
+    SLACK_WEBHOOK_URL: string;
   }
   interface ProductionEnv extends Env {}
   interface StagingEnv extends Env {}
@@ -40,6 +41,7 @@ declare namespace NodeJS {
         | "GITHUB_CALLBACK_URL"
         | "SEND_EMAIL_FROM"
         | "APP_URL"
+        | "SLACK_WEBHOOK_URL"
       >
     > {}
 }

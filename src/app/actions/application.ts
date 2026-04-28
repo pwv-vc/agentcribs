@@ -271,6 +271,7 @@ export const verifyApplication = serverAction(
       type: "pending-review",
       email,
       name: `${app.firstName} ${app.lastName}`,
+      applicationId,
     });
 
     return new Response(null, {
@@ -315,6 +316,7 @@ export const setApplicationStatus = serverAction(
         type: status as "accepted" | "rejected",
         email: app.email,
         name: `${app.firstName} ${app.lastName}`,
+        applicationId: id,
       });
     }
   },

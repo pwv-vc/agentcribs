@@ -6,20 +6,49 @@ import {
   sendAcceptedEmail,
   sendRejectedEmail,
 } from "@/app/actions/email";
-import { kvKey, emailIndexKey, R2_KEY_PREFIX, r2Meta } from "@/app/actions/application";
-import type { ApplicationData, ApplicationPayload } from "@/app/actions/application";
+import {
+  kvKey,
+  emailIndexKey,
+  R2_KEY_PREFIX,
+  r2Meta,
+} from "@/app/actions/application";
+import type {
+  ApplicationData,
+  ApplicationPayload,
+} from "@/app/actions/application";
 
 function sendEmailFrom() {
   return env.SEND_EMAIL_FROM || "agentcribs@agentcribs.com";
 }
 
-export async function handleProcessApplication(payload: ApplicationPayload): Promise<void> {
+async function sendSlackNotification(text: string): Promise<void> {
+  const webhook = env.SLACK_WEBHOOK_URL;
+  if (!webhook) return;
+
+  const response = await fetch(webhook, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+  });
+
+  if (!response.ok) {
+    console.error(
+      `[queue/notification] Slack notification failed: ${response.status}`,
+    );
+  }
+}
+
+export async function handleProcessApplication(
+  payload: ApplicationPayload,
+): Promise<void> {
   const { kvKey: applicationKvKey, email, token, isUpdate } = payload;
 
   // Fetch the application from KV
   const raw = await env.AGENTCRIBS_KV.get(applicationKvKey);
   if (!raw) {
-    console.error(`[queue/process] Application not found in KV: ${applicationKvKey}`);
+    console.error(
+      `[queue/process] Application not found in KV: ${applicationKvKey}`,
+    );
     return;
   }
 
@@ -43,7 +72,9 @@ export async function handleProcessApplication(payload: ApplicationPayload): Pro
     applicationId: application.id,
   });
 
-  console.log(`[queue/process] Application ${application.id} processed, email queued`);
+  console.log(
+    `[queue/process] Application ${application.id} processed, email queued`,
+  );
 }
 
 export async function handleSendEmail(payload: {
@@ -78,7 +109,9 @@ export async function handleSendNotification(payload: {
   const { type, email, name } = payload;
 
   if (type === "pending-review") {
-    console.log(`[queue/notification] Sending pending-review email to ${email}`);
+    console.log(
+      `[queue/notification] Sending pending-review email to ${email}`,
+    );
     await sendPendingReviewEmail({
       sendEmail: env.SEND_EMAIL,
       from: sendEmailFrom(),

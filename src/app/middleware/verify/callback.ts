@@ -54,6 +54,7 @@ export const handleVerificationCallback: RouteMiddleware = async (
     type: "pending-review",
     email: app.email,
     name: `${app.firstName} ${app.lastName}`,
+    applicationId,
   });
 
   return new Response(null, {
