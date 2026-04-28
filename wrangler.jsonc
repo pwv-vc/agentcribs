@@ -10,6 +10,47 @@
   "observability": {
     "enabled": true,
   },
+  "r2_buckets": [
+    {
+      "bucket_name": "agentcribs-applications",
+      "binding": "AGENTCRIBS_R2",
+    },
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "AGENTCRIBS_KV",
+      "id": "ba9c5eeaa10b4ce89ec84362d4510cd2",
+    },
+  ],
+  "send_email": [
+    {
+      "name": "SEND_EMAIL",
+    },
+  ],
+  "queues": {
+    "producers": [
+      {
+        "binding": "PROCESS_APPLICATION_QUEUE",
+        "queue": "agentcribs-process-application",
+      },
+      {
+        "binding": "SEND_EMAIL_QUEUE",
+        "queue": "agentcribs-send-email",
+      },
+    ],
+    "consumers": [
+      {
+        "queue": "agentcribs-process-application",
+        "max_batch_size": 5,
+        "max_batch_timeout": 5,
+      },
+      {
+        "queue": "agentcribs-send-email",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5,
+      },
+    ],
+  },
   "secrets": {
     "required": [
       "ADMIN_PASSWORD",
@@ -34,46 +75,12 @@
           "custom_domain": true,
         },
       ],
-      "r2_buckets": [
-        {
-          "bucket_name": "agentcribs-applications",
-          "binding": "AGENTCRIBS_R2",
-        },
-      ],
-      "kv_namespaces": [
-        {
-          "binding": "AGENTCRIBS_KV",
-          "id": "ba9c5eeaa10b4ce89ec84362d4510cd2",
-        },
-      ],
-      "send_email": [
-        {
-          "name": "SEND_EMAIL",
-        },
-      ],
     },
     "staging": {
       "routes": [
         {
           "pattern": "staging.agentcribs.com",
           "custom_domain": true,
-        },
-      ],
-      "r2_buckets": [
-        {
-          "bucket_name": "agentcribs-applications",
-          "binding": "AGENTCRIBS_R2",
-        },
-      ],
-      "kv_namespaces": [
-        {
-          "binding": "AGENTCRIBS_KV",
-          "id": "ba9c5eeaa10b4ce89ec84362d4510cd2",
-        },
-      ],
-      "send_email": [
-        {
-          "name": "SEND_EMAIL",
         },
       ],
     },

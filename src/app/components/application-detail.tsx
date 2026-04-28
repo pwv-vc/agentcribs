@@ -163,6 +163,18 @@ export function ApplicationDetail({ application }: { application: ApplicationDat
           <dt className="w-32 text-sm font-medium text-text-secondary">Applied</dt>
           <dd className="text-sm">{formatDate(application.createdAt)}</dd>
         </div>
+        {application.termsAcceptedAt && (
+          <div className="flex gap-4 py-3">
+            <dt className="w-32 text-sm font-medium text-text-secondary">Terms accepted</dt>
+            <dd className="text-sm">{formatDate(application.termsAcceptedAt)}</dd>
+          </div>
+        )}
+        {application.verifiedAt && (
+          <div className="flex gap-4 py-3">
+            <dt className="w-32 text-sm font-medium text-text-secondary">Verified</dt>
+            <dd className="text-sm">{formatDate(application.verifiedAt)}</dd>
+          </div>
+        )}
         {application.editedAt && (
           <div className="flex gap-4 py-3">
             <dt className="w-32 text-sm font-medium text-text-secondary">Edited</dt>

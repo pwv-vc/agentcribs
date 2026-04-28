@@ -80,3 +80,26 @@ export async function consumeGitHubVerification(
   log("verification consumed", { handle: result.githubHandle });
   return result;
 }
+
+// Save form state to KV so it survives cross-origin GitHub OAuth redirect
+export async function saveOAuthFormState(
+  formId: string,
+  state: Record<string, unknown>,
+): Promise<void> {
+  log("saveOAuthFormState", { formId });
+  await env.AGENTCRIBS_KV.put(
+    `oauth:form:${formId}`,
+    JSON.stringify(state),
+    { expirationTtl: 600 },
+  );
+}
+
+export async function restoreOAuthFormState(
+  formId: string,
+): Promise<Record<string, unknown> | null> {
+  log("restoreOAuthFormState", { formId });
+  const raw = await env.AGENTCRIBS_KV.get(`oauth:form:${formId}`);
+  if (!raw) return null;
+  await env.AGENTCRIBS_KV.delete(`oauth:form:${formId}`);
+  return JSON.parse(raw);
+}

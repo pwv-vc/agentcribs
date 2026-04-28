@@ -17,12 +17,14 @@ import { VerifyError } from "@/app/pages/verify-error";
 import { Terms } from "@/app/pages/terms";
 import { Privacy } from "@/app/pages/privacy";
 import { Home } from "@/app/pages/home";
+import { handleProcessApplication, handleSendEmail } from "@/app/actions/queue";
+import type { ApplicationPayload } from "@/app/actions/application";
 
 export type AppContext = {};
 
 const adminAuth = requireAdminPassword();
 
-export default defineApp([
+export const app = defineApp([
   setCommonHeaders(),
   ({ ctx }) => {
     // setup ctx here
@@ -49,3 +51,27 @@ export default defineApp([
     ]),
   ]),
 ]);
+
+export default {
+  fetch: app.fetch,
+  async queue(batch: MessageBatch) {
+    if (batch.queue === "agentcribs-process-application") {
+      for (const message of batch.messages) {
+        const payload = message.body as ApplicationPayload;
+        await handleProcessApplication(payload);
+        message.ack();
+      }
+    } else if (batch.queue === "agentcribs-send-email") {
+      for (const message of batch.messages) {
+        const payload = message.body as {
+          type: "application" | "update";
+          email: string;
+          token: string;
+          applicationId: string;
+        };
+        await handleSendEmail(payload);
+        message.ack();
+      }
+    }
+  },
+} satisfies ExportedHandler<Env>;
