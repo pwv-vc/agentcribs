@@ -153,7 +153,7 @@
 - Create a shared `Layout` component wrapping `Navbar`, page content, and `Footer`. Confidence: 0.90
 - Use `layout(Layout, [...routes])` in defineApp to apply layout to route groups. Confidence: 0.90
 - Define nav items as a typed array of `{ href, label }` objects. Confidence: 0.85
-- Use the typed `link()` helper for internal navigation hrefs. Confidence: 0.95
+- Use the typed `link()` helper as a function returning URL strings (e.g., `<a href={link(\"/\")}>`) for internal navigation hrefs in headers, navbars, and buttons — do NOT use `link` as a JSX component like `<link.App>`. Confidence: 0.98
 - Support dark/light/system theme via cookie-based preference stored in ctx. Confidence: 0.80
 - Fetch data directly in async server components — no client-side data fetching libraries needed. Confidence: 0.95
 - Use `serverQuery` for client-initiated data fetching without page re-render. Confidence: 0.90
