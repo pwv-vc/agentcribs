@@ -27,7 +27,7 @@ export default defineApp([
     ctx;
   },
   render(Document, [
-    ...layout(Layout, [
+    layout(Layout, [
       route("/", Home),
       route("/apply", Apply),
       route("/apply/thank-you", ThankYou),
@@ -36,7 +36,7 @@ export default defineApp([
       route("/apply/verify/success", VerifySuccess),
       route("/apply/verify/error", VerifyError),
     ]),
-    ...layout(AdminLayout, [
+    layout(AdminLayout, [
       route("/admin/applications", [adminAuth, AdminApplications]),
       route("/admin/applications/:id", [
         adminAuth,

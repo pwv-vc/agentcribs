@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useEffect, useTransition } from "react";
+import { useState, useEffect, useRef, useTransition } from "react";
 import { submitApplication } from "../actions/application";
 import {
   startGitHubOAuth,
   getGitHubVerification,
 } from "../actions/github";
+
+const SESSION_KEY = "agentcribs-apply-form";
 
 const ERROR_MESSAGES: Record<string, string> = {
   expired: "Verification expired. Please try again.",
@@ -16,6 +18,34 @@ const ERROR_MESSAGES: Record<string, string> = {
   api_error: "Something went wrong. Please try again.",
 };
 
+function saveFormState(form: HTMLFormElement) {
+  const data = new FormData(form);
+  const state: Record<string, string | string[]> = {};
+  for (const [key, value] of data) {
+    if (key === "topics") {
+      const prev = state[key];
+      state[key] = prev ? [...(prev as string[]), value as string] : [value as string];
+    } else {
+      state[key] = value as string;
+    }
+  }
+  try {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(state));
+  } catch {
+    // sessionStorage may be unavailable
+  }
+}
+
+function restoreFormState(): Record<string, string | string[]> | null {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
 export const ApplyForm = ({
   topics,
 }: {
@@ -23,17 +53,37 @@ export const ApplyForm = ({
 }) => {
   const [isPending, startTransition] = useTransition();
   const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [organization, setOrganization] = useState("");
+  const [otherTopic, setOtherTopic] = useState("");
+  const [selectedTopics, setSelectedTopics] = useState<Set<string>>(new Set());
   const [githubStateNonce, setGithubStateNonce] = useState<string | null>(null);
   const [githubHandle, setGithubHandle] = useState<string | null>(null);
   const [githubAvatarUrl, setGithubAvatarUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   // Check URL params on mount for OAuth callback
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const state = params.get("github_state");
     const err = params.get("github_error");
+
+    // Restore saved form state before processing callback
+    const saved = restoreFormState();
+    if (saved) {
+      setEmail((saved.email as string) ?? "");
+      setFirstName((saved.firstName as string) ?? "");
+      setLastName((saved.lastName as string) ?? "");
+      setOrganization((saved.organization as string) ?? "");
+      setOtherTopic((saved.otherTopic as string) ?? "");
+      if (saved.topics) {
+        setSelectedTopics(new Set(saved.topics as string[]));
+      }
+      sessionStorage.removeItem(SESSION_KEY);
+    }
 
     if (state) {
       getGitHubVerification(state).then((verification) => {
@@ -61,6 +111,11 @@ export const ApplyForm = ({
     setIsVerifying(true);
     setError(null);
 
+    // Save current form state before redirect
+    if (formRef.current) {
+      saveFormState(formRef.current);
+    }
+
     try {
       const url = await startGitHubOAuth(email);
       window.location.href = url;
@@ -85,8 +140,17 @@ export const ApplyForm = ({
     });
   };
 
+  const toggleTopic = (id: string) => {
+    setSelectedTopics((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+    <form onSubmit={handleSubmit} ref={formRef} className="mt-8 space-y-6">
       <div className="grid gap-6 sm:grid-cols-2">
         <label className="flex flex-col gap-1.5">
           <span className="text-sm font-semibold">
@@ -95,6 +159,8 @@ export const ApplyForm = ({
           <input
             name="firstName"
             required
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             className="rounded-lg border border-border bg-bg-secondary px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
             placeholder="Jane"
           />
@@ -106,6 +172,8 @@ export const ApplyForm = ({
           <input
             name="lastName"
             required
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
             className="rounded-lg border border-border bg-bg-secondary px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
             placeholder="Doe"
           />
@@ -127,8 +195,67 @@ export const ApplyForm = ({
         />
       </label>
 
-      {/* GitHub verification */}
-      <div>
+      <label className="flex flex-col gap-1.5">
+        <span className="text-sm font-semibold">
+          Organization <span className="text-text-secondary">(optional)</span>
+        </span>
+        <input
+          name="organization"
+          value={organization}
+          onChange={(e) => setOrganization(e.target.value)}
+          className="rounded-lg border border-border bg-bg-secondary px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
+          placeholder="Company, school, project, etc."
+        />
+      </label>
+
+      <fieldset>
+        <legend className="text-sm font-semibold">
+          Areas of interest{" "}
+          <span className="text-text-secondary">(select all that apply)</span>
+        </legend>
+        <div className="mt-3 space-y-2.5">
+          {topics.map((topic) => (
+            <label
+              key={topic.id}
+              className="flex items-start gap-3 rounded-lg border border-border bg-bg-secondary px-4 py-3 transition-colors has-[:checked]:border-accent has-[:checked]:bg-accent/5"
+            >
+              <input
+                name="topics"
+                type="checkbox"
+                value={topic.id}
+                checked={selectedTopics.has(topic.id)}
+                onChange={() => toggleTopic(topic.id)}
+                className="mt-0.5 h-4 w-4 rounded border-border accent-accent"
+              />
+              <span className="text-sm leading-relaxed sm:text-base">
+                {topic.label}
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <label className="flex flex-col gap-1.5">
+        <span className="text-sm font-semibold">
+          Tell us more{" "}
+          <span className="text-text-secondary">(optional)</span>
+        </span>
+        <textarea
+          name="otherTopic"
+          rows={3}
+          value={otherTopic}
+          onChange={(e) => setOtherTopic(e.target.value)}
+          className="rounded-lg border border-border bg-bg-secondary px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
+          placeholder="What are you building with AI agents?"
+        />
+      </label>
+
+      {/* GitHub verification — moved to bottom */}
+      <div className="border-t border-border pt-6">
+        <p className="mb-1 text-sm font-semibold">Connect GitHub</p>
+        <p className="mb-4 text-xs text-text-secondary">
+          Verifying your GitHub helps us get to know you and what you're building. It's optional but recommended.
+        </p>
         {githubHandle ? (
           <div className="flex items-center gap-3 rounded-lg border border-green-500/30 bg-green-500/5 px-4 py-3">
             {githubAvatarUrl && (
@@ -179,55 +306,6 @@ export const ApplyForm = ({
           </div>
         )}
       </div>
-
-      <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-semibold">
-          Organization <span className="text-text-secondary">(optional)</span>
-        </span>
-        <input
-          name="organization"
-          className="rounded-lg border border-border bg-bg-secondary px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
-          placeholder="Company, school, project, etc."
-        />
-      </label>
-
-      <fieldset>
-        <legend className="text-sm font-semibold">
-          Areas of interest{" "}
-          <span className="text-text-secondary">(select all that apply)</span>
-        </legend>
-        <div className="mt-3 space-y-2.5">
-          {topics.map((topic) => (
-            <label
-              key={topic.id}
-              className="flex items-start gap-3 rounded-lg border border-border bg-bg-secondary px-4 py-3 transition-colors has-[:checked]:border-accent has-[:checked]:bg-accent/5"
-            >
-              <input
-                name="topics"
-                type="checkbox"
-                value={topic.id}
-                className="mt-0.5 h-4 w-4 rounded border-border accent-accent"
-              />
-              <span className="text-sm leading-relaxed sm:text-base">
-                {topic.label}
-              </span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-semibold">
-          Tell us more{" "}
-          <span className="text-text-secondary">(optional)</span>
-        </span>
-        <textarea
-          name="otherTopic"
-          rows={3}
-          className="rounded-lg border border-border bg-bg-secondary px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
-          placeholder="What are you building with AI agents?"
-        />
-      </label>
 
       <button
         type="submit"
