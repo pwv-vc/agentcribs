@@ -5,3 +5,64 @@ A curated [PWV](https://www.pwv/com) community for founders, developers, and hac
 AgentCribs began as a private gathering of PWV founders and close friends sharing the real tools, workflows, repos, and team practices they use to build software and run companies with AI. Now it's opening selectively to more people already building with agents.
 
 Apply at [agentcribs.com](https://agentcribs.com/).
+
+## Setup
+
+### Prerequisites
+
+- Node.js 22+
+- [Wrangler](https://developers.cloudflare.com/workers/wrangler/) CLI (`npm install -g wrangler`)
+- A Cloudflare account with Workers, KV, R2, and Email Send enabled
+
+### Cloudflare Bindings
+
+The worker requires these bindings (configured in `wrangler.jsonc`):
+
+| Binding | Type | Purpose |
+|---------|------|---------|
+| `AGENTCRIBS_KV` | KV Namespace | Application storage, email dedup, OAuth state, verification tokens |
+| `AGENTCRIBS_R2` | R2 Bucket | Durable application backup storage |
+| `SEND_EMAIL` | Send Email | Transactional email for magic link verification |
+| `ASSETS` | Fetcher | Static asset serving |
+
+### Required Secrets
+
+Set these via `wrangler secret put <NAME>`:
+
+| Secret | Description |
+|--------|-------------|
+| `ADMIN_PASSWORD` | Password for the admin panel at `/admin` |
+| `ADMIN_COOKIE_NAME` | Cookie name for the admin session (defaults to `agentcribs-dev-admin_session`) |
+| `GITHUB_CLIENT_ID` | GitHub OAuth App client ID |
+| `GITHUB_CLIENT_SECRET` | GitHub OAuth App client secret |
+| `GITHUB_CALLBACK_URL` | GitHub OAuth callback URL (e.g. `https://agentcribs.com/api/auth/github/callback`) |
+| `SEND_EMAIL_FROM` | From address for verification emails (defaults to `agentcribs@agentcribs.com`) |
+| `APP_URL` | Public base URL of the app (e.g. `https://agentcribs.com` or `http://localhost:5173`) |
+
+### Local Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Generate worker type bindings
+pnpm generate
+
+# Start dev server
+pnpm dev
+```
+
+The dev server runs on `http://localhost:5173` by default. For local testing of email and GitHub OAuth, set the corresponding secrets via wrangler or `.dev.vars`.
+
+### One-time Setup
+
+1. Create the KV namespace: `wrangler kv namespace create AGENTCRIBS_KV` (update `id` in `wrangler.jsonc`)
+2. Create the R2 bucket: `wrangler r2 bucket create agentcribs-applications`
+3. [Create a GitHub OAuth App](https://github.com/settings/developers) with the callback URL set to your `GITHUB_CALLBACK_URL`
+4. Set all required secrets with `wrangler secret put <NAME>`
+
+### Deploy
+
+```bash
+pnpm release
+```
