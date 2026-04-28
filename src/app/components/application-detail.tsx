@@ -21,14 +21,14 @@ function ReviewActions({ application }: { application: ApplicationData }) {
           <button
             onClick={() => updateStatus("accepted")}
             disabled={isPending}
-            className="rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-50"
+            className="rounded-lg bg-status-accepted-text px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-status-accepted-text/80 disabled:opacity-50"
           >
             Accept
           </button>
           <button
             onClick={() => updateStatus("rejected")}
             disabled={isPending}
-            className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-700 disabled:opacity-50"
+            className="rounded-lg bg-status-rejected-text px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-status-rejected-text/80 disabled:opacity-50"
           >
             Reject
           </button>
@@ -38,7 +38,7 @@ function ReviewActions({ application }: { application: ApplicationData }) {
         <button
           onClick={() => updateStatus("rejected")}
           disabled={isPending}
-          className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-700 disabled:opacity-50"
+          className="rounded-lg bg-status-rejected-text px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-status-rejected-text/80 disabled:opacity-50"
         >
           Move to rejected
         </button>
@@ -47,7 +47,7 @@ function ReviewActions({ application }: { application: ApplicationData }) {
         <button
           onClick={() => updateStatus("accepted")}
           disabled={isPending}
-          className="rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-50"
+          className="rounded-lg bg-status-accepted-text px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-status-accepted-text/80 disabled:opacity-50"
         >
           Move to accepted
         </button>
@@ -73,10 +73,10 @@ export function ApplicationDetail({ application }: { application: ApplicationDat
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 rounded-lg border border-border bg-bg-soft p-6 sm:p-8">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">
+          <h2 className="font-serif text-2xl font-bold tracking-tight">
             {application.firstName} {application.lastName}
           </h2>
           <p className="mt-1 text-sm text-text-secondary">{application.email}</p>
