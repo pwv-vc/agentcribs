@@ -54,13 +54,17 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.33.2",
     "@cloudflare/workers-types": "4.20260426.1",
+    "@content-collections/core": "^0.15.0",
+    "@content-collections/markdown": "^0.1.4",
+    "@content-collections/vite": "^0.3.0",
     "@react-email/ui": "6.0.5",
     "@types/node": "~25.6.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "typescript": "6.0.3",
     "vite": "~7.3.2",
-    "wrangler": "4.85.0"
+    "wrangler": "4.85.0",
+    "zod": "^4.3.6"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

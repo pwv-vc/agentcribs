@@ -2,7 +2,10 @@
 
 import { serverQuery } from "rwsdk/worker";
 import { env } from "cloudflare:workers";
+import { allTopics } from "content-collections";
 import type { ApplicationData } from "../actions/application";
+
+type Topic = (typeof allTopics)[number];
 
 const KV_PREFIX = "app:";
 
@@ -37,29 +40,8 @@ export const listApplications = serverQuery(
   },
 );
 
-export interface Topic {
-  id: string;
-  label: string;
-}
-
 export const getTopics = serverQuery(
   async (): Promise<Topic[]> => {
-    return [
-      { id: "code-generation", label: "AI Code Generation (Cursor, Copilot, Codeium)" },
-      { id: "agentic-coding", label: "Agentic Coding Tools (Devin, Factory, Augment)" },
-      { id: "cli-agents", label: "CLI Agents & Terminal Workflows" },
-      { id: "rag-patterns", label: "RAG Patterns & Knowledge Retrieval" },
-      { id: "fine-tuning", label: "Fine-Tuning & Custom Models" },
-      { id: "ai-workflows", label: "AI Agents for CI/CD, DevOps & Internal Tooling" },
-      { id: "ai-products", label: "Building AI-Native Products" },
-      { id: "prompt-engineering", label: "Prompt Engineering & Chain-of-Thought" },
-      { id: "evaluation", label: "Evaluation & Testing of AI Outputs" },
-      { id: "safety", label: "AI Safety, Alignment & Guardrails" },
-      { id: "infrastructure", label: "Infrastructure for AI (GPUs, Inference, Vector DBs)" },
-      { id: "open-source", label: "Open Source AI & Community Models" },
-      { id: "multi-agent", label: "Multi-Agent Systems & Orchestration" },
-      { id: "ai-design", label: "AI-Assisted Design & Prototyping" },
-      { id: "other", label: "Something else (tell us below)" },
-    ].sort((a, b) => a.label.localeCompare(b.label));
+    return [...allTopics].sort((a, b) => a.label.localeCompare(b.label));
   },
 );

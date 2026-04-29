@@ -14,3 +14,4 @@
 - [x] inform via email of new email to review
 - [x] inform via slack of a new application to review
 - [x] use react email and templates
+- [ ] add consent cookie tracking
