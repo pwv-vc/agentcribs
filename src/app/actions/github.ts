@@ -8,18 +8,20 @@ interface OAuthState {
   formStateId?: string;
 }
 
+interface GitHubEmail {
+  email: string;
+  primary: boolean;
+  verified: boolean;
+  visibility: string | null;
+}
+
 interface VerificationResult {
   githubHandle: string;
   githubId: number;
   githubAvatarUrl: string;
   githubProfile: Record<string, unknown>;
   email: string;
-}
-
-function log(...args: unknown[]) {
-  console.log("[github/actions]", ...args.map((a) =>
-    typeof a === "object" ? JSON.stringify(a, null, 2) : String(a)
-  ));
+  githubEmails: GitHubEmail[];
 }
 
 function authorizeUrl(state: string): string {
@@ -36,8 +38,6 @@ export async function startGitHubOAuth(
   email: string,
   formState?: Record<string, unknown>,
 ): Promise<string> {
-  log("startGitHubOAuth called", { email });
-
   if (!email) {
     throw new Error("Email is required to start GitHub verification.");
   }
@@ -64,36 +64,29 @@ export async function startGitHubOAuth(
   );
 
   const url = authorizeUrl(nonce);
-  log("state stored in KV, returning authorize URL", { nonce: nonce.slice(0, 8) });
   return url;
 }
 
 export async function getGitHubVerification(
   nonce: string,
 ): Promise<VerificationResult | null> {
-  log("getGitHubVerification called", { nonce: nonce.slice(0, 8) });
   const raw = await env.AGENTCRIBS_KV.get(`oauth:verify:${nonce}`);
   if (!raw) {
-    log("no verification found in KV for nonce");
     return null;
   }
   const result = JSON.parse(raw) as VerificationResult;
-  log("verification found", { handle: result.githubHandle });
   return result;
 }
 
 export async function consumeGitHubVerification(
   nonce: string,
 ): Promise<VerificationResult | null> {
-  log("consumeGitHubVerification called", { nonce: nonce.slice(0, 8) });
   const raw = await env.AGENTCRIBS_KV.get(`oauth:verify:${nonce}`);
   if (!raw) {
-    log("no verification found in KV for nonce (may have expired)");
     return null;
   }
   await env.AGENTCRIBS_KV.delete(`oauth:verify:${nonce}`);
   const result = JSON.parse(raw) as VerificationResult;
-  log("verification consumed", { handle: result.githubHandle });
   return result;
 }
 
@@ -102,7 +95,6 @@ export async function saveOAuthFormState(
   formId: string,
   state: Record<string, unknown>,
 ): Promise<void> {
-  log("saveOAuthFormState", { formId });
   await env.AGENTCRIBS_KV.put(
     `oauth:form:${formId}`,
     JSON.stringify(state),
@@ -113,7 +105,6 @@ export async function saveOAuthFormState(
 export async function restoreOAuthFormState(
   formId: string,
 ): Promise<Record<string, unknown> | null> {
-  log("restoreOAuthFormState", { formId });
   const raw = await env.AGENTCRIBS_KV.get(`oauth:form:${formId}`);
   if (!raw) return null;
   await env.AGENTCRIBS_KV.delete(`oauth:form:${formId}`);

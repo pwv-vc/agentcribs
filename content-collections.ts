@@ -17,5 +17,5 @@ const topics = defineCollection({
 });
 
 export default defineConfig({
-  collections: [topics],
+  content: [topics],
 });

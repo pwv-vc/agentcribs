@@ -14,10 +14,7 @@ const SESSION_KEY = "agentcribs-apply-form";
 
 const ERROR_MESSAGES: Record<string, string> = {
   expired: "Verification expired. Please try again.",
-  email_mismatch:
-    "The GitHub email doesn't match the email you entered.",
-  no_verified_email:
-    "Your GitHub account must have a verified primary email.",
+  no_verified_email: "Your GitHub account must have a verified primary email.",
   api_error: "Something went wrong. Please try again.",
 };
 
@@ -27,7 +24,9 @@ function saveFormState(form: HTMLFormElement) {
   for (const [key, value] of data) {
     if (key === "topics") {
       const prev = state[key];
-      state[key] = prev ? [...(prev as string[]), value as string] : [value as string];
+      state[key] = prev
+        ? [...(prev as string[]), value as string]
+        : [value as string];
     } else {
       state[key] = value as string;
     }
@@ -59,6 +58,7 @@ export const ApplyForm = ({
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [organization, setOrganization] = useState("");
+  const [story, setStory] = useState("");
   const [summary, setSummary] = useState("");
   const [isSummarizing, setIsSummarizing] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -67,6 +67,7 @@ export const ApplyForm = ({
   const [githubStateNonce, setGithubStateNonce] = useState<string | null>(null);
   const [githubHandle, setGithubHandle] = useState<string | null>(null);
   const [githubAvatarUrl, setGithubAvatarUrl] = useState<string | null>(null);
+  const [githubEmailMismatch, setGithubEmailMismatch] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -90,7 +91,12 @@ export const ApplyForm = ({
           if (saved.topics) {
             setSelectedTopics(new Set(saved.topics as string[]));
           }
-          setAcceptedTerms((saved.acceptedTerms as unknown as boolean) ?? false);
+          setAcceptedTerms(
+            (saved.acceptedTerms as unknown as boolean) ?? false,
+          );
+          setStory((saved.story as string) ?? "");
+          storyRef.current = (saved.story as string) ?? "";
+          setSummary((saved.summary as string) ?? "");
         }
       });
     } else {
@@ -105,6 +111,9 @@ export const ApplyForm = ({
           setSelectedTopics(new Set(saved.topics as string[]));
         }
         setAcceptedTerms((saved.acceptedTerms as unknown as boolean) ?? false);
+        setStory((saved.story as string) ?? "");
+        storyRef.current = (saved.story as string) ?? "";
+        setSummary((saved.summary as string) ?? "");
         sessionStorage.removeItem(SESSION_KEY);
       }
     }
@@ -115,6 +124,10 @@ export const ApplyForm = ({
           setGithubHandle(verification.githubHandle);
           setGithubAvatarUrl(verification.githubAvatarUrl);
           setGithubStateNonce(state);
+          // If the GitHub verified email doesn't match the form email, show a warning
+          if (verification.email.toLowerCase() !== email.toLowerCase()) {
+            setGithubEmailMismatch(true);
+          }
         }
       });
     }
@@ -136,6 +149,8 @@ export const ApplyForm = ({
         firstName,
         lastName,
         organization,
+        story: storyRef.current,
+        summary,
         topics: [...selectedTopics],
         acceptedTerms,
       });
@@ -262,14 +277,17 @@ export const ApplyForm = ({
           Tell us more <span className="text-accent">*</span>
         </span>
         <p className="text-xs leading-relaxed text-text-secondary">
-          What are you building with AI agents? What interests you about AgentCribs? What do you want to see in an agent platform?
+          What are you building with AI agents? What interests you about
+          AgentCribs? What do you want to see in an agent platform?
         </p>
         <textarea
           name="story"
           rows={3}
+          value={story}
           onChange={(e) => {
             const value = e.target.value;
             storyRef.current = value;
+            setStory(value);
 
             if (debounceRef.current) {
               clearTimeout(debounceRef.current);
@@ -297,9 +315,9 @@ export const ApplyForm = ({
                         // skip malformed lines
                       }
                     },
-                  })
+                  }),
                 );
-              }, 1500);
+              }, 850);
             }
           }}
           className="rounded-lg border border-border bg-bg-soft px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
@@ -319,23 +337,34 @@ export const ApplyForm = ({
       <div className="border-t border-border pt-6">
         <p className="mb-1 text-sm font-semibold text-text">Connect GitHub</p>
         <p className="mb-4 text-sm text-text-secondary">
-          Verifying your GitHub helps us get to know you and what you're building. It's optional but recommended.
+          Verifying your GitHub helps us get to know you and what you're
+          building. It's optional but recommended.
         </p>
         {githubHandle ? (
-          <div className="flex items-center gap-3 rounded-lg border border-accent/30 bg-accent/5 px-4 py-3">
-            {githubAvatarUrl && (
-              <img
-                src={githubAvatarUrl}
-                alt=""
-                className="h-6 w-6 rounded-full"
-              />
+          <div className="space-y-2">
+            <div className="flex items-center gap-3 rounded-lg border border-accent/30 bg-accent/5 px-4 py-3">
+              {githubAvatarUrl && (
+                <img
+                  src={githubAvatarUrl}
+                  alt=""
+                  className="h-6 w-6 rounded-full"
+                />
+              )}
+              <span className="text-sm text-text">
+                Verified as{" "}
+                <span className="font-semibold">@{githubHandle}</span>
+              </span>
+              <span className="ml-auto text-xs font-medium text-accent">
+                Connected
+              </span>
+            </div>
+            {githubEmailMismatch && (
+              <p className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-xs text-amber-800">
+                Your GitHub email doesn't match the email entered above. The
+                mismatch will be noted in your application, but you can still
+                submit.
+              </p>
             )}
-            <span className="text-sm text-text">
-              Verified as <span className="font-semibold">@{githubHandle}</span>
-            </span>
-            <span className="ml-auto text-xs font-medium text-accent">
-              Connected
-            </span>
           </div>
         ) : (
           <div>
@@ -360,9 +389,7 @@ export const ApplyForm = ({
                 </>
               )}
             </button>
-            {error && (
-              <p className="mt-2 text-sm text-red-600">{error}</p>
-            )}
+            {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
             {!email && (
               <p className="mt-2 text-sm text-text-secondary">
                 Enter your email first to verify with GitHub.

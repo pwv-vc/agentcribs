@@ -15,3 +15,11 @@ See [brand/taste.md](brand/taste.md)
 # data
 
 - Query files in `src/app/queries/` should use content collections instead of redefining them inline. Confidence: 0.65
+
+# logging
+
+- Remove console debug/log statements from server action files and middleware before considering them complete — don't leave `log()` calls or `console.log` in production code. Confidence: 0.65
+
+# code-style
+
+- Use numeric separator underscores (e.g., `1_000` instead of `1000`) for readable large number literals. Confidence: 0.70

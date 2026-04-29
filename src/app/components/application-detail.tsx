@@ -139,6 +139,30 @@ export function ApplicationDetail({ application }: { application: ApplicationDat
               >
                 @{application.githubHandle}
               </a>
+              {application.githubEmailMismatch && (
+                <p className="mt-1 rounded-md border border-amber-300 bg-amber-50 px-3 py-1.5 text-xs text-amber-800">
+                  GitHub email doesn&apos;t match application email
+                </p>
+              )}
+              {application.githubEmails && application.githubEmails.length > 0 && (
+                <div className="mt-2 space-y-0.5">
+                  <p className="text-xs font-medium text-text-secondary/70">GitHub account emails</p>
+                  {application.githubEmails.map((e) => (
+                    <p key={e.email} className="text-xs text-text-secondary">
+                      {e.email}
+                      {e.primary && (
+                        <span className="ml-1.5 text-accent">primary</span>
+                      )}
+                      {e.verified && !e.primary && (
+                        <span className="ml-1.5 text-status-accepted-text">verified</span>
+                      )}
+                      {!e.verified && (
+                        <span className="ml-1.5 text-amber-600">unverified</span>
+                      )}
+                    </p>
+                  ))}
+                </div>
+              )}
               {application.githubProfile && (
                 <div className="mt-2 space-y-1 text-text-secondary">
                   {application.githubProfile.name && (

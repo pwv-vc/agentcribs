@@ -24,6 +24,13 @@ export interface GitHubProfile {
   [key: string]: unknown;
 }
 
+export interface GitHubEmail {
+  email: string;
+  primary: boolean;
+  verified: boolean;
+  visibility: string | null;
+}
+
 export interface ApplicationData {
   id: string;
   firstName: string;
@@ -43,6 +50,8 @@ export interface ApplicationData {
   githubId?: number;
   githubAvatarUrl?: string;
   githubProfile?: GitHubProfile;
+  githubEmailMismatch?: boolean;
+  githubEmails?: GitHubEmail[];
   termsAcceptedAt?: string;
   verifiedAt?: string;
 }
@@ -75,6 +84,7 @@ export function r2Meta(app: {
   createdAt: string;
   updatedAt: string;
   status: string;
+  githubHandle?: string;
 }) {
   return {
     customMetadata: {
@@ -83,6 +93,7 @@ export function r2Meta(app: {
       status: app.status,
       created: app.createdAt,
       updated: app.updatedAt,
+      ...(app.githubHandle ? { github: app.githubHandle } : {}),
     },
   };
 }
@@ -109,14 +120,18 @@ export const submitApplication = serverAction(async (formData: FormData) => {
   let githubId: number | undefined;
   let githubAvatarUrl: string | undefined;
   let githubProfile: Record<string, unknown> | undefined;
+  let githubEmailMismatch: boolean | undefined;
+  let githubEmails: GitHubEmail[] | undefined;
 
   if (githubState) {
     const verification = await consumeGitHubVerification(githubState);
-    if (verification && verification.email.toLowerCase() === email) {
+    if (verification) {
       githubHandle = verification.githubHandle;
       githubId = verification.githubId;
       githubAvatarUrl = verification.githubAvatarUrl;
       githubProfile = verification.githubProfile;
+      githubEmailMismatch = verification.email.toLowerCase() !== email;
+      githubEmails = verification.githubEmails;
     }
   }
 
@@ -152,6 +167,8 @@ export const submitApplication = serverAction(async (formData: FormData) => {
         updated.githubId = githubId;
         updated.githubAvatarUrl = githubAvatarUrl;
         updated.githubProfile = githubProfile;
+        updated.githubEmailMismatch = githubEmailMismatch;
+        updated.githubEmails = githubEmails;
       }
       id = existingId;
       isUpdate = true;
@@ -181,7 +198,7 @@ export const submitApplication = serverAction(async (formData: FormData) => {
         updatedAt: now,
         summary,
         ...(acceptedTerms && { termsAcceptedAt: now }),
-        ...(githubHandle && { githubHandle, githubId, githubAvatarUrl, githubProfile }),
+        ...(githubHandle && { githubHandle, githubId, githubAvatarUrl, githubProfile, githubEmailMismatch, githubEmails }),
       };
       await Promise.all([
         env.AGENTCRIBS_KV.put(kvKey(id), JSON.stringify(application)),
@@ -207,7 +224,7 @@ export const submitApplication = serverAction(async (formData: FormData) => {
       updatedAt: now,
       summary,
       ...(acceptedTerms && { termsAcceptedAt: now }),
-      ...(githubHandle && { githubHandle, githubId, githubAvatarUrl, githubProfile }),
+      ...(githubHandle && { githubHandle, githubId, githubAvatarUrl, githubProfile, githubEmailMismatch, githubEmails }),
     };
     await Promise.all([
       env.AGENTCRIBS_KV.put(kvKey(id), JSON.stringify(application)),
