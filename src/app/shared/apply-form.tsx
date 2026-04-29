@@ -58,6 +58,8 @@ export const ApplyForm = ({
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [organization, setOrganization] = useState("");
+  const [location, setLocation] = useState("");
+  const [howHeard, setHowHeard] = useState("");
   const [story, setStory] = useState("");
   const [summary, setSummary] = useState("");
   const [isSummarizing, setIsSummarizing] = useState(false);
@@ -88,6 +90,8 @@ export const ApplyForm = ({
           setFirstName((saved.firstName as string) ?? "");
           setLastName((saved.lastName as string) ?? "");
           setOrganization((saved.organization as string) ?? "");
+          setLocation((saved.location as string) ?? "");
+          setHowHeard((saved.howHeard as string) ?? "");
           if (saved.topics) {
             setSelectedTopics(new Set(saved.topics as string[]));
           }
@@ -107,6 +111,8 @@ export const ApplyForm = ({
         setFirstName((saved.firstName as string) ?? "");
         setLastName((saved.lastName as string) ?? "");
         setOrganization((saved.organization as string) ?? "");
+        setLocation((saved.location as string) ?? "");
+        setHowHeard((saved.howHeard as string) ?? "");
         if (saved.topics) {
           setSelectedTopics(new Set(saved.topics as string[]));
         }
@@ -149,6 +155,8 @@ export const ApplyForm = ({
         firstName,
         lastName,
         organization,
+        location,
+        howHeard,
         story: storyRef.current,
         summary,
         topics: [...selectedTopics],
@@ -242,6 +250,43 @@ export const ApplyForm = ({
           onChange={(e) => setOrganization(e.target.value)}
           className="rounded-lg border border-border bg-bg-soft px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
           placeholder="Company, school, project, etc."
+        />
+      </label>
+
+      <label className="flex flex-col gap-1.5">
+        <span className="text-sm font-semibold text-text">
+          Location <span className="text-accent">*</span>
+        </span>
+        <p className="text-xs leading-relaxed text-text-secondary">
+          Used if we send you updates or news so they arrive at the right
+          time.
+        </p>
+        <input
+          name="location"
+          required
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          className="rounded-lg border border-border bg-bg-soft px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
+          placeholder="City, country"
+        />
+      </label>
+
+      <label className="flex flex-col gap-1.5">
+        <span className="text-sm font-semibold text-text">
+          How did you hear about AgentCribs?{" "}
+          <span className="text-accent">*</span>
+        </span>
+        <p className="text-xs leading-relaxed text-text-secondary">
+          A founder, investor, friend, or somewhere else?
+        </p>
+        <textarea
+          name="howHeard"
+          required
+          rows={3}
+          value={howHeard}
+          onChange={(e) => setHowHeard(e.target.value)}
+          className="rounded-lg border border-border bg-bg-soft px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
+          placeholder="Heard about AgentCribs from a founder in the Discord"
         />
       </label>
 

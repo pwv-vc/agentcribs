@@ -214,6 +214,14 @@ export function ApplicationDetail({ application }: { application: ApplicationDat
           <dd className="text-sm">{application.organization || "\u2014"}</dd>
         </div>
         <div className="flex gap-4 py-3">
+          <dt className="w-32 text-sm font-medium text-text-secondary">Location</dt>
+          <dd className="text-sm">{application.location || "\u2014"}</dd>
+        </div>
+        <div className="flex gap-4 py-3">
+          <dt className="w-32 text-sm font-medium text-text-secondary">How heard</dt>
+          <dd className="text-sm">{application.howHeard || "\u2014"}</dd>
+        </div>
+        <div className="flex gap-4 py-3">
           <dt className="w-32 text-sm font-medium text-text-secondary">Topics</dt>
           <dd className="text-sm">{formatTopics(application.topics)}</dd>
         </div>
