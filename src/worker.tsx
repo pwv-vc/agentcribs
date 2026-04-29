@@ -17,6 +17,7 @@ import { VerifyError } from "@/app/pages/verify-error";
 import { Terms } from "@/app/pages/terms";
 import { Privacy } from "@/app/pages/privacy";
 import { Home } from "@/app/pages/home";
+import { Playlist } from "@/app/pages/playlist";
 import {
   handleProcessApplication,
   handleSendEmail,
@@ -46,6 +47,7 @@ export const app = defineApp([
       route("/apply/verify", handleVerificationCallback),
       route("/apply/verify/success", VerifySuccess),
       route("/apply/verify/error", VerifyError),
+      route("/playlist", Playlist),
     ]),
     layout(AdminLayout, [
       route("/admin/applications", [adminAuth, AdminApplications]),

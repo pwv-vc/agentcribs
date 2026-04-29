@@ -14,6 +14,9 @@ export function Header() {
           <a href={link("/")} className="hidden text-sm font-medium text-text-secondary no-underline transition-colors hover:text-text sm:block">
             About
           </a>
+          <a href={link("/playlist")} className="hidden text-sm font-medium text-text-secondary no-underline transition-colors hover:text-text sm:block">
+            Videos
+          </a>
           <a href={link("/apply")} className="rounded-lg bg-accent px-5 py-2 text-sm font-bold text-accent-text no-underline transition-colors hover:bg-accent-hover">
             Apply
           </a>

@@ -16,6 +16,41 @@ const topics = defineCollection({
   }),
 });
 
+const playlistSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  channel: z.string(),
+  thumbnail: z.string(),
+});
+
+const videoSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  url: z.string(),
+  thumbnail: z.string(),
+  published: z.string(),
+});
+
+const playlistFileSchema = z.object({
+  playlist: playlistSchema,
+  videos: z.array(videoSchema),
+});
+
+const playlist = defineCollection({
+  name: "playlist",
+  directory: "content/playlist",
+  include: "*.json",
+  parser: "json",
+  schema: playlistFileSchema,
+  transform(data) {
+    return {
+      playlist: data.playlist,
+      videos: data.videos,
+      totalVideos: data.videos.length,
+    };
+  },
+});
+
 export default defineConfig({
-  content: [topics],
+  content: [topics, playlist],
 });
