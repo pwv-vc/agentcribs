@@ -1,4 +1,4 @@
-import { SITE_NAME, SITE_URL, OG_IMAGE } from "@/app/lib/seo";
+import { SITE_NAME, SITE_URL, OG_IMAGE, OG_IMAGE_CB } from "@/app/lib/seo";
 
 export type SeoProps = {
   title: string;
@@ -12,6 +12,11 @@ export type SeoProps = {
   noIndex?: boolean;
 };
 
+function ogImageUrl(path: string) {
+  const separator = path.includes("?") ? "&" : "?";
+  return `${path}${separator}${OG_IMAGE_CB}`;
+}
+
 export const Seo = ({
   title,
   description,
@@ -21,6 +26,7 @@ export const Seo = ({
   noIndex = false,
 }: SeoProps) => {
   const fullTitle = `${title} | ${SITE_NAME}`;
+  const imageUrl = ogImageUrl(ogImage);
 
   return (
     <>
@@ -31,7 +37,7 @@ export const Seo = ({
       <meta property="og:description" content={description} />
       <meta property="og:type" content={ogType} />
       <meta property="og:url" content={canonical} />
-      <meta property="og:image" content={ogImage} />
+      <meta property="og:image" content={imageUrl} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
