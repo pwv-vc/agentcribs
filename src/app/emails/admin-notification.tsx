@@ -13,10 +13,16 @@ export default function AdminNotificationEmail({
   name,
   email,
   applicationUrl,
+  story,
+  summary,
+  topics,
 }: {
   name: string;
   email: string;
   applicationUrl: string;
+  story?: string;
+  summary?: string;
+  topics?: string[];
 }) {
   return (
     <Html>
@@ -30,9 +36,25 @@ export default function AdminNotificationEmail({
               {email}
             </Link>
           </Text>
-          <Text style={paragraph}>
-            Their application is ready for review.
-          </Text>
+
+          {topics && topics.length > 0 && (
+            <Text style={paragraph}>
+              <strong>Topics:</strong> {topics.join(", ")}
+            </Text>
+          )}
+
+          {story && (
+            <Text style={paragraph}>
+              <strong>Story:</strong> {story}
+            </Text>
+          )}
+
+          {summary && (
+            <Text style={paragraph}>
+              <strong>AI Summary:</strong> <em>{summary}</em>
+            </Text>
+          )}
+
           <Button href={applicationUrl} style={button}>
             Review application
           </Button>
@@ -54,14 +76,34 @@ export function adminNotificationText({
   name,
   email,
   applicationUrl,
+  story,
+  summary,
+  topics,
 }: {
   name: string;
   email: string;
   applicationUrl: string;
+  story?: string;
+  summary?: string;
+  topics?: string[];
 }) {
-  return `New application from ${name} (${email}) is ready for review.
+  const parts = [`New application from ${name} (${email})`];
 
-${applicationUrl}`;
+  if (topics && topics.length > 0) {
+    parts.push(`Topics: ${topics.join(", ")}`);
+  }
+
+  if (story) {
+    parts.push(`Story: ${story}`);
+  }
+
+  if (summary) {
+    parts.push(`Summary: ${summary}`);
+  }
+
+  parts.push(applicationUrl);
+
+  return parts.join("\n\n");
 }
 
 const body = {

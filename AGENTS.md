@@ -20,14 +20,20 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   │   │       └── application.tsx
 │   │   ├── components/        # Reusable UI components (hero, faq, seo, etc.)
 │   │   ├── layouts/           # default.tsx, admin.tsx
-│   │   ├── actions/           # Server actions: application.ts, email.ts, github.ts
+│   │   ├── actions/           # Server actions
+│   │   │   ├── application.ts # Submit/get/update applications, types, KV/R2 helpers
+│   │   │   ├── email.tsx      # Email sending (magic link, notifications, accept/reject)
+│   │   │   ├── github.ts      # GitHub OAuth flow
+│   │   │   └── queue.ts       # Queue handlers: process-application, send-email, notifications, slack
+│   │   ├── emails/            # Email templates (admin-notification, pending-review, accepted, rejected, magic-link)
+│   │   ├── lib/               # ai.ts (streamText via AI Gateway), seo.ts
 │   │   ├── queries/           # Data fetching: application.ts
 │   │   ├── middleware/        # Route middleware
 │   │   │   ├── auth/basic.ts  # Basic auth for admin
 │   │   │   ├── github/callback.ts
 │   │   │   └── verify/callback.ts
 │   │   ├── shared/            # Shared UI bits: apply-form, cta-button, links, status-badge
-│   │   ├── lib/seo.ts         # SEO helpers
+│   │   ├── lib/               # ai.ts (streamText via AI Gateway), seo.ts
 │   │   ├── document.tsx       # HTML document shell
 │   │   ├── headers.ts         # Common header middleware
 │   │   └── styles.css

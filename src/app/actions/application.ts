@@ -31,7 +31,8 @@ export interface ApplicationData {
   email: string;
   organization: string;
   topics: string[];
-  otherTopic?: string;
+  story?: string;
+  summary?: string;
   status: ApplicationStatus;
   createdAt: string;
   updatedAt: string;
@@ -92,11 +93,12 @@ export const submitApplication = serverAction(async (formData: FormData) => {
   const email = ((formData.get("email") as string) ?? "").trim().toLowerCase();
   const organization = (formData.get("organization") as string) ?? "";
   const topics = formData.getAll("topics") as string[];
-  const otherTopic = (formData.get("otherTopic") as string) ?? "";
+  const story = (formData.get("story") as string) ?? "";
+  const summary = (formData.get("summary") as string) ?? "";
   const githubState = (formData.get("github_state") as string) ?? null;
   const acceptedTerms = formData.get("acceptedTerms") === "on";
 
-  if (!firstName || !lastName || !email) {
+  if (!firstName || !lastName || !email || !story) {
     return new Response("First name, last name, and email are required.", {
       status: 400,
     });
@@ -139,7 +141,8 @@ export const submitApplication = serverAction(async (formData: FormData) => {
         lastName,
         organization,
         topics,
-        otherTopic,
+        story,
+        summary,
         updatedAt: now,
         editedAt: now,
         ...(acceptedTerms && !existing.termsAcceptedAt && { termsAcceptedAt: now }),
@@ -172,10 +175,11 @@ export const submitApplication = serverAction(async (formData: FormData) => {
         email,
         organization,
         topics,
-        otherTopic,
+        story,
         status: "unverified",
         createdAt: now,
         updatedAt: now,
+        summary,
         ...(acceptedTerms && { termsAcceptedAt: now }),
         ...(githubHandle && { githubHandle, githubId, githubAvatarUrl, githubProfile }),
       };
@@ -197,10 +201,11 @@ export const submitApplication = serverAction(async (formData: FormData) => {
       email,
       organization,
       topics,
-      otherTopic,
+      story,
       status: "unverified",
       createdAt: now,
       updatedAt: now,
+      summary,
       ...(acceptedTerms && { termsAcceptedAt: now }),
       ...(githubHandle && { githubHandle, githubId, githubAvatarUrl, githubProfile }),
     };

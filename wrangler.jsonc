@@ -10,6 +10,9 @@
   "observability": {
     "enabled": true,
   },
+  "ai": {
+    "binding": "AI",
+  },
   "r2_buckets": [
     {
       "bucket_name": "agentcribs-applications",
@@ -79,6 +82,9 @@
       "SEND_EMAIL_FROM",
       "APP_URL",
       "SLACK_WEBHOOK_URL",
+      "CLOUDFLARE_ACCOUNT_ID",
+      "AI_GATEWAY_NAME",
+      "CF_AIG_TOKEN",
     ],
   },
   // ---- Environments ----

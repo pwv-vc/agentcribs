@@ -193,10 +193,16 @@ export function ApplicationDetail({ application }: { application: ApplicationDat
           <dt className="w-32 text-sm font-medium text-text-secondary">Topics</dt>
           <dd className="text-sm">{formatTopics(application.topics)}</dd>
         </div>
-        {application.otherTopic && (
+        {application.story && (
           <div className="flex gap-4 py-3">
-            <dt className="w-32 text-sm font-medium text-text-secondary">Notes</dt>
-            <dd className="text-sm">{application.otherTopic}</dd>
+            <dt className="w-32 shrink-0 text-sm font-medium text-text-secondary">Story</dt>
+            <dd className="text-sm">{application.story}</dd>
+          </div>
+        )}
+        {application.summary && (
+          <div className="flex gap-4 py-3">
+            <dt className="w-32 shrink-0 text-sm font-medium text-text-secondary">Summary</dt>
+            <dd className="text-sm italic text-accent">{application.summary}</dd>
           </div>
         )}
         <div className="flex gap-4 py-3">

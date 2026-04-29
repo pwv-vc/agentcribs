@@ -24,6 +24,7 @@
     "types": "tsc"
   },
   "dependencies": {
+    "@cloudflare/ai": "^1.2.2",
     "@fontsource-variable/dm-sans": "^5.2.8",
     "@fontsource-variable/inter": "^5.2.8",
     "@fontsource-variable/source-serif-4": "^5.2.9",
@@ -43,6 +44,8 @@
     "@react-email/text": "0.1.6",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.4",
+    "ai": "^6.0.169",
+    "ai-gateway-provider": "^3.1.3",
     "react": "19.2.5",
     "react-dom": "19.2.5",
     "react-email": "6.0.5",

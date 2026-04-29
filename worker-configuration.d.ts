@@ -22,6 +22,9 @@ declare namespace Cloudflare {
     SEND_EMAIL_FROM: string;
     APP_URL: string;
     SLACK_WEBHOOK_URL: string;
+    CLOUDFLARE_ACCOUNT_ID: string;
+    AI_GATEWAY_NAME: string;
+    CF_AIG_TOKEN: string;
   }
   interface ProductionEnv extends Env {}
   interface StagingEnv extends Env {}

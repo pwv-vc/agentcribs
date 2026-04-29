@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef, useTransition } from "react";
+import { consumeEventStream } from "rwsdk/client";
 import { submitApplication } from "../actions/application";
 import {
   startGitHubOAuth,
   getGitHubVerification,
   restoreOAuthFormState,
 } from "../actions/github";
+import { summarizeStory } from "./summarize";
 
 const SESSION_KEY = "agentcribs-apply-form";
 
@@ -57,7 +59,10 @@ export const ApplyForm = ({
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [organization, setOrganization] = useState("");
-  const [otherTopic, setOtherTopic] = useState("");
+  const [summary, setSummary] = useState("");
+  const [isSummarizing, setIsSummarizing] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const storyRef = useRef("");
   const [selectedTopics, setSelectedTopics] = useState<Set<string>>(new Set());
   const [githubStateNonce, setGithubStateNonce] = useState<string | null>(null);
   const [githubHandle, setGithubHandle] = useState<string | null>(null);
@@ -82,7 +87,6 @@ export const ApplyForm = ({
           setFirstName((saved.firstName as string) ?? "");
           setLastName((saved.lastName as string) ?? "");
           setOrganization((saved.organization as string) ?? "");
-          setOtherTopic((saved.otherTopic as string) ?? "");
           if (saved.topics) {
             setSelectedTopics(new Set(saved.topics as string[]));
           }
@@ -97,7 +101,6 @@ export const ApplyForm = ({
         setFirstName((saved.firstName as string) ?? "");
         setLastName((saved.lastName as string) ?? "");
         setOrganization((saved.organization as string) ?? "");
-        setOtherTopic((saved.otherTopic as string) ?? "");
         if (saved.topics) {
           setSelectedTopics(new Set(saved.topics as string[]));
         }
@@ -133,7 +136,6 @@ export const ApplyForm = ({
         firstName,
         lastName,
         organization,
-        otherTopic,
         topics: [...selectedTopics],
         acceptedTerms,
       });
@@ -148,6 +150,7 @@ export const ApplyForm = ({
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);
+    formData.set("summary", summary);
 
     if (githubStateNonce) {
       formData.set("github_state", githubStateNonce);
@@ -256,17 +259,60 @@ export const ApplyForm = ({
 
       <label className="flex flex-col gap-1.5">
         <span className="text-sm font-semibold text-text">
-          Tell us more{" "}
-          <span className="text-text-secondary">(optional)</span>
+          Tell us more <span className="text-accent">*</span>
         </span>
+        <p className="text-xs leading-relaxed text-text-secondary">
+          What are you building with AI agents? What interests you about AgentCribs? What do you want to see in an agent platform?
+        </p>
         <textarea
-          name="otherTopic"
+          name="story"
           rows={3}
-          value={otherTopic}
-          onChange={(e) => setOtherTopic(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            storyRef.current = value;
+
+            if (debounceRef.current) {
+              clearTimeout(debounceRef.current);
+            }
+
+            if (value.trim().length >= 20) {
+              debounceRef.current = setTimeout(async () => {
+                const currentValue = storyRef.current;
+                setIsSummarizing(true);
+                setSummary("");
+
+                const stream = await summarizeStory(currentValue);
+
+                stream.pipeTo(
+                  consumeEventStream({
+                    onChunk: (event) => {
+                      if (event.data === "[DONE]") {
+                        setIsSummarizing(false);
+                        return;
+                      }
+                      try {
+                        const parsed = JSON.parse(event.data);
+                        setSummary((prev) => prev + parsed.text);
+                      } catch {
+                        // skip malformed lines
+                      }
+                    },
+                  })
+                );
+              }, 1500);
+            }
+          }}
           className="rounded-lg border border-border bg-bg-soft px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
-          placeholder="What are you building with AI agents?"
+          placeholder="Tell us what you're building, what excites you about AI agents, and why AgentCribs..."
         />
+        {isSummarizing && (
+          <p className="text-xs text-accent">Distilling your story...</p>
+        )}
+        {summary && (
+          <p className="rounded-lg border border-accent/30 bg-accent/5 px-4 py-2.5 text-xs leading-relaxed text-accent">
+            {summary}
+          </p>
+        )}
       </label>
 
       {/* GitHub verification — moved to bottom */}
@@ -350,7 +396,7 @@ export const ApplyForm = ({
 
       <button
         type="submit"
-        disabled={isPending || !acceptedTerms}
+        disabled={isPending || !acceptedTerms || !summary}
         className="block w-full rounded-lg bg-accent px-6 py-3 text-center text-base font-bold text-accent-text no-underline transition-colors hover:bg-accent-hover disabled:opacity-50 sm:inline-block sm:w-auto sm:px-10 sm:py-3.5 sm:text-lg"
       >
         {isPending ? "Submitting..." : "Submit application"}

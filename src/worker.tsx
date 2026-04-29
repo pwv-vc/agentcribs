@@ -17,7 +17,12 @@ import { VerifyError } from "@/app/pages/verify-error";
 import { Terms } from "@/app/pages/terms";
 import { Privacy } from "@/app/pages/privacy";
 import { Home } from "@/app/pages/home";
-import { handleProcessApplication, handleSendEmail, handleSendNotification, handleSendSlack } from "@/app/actions/queue";
+import {
+  handleProcessApplication,
+  handleSendEmail,
+  handleSendNotification,
+  handleSendSlack,
+} from "@/app/actions/queue";
 import type { ApplicationPayload } from "@/app/actions/application";
 
 export type AppContext = {};
