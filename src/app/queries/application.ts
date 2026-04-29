@@ -3,13 +3,16 @@
 import { serverQuery } from "rwsdk/worker";
 import { env } from "cloudflare:workers";
 import { allTopics } from "content-collections";
-import type { ApplicationData, ApplicationStatus } from "../actions/application";
+import type {
+  ApplicationData,
+  ApplicationStatus,
+} from "../actions/application";
 import { allPlaylists } from "content-collections";
 
 type Topic = (typeof allTopics)[number];
 
 const KV_PREFIX = "app:";
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 10;
 
 function kvKey(id: string) {
   return `${KV_PREFIX}${id}`;
@@ -94,11 +97,9 @@ export const queryApplications = serverQuery(
   },
 );
 
-export const getTopics = serverQuery(
-  async (): Promise<Topic[]> => {
-    return [...allTopics].sort((a, b) => a.label.localeCompare(b.label));
-  },
-);
+export const getTopics = serverQuery(async (): Promise<Topic[]> => {
+  return [...allTopics].sort((a, b) => a.label.localeCompare(b.label));
+});
 
 export type PlaylistData = (typeof allPlaylists)[number];
 
@@ -109,7 +110,8 @@ export const getPlaylist = serverQuery(
     return {
       ...list,
       videos: [...list.videos].sort(
-        (a, b) => new Date(b.published).getTime() - new Date(a.published).getTime(),
+        (a, b) =>
+          new Date(b.published).getTime() - new Date(a.published).getTime(),
       ),
     };
   },
