@@ -19,7 +19,7 @@
 - [x] user email include parts of application info in email like topics, summary
 - [x] admin review notification email include parts of application info in email like name, email, topics, summary 
 - [x] add todos skill
-- [ ] warn but no error if GitHib email does not match still keep form state and allow submit. just note in admin view application if emails do not match and how
+- [x] warn but no error if GitHib email does not match still keep form state and allow submit. just note in admin view application if emails do not match and how
 - [x] improve admin applications table to two rows
 - [x] filter admin applications by status
 - [x] sort ui option tsort asc/desc by time
