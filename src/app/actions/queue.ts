@@ -245,14 +245,13 @@ export async function handleSendSlack(payload: {
     });
   }
 
+  // Use a link in context rather than an actions button to avoid needing Slack app interactivity
   blocks.push({
-    type: "actions",
+    type: "context",
     elements: [
       {
-        type: "button",
-        text: { type: "plain_text", text: "Review Application" },
-        url: appUrl,
-        action_id: "review_application",
+        type: "mrkdwn",
+        text: `<${appUrl}|Review in AgentCribs>`,
       },
     ],
   });
