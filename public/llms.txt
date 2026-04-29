@@ -1,9 +1,10 @@
 # AgentCribs
 
-AgentCribs is a curated PWV community for founders, developers, and hackers building tools and workflows for agentic software development. It launched publicly with an in-person event on May 6, 2026 in San Francisco, featuring a fireside chat between Peter Levine of a16z and Tom Preston-Werner, GitHub co-founder and PWV founder/investor.
+AgentCribs is a curated PWV community project for founders, developers, and hackers building tools and workflows for agentic software development. It is publicly soft launching with an in-person event on May 6, 2026 in San Francisco, featuring a fireside chat between Peter Levine of a16z and Tom Preston-Werner, GitHub co-founder and PWV founder/investor.
 
 ## Links
 
 - Homepage: https://agentcribs.com/
 - Apply: https://agentcribs.com/apply
 - PWV: https://pwv.com/
+- PWV AgentCribs post: coming soon

@@ -16,7 +16,7 @@ const schema = {
       name: "AgentCribs",
       url: "https://agentcribs.com/",
       description:
-        "AgentCribs is a curated PWV community for founders, developers, and hackers building tools and workflows for agentic software development.",
+        "AgentCribs is a curated PWV community project for people already building with AI agents and agentic software development workflows.",
       parentOrganization: {
         "@type": "Organization",
         name: "PWV",
@@ -43,8 +43,9 @@ const schema = {
       "@id": "https://agentcribs.com/#may-6-event",
       name: "AgentCribs: Show & Tell, hosted by PWV",
       description:
-        "An evening gathering in San Francisco for PWV founders, seasoned developers, and selected builders focused on agentic software development, with a fireside chat between Peter Levine and Tom Preston-Werner.",
+        "An evening gathering in San Francisco for PWV founders, seasoned developers, and selected builders focused on agentic software development, featuring a fireside chat between Peter Levine and Tom Preston-Werner.",
       startDate: "2026-05-06",
+      url: "https://agentcribs.com/",
       eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
       eventStatus: "https://schema.org/EventScheduled",
       location: {

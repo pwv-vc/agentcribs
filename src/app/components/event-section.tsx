@@ -17,16 +17,15 @@ export function EventSection() {
         </p>
 
         <p className="mt-5 leading-relaxed">
-          The evening will include an update from the core AgentCribs team, demos
-          and discussion from people building with agents, and an invitation to
-          participate in ongoing collaboration.
+          The main draw is a fireside chat between <strong>Peter Levine</strong>{" "}
+          of a16z and <strong>Tom Preston-Werner</strong>, GitHub co-founder and
+          PWV founder/investor.
         </p>
 
         <p className="mt-5 leading-relaxed">
-          The highlight of the evening will be a fireside chat between{" "}
-          <strong>Peter Levine</strong> of a16z and{" "}
-          <strong>Tom Preston-Werner</strong>, GitHub co-founder and PWV
-          founder/investor.
+          The evening will also include an update from the core AgentCribs team,
+          demos and discussion from people building with agents, and an
+          invitation to participate in ongoing collaboration.
         </p>
 
         <p className="mt-5 italic leading-relaxed text-text-secondary">

@@ -17,10 +17,9 @@ export function CommunitySection() {
       </p>
 
       <p className="mt-5 leading-relaxed">
-        AgentCribs is for technical founders, senior developers, and hands-on
-        builders creating products, companies, developer tools, internal
-        systems, agent workflows, or new ways to ship faster from the command
-        line.
+        The strongest fit is a technical founder, senior developer, or hands-on
+        builder creating products, companies, developer tools, internal systems,
+        agent workflows, or new ways to ship faster from the command line.
       </p>
 
       <p className="mt-6 font-semibold leading-relaxed">

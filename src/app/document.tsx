@@ -8,10 +8,10 @@ export const Document: React.FC<{
     <head>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>AgentCribs &mdash; A community for agentic software builders</title>
+      <title>AgentCribs &mdash; PWV Community + May 6 Event in San Francisco</title>
       <meta
         name="description"
-        content="AgentCribs is a PWV community project for people building the future of agentic software development. Join us in San Francisco on May 6."
+        content="AgentCribs is a curated PWV community for builders working with AI agents. Apply for May 6 in San Francisco with Peter Levine and Tom Preston-Werner."
       />
       <meta name="theme-color" content="#5a6b5e" />
 
