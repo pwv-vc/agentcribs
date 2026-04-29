@@ -25,3 +25,13 @@
 - [x] sort ui option sort asc/desc by time
 - [x] paginate admin applications list
 - [ ] handle incoming emails to @agentcribs.com and forward or other?
+- [ ] add location to apply form
+- [ ] add how found out about agentcribs
+- [ ] remove videos and data so don't show urls to view
+- [ ] try auth with cloudflare for admin in prod
+- [ ] check all email addresses for consitency
+- [ ] sent sender firend name in send emails
+- [ ] revise topic list
+- [ ] generate regsitration code and add it and link to luma event in accept email
+- [ ] change in cloudflare the app url to prod
+- [ ] change slack webhook to whatever new channel is (setup and uopdate CF secret)
