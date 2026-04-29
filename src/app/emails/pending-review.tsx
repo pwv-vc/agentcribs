@@ -1,7 +1,17 @@
 import { Body, Container, Head, Html, Text } from "@react-email/components";
 import * as React from "react";
 
-export default function PendingReviewEmail({ name }: { name: string }) {
+export default function PendingReviewEmail({
+  name,
+  topics,
+  story,
+  summary,
+}: {
+  name: string;
+  topics?: string[];
+  story?: string;
+  summary?: string;
+}) {
   return (
     <Html>
       <Head />
@@ -11,7 +21,30 @@ export default function PendingReviewEmail({ name }: { name: string }) {
           <Text style={paragraph}>Hi {name},</Text>
           <Text style={paragraph}>
             Thank you for applying to AgentCribs! Your application has been
-            verified and is now pending review. We'll get back to you soon.
+            verified and is now pending review. Here's a summary of what
+            you shared with us:
+          </Text>
+
+          {topics && topics.length > 0 && (
+            <Text style={paragraph}>
+              <strong>Topics:</strong> {topics.join(", ")}
+            </Text>
+          )}
+
+          {story && (
+            <Text style={paragraph}>
+              <strong>Your story:</strong> {story}
+            </Text>
+          )}
+
+          {summary && (
+            <Text style={paragraph}>
+              <strong>AI Summary:</strong> <em>{summary}</em>
+            </Text>
+          )}
+
+          <Text style={paragraph}>
+            We'll get back to you soon.
           </Text>
           <Text style={closing}>— AgentCribs Team</Text>
         </Container>
@@ -20,12 +53,38 @@ export default function PendingReviewEmail({ name }: { name: string }) {
   );
 }
 
-export function pendingReviewText({ name }: { name: string }) {
-  return `Hi ${name},
+export function pendingReviewText({
+  name,
+  topics,
+  story,
+  summary,
+}: {
+  name: string;
+  topics?: string[];
+  story?: string;
+  summary?: string;
+}) {
+  const parts = [
+    `Hi ${name},`,
+    `Thank you for applying to AgentCribs! Your application has been verified and is now pending review. Here's a summary of what you shared:`,
+  ];
 
-Thank you for applying to AgentCribs! Your application has been verified and is now pending review. We'll get back to you soon.
+  if (topics && topics.length > 0) {
+    parts.push(`Topics: ${topics.join(", ")}`);
+  }
 
-— AgentCribs Team`;
+  if (story) {
+    parts.push(`Your story: ${story}`);
+  }
+
+  if (summary) {
+    parts.push(`AI Summary: ${summary}`);
+  }
+
+  parts.push(`We'll get back to you soon.`);
+  parts.push(`— AgentCribs Team`);
+
+  return parts.join("\n\n");
 }
 
 const body = {

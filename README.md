@@ -11,7 +11,8 @@ Apply at [agentcribs.com](https://agentcribs.com/).
 ### Prerequisites
 
 - Node.js 22+
-- A Cloudflare account with Workers, KV, R2, and Email Send enabled
+- A Cloudflare account with Workers, KV, R2, Queues, Workers AI Gateway, and Email Send enabled
+- A [Workers AI Gateway](https://developers.cloudflare.com/ai-gateway/) — used for AI-powered story summarization via Llama models. The gateway runs from Cloudflare's edge even in local development (no local model needed).
 
 This is a [RedwoodSDK](https://rwsdk.com) app. Wrangler is already included as a dev dependency via `rwsdk` — no global install needed.
 
@@ -27,6 +28,13 @@ The worker requires these bindings (configured in `wrangler.jsonc`):
 | `AGENTCRIBS_R2` | R2 Bucket | Durable application backup storage |
 | `SEND_EMAIL` | Send Email | Transactional email for magic link verification |
 | `ASSETS` | Fetcher | Static asset serving |
+| `AGENTCRIBS_QUEUES` | Queue (x4) | Background processing: process applications, send email, notifications, Slack |
+
+The worker defines 4 queues:
+- **`agentcribs-process-application`** — backup to R2, set email index, enqueue magic link
+- **`agentcribs-send-email`** — send magic link verification email
+- **`agentcribs-notifications`** — send pending-review/accepted/rejected emails + enqueue Slack
+- **`agentcribs-slack`** — post notifications to Slack webhook
 
 ### Required Secrets
 
@@ -41,6 +49,10 @@ Set these via `wrangler secret put <NAME>`:
 | `GITHUB_CALLBACK_URL` | GitHub OAuth callback URL (e.g. `https://agentcribs.com/api/auth/github/callback`) |
 | `SEND_EMAIL_FROM` | From address for verification emails (defaults to `agentcribs@agentcribs.com`) |
 | `APP_URL` | Public base URL of the app (e.g. `https://agentcribs.com` or `http://localhost:5173`) |
+| `SLACK_WEBHOOK_URL` | Slack webhook URL for application notifications (optional) |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID — used by AI Gateway |
+| `AI_GATEWAY_NAME` | Name of your Workers AI Gateway (e.g. `agentcribs`) |
+| `CF_AIG_TOKEN` | AI Gateway API token — generate via Cloudflare dashboard under AI Gateway → API Keys |
 
 ### Local Development
 
@@ -61,8 +73,14 @@ The dev server runs on `http://localhost:5173` by default. For local testing of 
 
 1. Create the KV namespace: `wrangler kv namespace create AGENTCRIBS_KV` (update `id` in `wrangler.jsonc`)
 2. Create the R2 bucket: `wrangler r2 bucket create agentcribs-applications`
-3. [Create a GitHub OAuth App](https://github.com/settings/developers) with the callback URL set to your `GITHUB_CALLBACK_URL`
-5. (Optional) Set up Slack notifications: Create a [Slack webhook](https://api.slack.com/messaging/webhooks) and set it as `SLACK_WEBHOOK_URL` secret
+3. Create the 4 queues (names must match `wrangler.jsonc`):
+   `wrangler queues create agentcribs-process-application`
+   `wrangler queues create agentcribs-send-email`
+   `wrangler queues create agentcribs-notifications`
+   `wrangler queues create agentcribs-slack`
+4. Create a [Workers AI Gateway](https://developers.cloudflare.com/ai-gateway/) — note the gateway name and generate an API key
+5. [Create a GitHub OAuth App](https://github.com/settings/developers) with the callback URL set to your `GITHUB_CALLBACK_URL`
+6. (Optional) Set up Slack notifications: Create a [Slack webhook](https://api.slack.com/messaging/webhooks) and set it as `SLACK_WEBHOOK_URL` secret
 
 ### Deploy
 

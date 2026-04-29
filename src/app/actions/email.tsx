@@ -38,18 +38,26 @@ export async function sendPendingReviewEmail({
   from,
   email,
   name,
+  topics,
+  story,
+  summary,
 }: {
   sendEmail: SendEmail;
   from: string;
   email: string;
   name: string;
+  topics?: string[];
+  story?: string;
+  summary?: string;
 }): Promise<void> {
   await sendEmail.send({
     from,
     to: email,
     subject: "Your AgentCribs application is under review",
-    text: pendingReviewText({ name }),
-    html: await render(<PendingReviewEmail name={name} />),
+    text: pendingReviewText({ name, topics, story, summary }),
+    html: await render(
+      <PendingReviewEmail name={name} topics={topics} story={story} summary={summary} />,
+    ),
   });
 }
 

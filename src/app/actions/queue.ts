@@ -21,14 +21,14 @@ function sendEmailFrom() {
   return env.SEND_EMAIL_FROM || "agentcribs@agentcribs.com";
 }
 
-async function sendSlackNotification(text: string): Promise<void> {
+async function sendSlackNotification(body: string): Promise<void> {
   const webhook = env.SLACK_WEBHOOK_URL;
   if (!webhook) return;
 
   const response = await fetch(webhook, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text }),
+    body,
   });
 
   if (!response.ok) {
@@ -114,12 +114,25 @@ export async function handleSendNotification(payload: {
   );
 
   if (type === "pending-review") {
-    console.log(`[queue/notification] Sending pending-review email to ${email}`);
+    // Fetch application data from KV for richer email content
+    const appRaw = await env.AGENTCRIBS_KV.get(kvKey(applicationId));
+    const app: ApplicationData | null = appRaw ? JSON.parse(appRaw) : null;
+
+    const topics = app?.topics;
+    const story = app?.story;
+    const summary = app?.summary;
+
+    console.log(
+      `[queue/notification] Sending pending-review email to ${email}`,
+    );
     await sendPendingReviewEmail({
       sendEmail: env.SEND_EMAIL,
       from: sendEmailFrom(),
       email,
       name,
+      topics,
+      story,
+      summary,
     });
     // Also notify admin
     const baseUrl = env.APP_URL || "https://agentcribs.com";
@@ -129,6 +142,9 @@ export async function handleSendNotification(payload: {
       name,
       email,
       applicationUrl: `${baseUrl}/admin/applications/${applicationId}`,
+      story,
+      summary,
+      topics,
     });
   } else if (type === "accepted") {
     console.log(`[queue/notification] Sending accepted email to ${email}`);
@@ -149,7 +165,9 @@ export async function handleSendNotification(payload: {
   }
 
   // Send Slack notification as a separate queue message
-  console.log(`[queue/notification] Enqueuing Slack notification for ${applicationId}`);
+  console.log(
+    `[queue/notification] Enqueuing Slack notification for ${applicationId}`,
+  );
   await env.SLACK_QUEUE.send({
     type,
     email,
@@ -168,22 +186,80 @@ export async function handleSendSlack(payload: {
 }): Promise<void> {
   const { type, email, name, applicationId } = payload;
 
-  console.log(`[queue/slack] Starting: type=${type} name=${name} appId=${applicationId}`);
+  console.log(
+    `[queue/slack] Starting: type=${type} name=${name} appId=${applicationId}`,
+  );
 
   const baseUrl = env.APP_URL || "https://agentcribs.com";
   const appUrl = `${baseUrl}/admin/applications/${applicationId}`;
 
   const appRaw = await env.AGENTCRIBS_KV.get(kvKey(applicationId));
   if (!appRaw) {
-    console.error(`[queue/slack] Application not found in KV: ${applicationId}`);
+    console.error(
+      `[queue/slack] Application not found in KV: ${applicationId}`,
+    );
     return;
   }
 
   const app: ApplicationData = JSON.parse(appRaw);
   const org = app.organization || "no org";
-  const slackText = `${type}: ${name} <${email}> (${org}) — status: ${app.status} — View: ${appUrl}`;
+  const topics = app.topics?.length ? app.topics.join(", ") : null;
 
-  console.log(`[queue/slack] Posting to Slack: ${slackText}`);
-  await sendSlackNotification(slackText);
+  const blocks: Record<string, unknown>[] = [
+    {
+      type: "header",
+      text: {
+        type: "plain_text",
+        text: `📝 ${type === "pending-review" ? "New" : type === "accepted" ? "Accepted" : "Rejected"} Application`,
+      },
+    },
+    {
+      type: "section",
+      fields: [
+        { type: "mrkdwn", text: `*Name:*\n${name}` },
+        { type: "mrkdwn", text: `*Email:*\n<mailto:${email}|${email}>` },
+        { type: "mrkdwn", text: `*Organization:*\n${org}` },
+        { type: "mrkdwn", text: `*Status:*\n${app.status}` },
+      ],
+    },
+  ];
+
+  if (topics) {
+    blocks.push({
+      type: "section",
+      text: { type: "mrkdwn", text: `*Topics:*\n${topics}` },
+    });
+  }
+
+  if (app.story) {
+    blocks.push({
+      type: "section",
+      text: { type: "mrkdwn", text: `*Story:*\n${app.story}` },
+    });
+  }
+
+  if (app.summary) {
+    blocks.push({
+      type: "section",
+      text: { type: "mrkdwn", text: `*AI Summary:*\n_${app.summary}_` },
+    });
+  }
+
+  blocks.push({
+    type: "actions",
+    elements: [
+      {
+        type: "button",
+        text: { type: "plain_text", text: "Review Application" },
+        url: appUrl,
+        action_id: "review_application",
+      },
+    ],
+  });
+
+  const slackPayload = { blocks, text: `${type}: ${name} (${org})` };
+
+  console.log(`[queue/slack] Posting to Slack`);
+  await sendSlackNotification(JSON.stringify(slackPayload));
   console.log(`[queue/slack] Done: Slack notification sent for ${applicationId}`);
 }
