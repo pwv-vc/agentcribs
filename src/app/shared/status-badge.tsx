@@ -1,7 +1,7 @@
 import type { ApplicationStatus } from "@/app/actions/application";
 
 const statusStyles: Record<ApplicationStatus, string> = {
-  unverified: "bg-bg-soft text-text-secondary",
+  unverified: "bg-status-pending-bg text-status-pending-text",
   pending: "bg-status-pending-bg text-status-pending-text",
   accepted: "bg-status-accepted-bg text-status-accepted-text",
   rejected: "bg-status-rejected-bg text-status-rejected-text",

@@ -15,7 +15,13 @@
 - [x] inform via slack of a new application to review
 - [x] use react email and templates
 - [ ] add consent cookie tracking
-- [ ] slack notification also show summary of ai story on application
-- [ ] user email include parts of application info in email like topics, summary
-- [ ] admin reviw notificatio email include parts of application info in email like name, email, topics, summary 
+- [x] slack notification also show summary of ai story on application
+- [x] user email include parts of application info in email like topics, summary
+- [x] admin review notification email include parts of application info in email like name, email, topics, summary 
+- [x] add todos skill
+- [ ] warn but no error if GitHib email does not match still keep form state and allow submit. just note in admin view application if emails do not match and how
+- [x] improve admin applications table to two rows
+- [x] filter admin applications by status
+- [x] sort ui option tsort asc/desc by time
+- [x] paginate admin applications list
 

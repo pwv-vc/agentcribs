@@ -177,3 +177,7 @@
 - Place cron/scheduled jobs in `src/app/jobs/` organized by purpose (one file per job or related jobs). Confidence: 0.70
 - Import `env` directly from `"cloudflare:workers"` to access Cloudflare bindings (R2, Queues, etc.) inside server actions and queries, rather than storing `env` on `globalThis`. Confidence: 0.75
 - Store cookie names and similar configurable constants as environment variables rather than hardcoded `const` values, and prefix them with the environment name (e.g., `agentcribs-dev-` for dev). Confidence: 0.65
+- Keep admin table/list components as async server components instead of client components; handle filtering, sorting, and pagination server-side in queries rather than client-side in JS. Confidence: 0.70
+- Use pill-style toggle buttons (not select dropdowns) for filter controls in admin UIs. Confidence: 0.70
+- Store pagination page size as a named constant at the top of the component (e.g., `const PAGE_SIZE = 25`) for testability. Confidence: 0.70
+- Structure admin table rows with a leftmost status pill column, then a top line of key info (name, email, dates), and secondary info on a separate line below. Confidence: 0.70
