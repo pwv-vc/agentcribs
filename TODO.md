@@ -3,7 +3,7 @@
 - [x] send emails (verification)
 - [x] send emails submit
 - [x] send emails on accept, reject
-- [ ] agent cribs video list
+- [x] agent cribs video list
 - [ ] blog (content collections) - content should match data topics
 - [ ] newsletter
 - [ ] luma event integration
