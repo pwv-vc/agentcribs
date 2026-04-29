@@ -8,6 +8,7 @@ import PendingReviewEmail, { pendingReviewText } from "@/app/emails/pending-revi
 import AdminNotificationEmail, { adminNotificationText } from "@/app/emails/admin-notification";
 import AcceptedEmail, { acceptedText } from "@/app/emails/accepted";
 import RejectedEmail, { rejectedText } from "@/app/emails/rejected";
+import { generateRegistrationCode } from "@/app/lib/registration-code";
 
 export async function sendMagicLink({
   sendEmail,
@@ -17,7 +18,7 @@ export async function sendMagicLink({
   token,
 }: {
   sendEmail: SendEmail;
-  from: string;
+  from: string | EmailAddress;
   baseUrl: string;
   email: string;
   token: string;
@@ -43,7 +44,7 @@ export async function sendPendingReviewEmail({
   summary,
 }: {
   sendEmail: SendEmail;
-  from: string;
+  from: string | EmailAddress;
   email: string;
   name: string;
   topics?: string[];
@@ -72,7 +73,7 @@ export async function sendAdminNotificationEmail({
   topics,
 }: {
   sendEmail: SendEmail;
-  from: string;
+  from: string | EmailAddress;
   name: string;
   email: string;
   applicationUrl: string;
@@ -110,18 +111,25 @@ export async function sendAcceptedEmail({
   from,
   email,
   name,
+  baseUrl,
 }: {
   sendEmail: SendEmail;
-  from: string;
+  from: string | EmailAddress;
   email: string;
   name: string;
+  baseUrl: string;
 }): Promise<void> {
+  const registrationCode = generateRegistrationCode();
+  const eventUrl = "https://lu.ma/tbgovtd2?tk=jK4e9B";
+
   await sendEmail.send({
     from,
     to: email,
     subject: "Welcome to AgentCribs!",
-    text: acceptedText({ name }),
-    html: await render(<AcceptedEmail name={name} />),
+    text: acceptedText({ name, registrationCode, eventUrl }),
+    html: await render(
+      <AcceptedEmail name={name} registrationCode={registrationCode} eventUrl={eventUrl} />,
+    ),
   });
 }
 
@@ -132,7 +140,7 @@ export async function sendRejectedEmail({
   name,
 }: {
   sendEmail: SendEmail;
-  from: string;
+  from: string | EmailAddress;
   email: string;
   name: string;
 }): Promise<void> {

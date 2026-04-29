@@ -30,8 +30,8 @@
 - [ ] remove videos and data so don't show urls to view
 - [ ] try auth with cloudflare for admin in prod
 - [ ] check all email addresses for consistency
-- [ ] sent sender friendly name in send emails
+- [x] sent sender friendly name in send emails
 - [ ] revise topic list
-- [ ] generate registration code and add it and link to luma event in accept email
+- [x] generate registration code and add it and link to luma event in accept email
 - [ ] change in cloudflare the app url to prod
 - [ ] change slack webhook to whatever new channel is (setup and update CF secret)
