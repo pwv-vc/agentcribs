@@ -1,5 +1,5 @@
 import { Seo } from "@/app/components/seo";
-import { getPlaylist } from "@/app/queries/application";
+import { getPlaylist } from "@/app/queries/playlist";
 import { CtaButton } from "@/app/shared/cta-button";
 import VideoCard from "@/app/shared/video-card";
 

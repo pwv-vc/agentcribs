@@ -19,6 +19,8 @@ See [brand/taste.md](brand/taste.md)
 # data
 
 - Query files in `src/app/queries/` should use content collections instead of redefining them inline. Confidence: 0.65
+- Always use specific query files by domain (e.g., `playlist.ts`, `user.ts`) rather than lumping unrelated queries into a generic file like `application.ts`. Confidence: 0.85
+- Apply data transformations like sorting in the query layer (server queries), not in page components. Confidence: 0.60
 
 # logging
 

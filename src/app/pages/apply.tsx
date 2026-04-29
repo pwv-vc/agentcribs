@@ -1,5 +1,5 @@
 import { Seo } from "@/app/components/seo";
-import { getTopics } from "@/app/queries/application";
+import { getTopics } from "@/app/queries/topics";
 import { CtaButton } from "@/app/shared/cta-button";
 import { ApplyForm } from "@/app/shared/apply-form";
 
