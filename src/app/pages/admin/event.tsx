@@ -144,10 +144,10 @@ export async function AdminEventDetail({
             <img
               src={event.cover_url}
               alt={"Cover for " + event.name}
-              className="h-72 w-72 flex-shrink-0 rounded-lg border border-border object-cover"
+              className="h-24 sm:h-32 md:h-48 w-auto flex-shrink-0 rounded-lg border border-border object-cover"
             />
           )}
-          <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
+          <h1 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold leading-snug">
             {event.name}
           </h1>
         </div>
@@ -210,7 +210,7 @@ export async function AdminEventDetail({
 
         {hosts && hosts.length > 0 && (
           <>
-            <h2 className="mt-10 font-serif text-xl font-bold tracking-tight">
+            <h2 className="mt-10 font-serif text-xl font-bold">
               Hosts
             </h2>
             <div className="mt-4 rounded-lg border border-border bg-bg-soft p-6 sm:p-8">
@@ -225,7 +225,7 @@ export async function AdminEventDetail({
 
         {guests.length > 0 && (
           <>
-            <h2 className="mt-10 font-serif text-xl font-bold tracking-tight">
+            <h2 className="mt-10 font-serif text-xl font-bold">
               Guests ({guests.length}
               {guestsHasMore ? "+" : ""})
             </h2>
@@ -257,7 +257,7 @@ export async function AdminEventDetail({
 
         {(event.description || event.description_mirror) && (
           <>
-            <h2 className="mt-10 font-serif text-xl font-bold tracking-tight">
+            <h2 className="mt-10 font-serif text-xl font-bold">
               Description
             </h2>
             <div className="mt-4">

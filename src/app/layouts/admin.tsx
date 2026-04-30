@@ -1,4 +1,5 @@
 import { link } from "@/app/shared/links";
+import { MobileNav } from "@/app/components/admin/mobile-nav";
 
 export function AdminLayout({
   children,
@@ -15,13 +16,13 @@ export function AdminLayout({
   return (
     <div className="flex min-h-screen flex-col">
       <header className="border-b border-border bg-bg-muted">
-        <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-3 sm:px-8">
+        <div className="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-3 sm:px-8">
           <div className="flex items-center gap-3">
             <span className="font-mono text-xs font-medium uppercase tracking-widest text-text-secondary">
               Admin
             </span>
             {displayEmailAddress && (
-              <span className="flex items-center gap-1.5 text-xs text-text-secondary">
+              <span className="hidden sm:flex items-center gap-1.5 text-xs text-text-secondary">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
@@ -34,7 +35,9 @@ export function AdminLayout({
               </span>
             )}
           </div>
-          <nav className="flex items-center gap-6">
+
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-6">
             <a
               href={link("/admin/applications")}
               className="text-sm font-medium text-text-secondary no-underline transition-colors hover:text-text"
@@ -62,6 +65,9 @@ export function AdminLayout({
               </a>
             )}
           </nav>
+
+          {/* Mobile nav (client component) */}
+          <MobileNav displayEmailAddress={displayEmailAddress} isDev={isDev} />
         </div>
       </header>
 

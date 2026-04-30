@@ -5,8 +5,8 @@ export function LumaMapLink({
 }) {
   const url = `https://www.google.com/maps/place/?q=place_id:${googleMapsPlaceId}`;
   return (
-    <div className="flex gap-4 py-3">
-      <dt className="w-32 shrink-0 text-sm font-medium text-text-secondary">
+    <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 py-3">
+      <dt className="w-32 shrink-0 text-xs sm:text-sm font-medium text-text-secondary">
         Map
       </dt>
       <dd className="text-sm">

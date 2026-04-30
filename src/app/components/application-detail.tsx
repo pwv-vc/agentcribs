@@ -114,9 +114,9 @@ export function ApplicationDetail({ application }: { application: ApplicationDat
 
   return (
     <div className="space-y-6 rounded-lg border border-border bg-bg-soft p-6 sm:p-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="font-serif text-2xl font-bold tracking-tight">
+          <h2 className="font-serif text-xl sm:text-2xl font-bold leading-snug">
             {application.firstName} {application.lastName}
           </h2>
           <p className="mt-1 text-sm text-text-secondary">{application.email}</p>
@@ -126,8 +126,8 @@ export function ApplicationDetail({ application }: { application: ApplicationDat
 
       <dl className="divide-y divide-border">
         {application.githubHandle && (
-          <div className="flex gap-4 py-3">
-            <dt className="w-32 shrink-0 text-sm font-medium text-text-secondary">
+          <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 py-3">
+            <dt className="w-32 shrink-0 text-xs sm:text-sm font-medium text-text-secondary">
               GitHub
             </dt>
             <dd className="space-y-1 text-sm">
@@ -209,65 +209,65 @@ export function ApplicationDetail({ application }: { application: ApplicationDat
             </dd>
           </div>
         )}
-        <div className="flex gap-4 py-3">
-          <dt className="w-32 text-sm font-medium text-text-secondary">Organization</dt>
+        <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 py-3">
+          <dt className="w-32 text-xs sm:text-sm font-medium text-text-secondary">Organization</dt>
           <dd className="text-sm">{application.organization || "\u2014"}</dd>
         </div>
-        <div className="flex gap-4 py-3">
-          <dt className="w-32 text-sm font-medium text-text-secondary">Location</dt>
+        <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 py-3">
+          <dt className="w-32 text-xs sm:text-sm font-medium text-text-secondary">Location</dt>
           <dd className="text-sm">{application.location || "\u2014"}</dd>
         </div>
-        <div className="flex gap-4 py-3">
-          <dt className="w-32 text-sm font-medium text-text-secondary">How heard</dt>
+        <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 py-3">
+          <dt className="w-32 text-xs sm:text-sm font-medium text-text-secondary">How heard</dt>
           <dd className="text-sm">{application.howHeard || "\u2014"}</dd>
         </div>
-        <div className="flex gap-4 py-3">
-          <dt className="w-32 text-sm font-medium text-text-secondary">Topics</dt>
+        <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 py-3">
+          <dt className="w-32 text-xs sm:text-sm font-medium text-text-secondary">Topics</dt>
           <dd className="text-sm">{formatTopics(application.topics)}</dd>
         </div>
         {application.story && (
-          <div className="flex gap-4 py-3">
-            <dt className="w-32 shrink-0 text-sm font-medium text-text-secondary">Story</dt>
+          <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 py-3">
+            <dt className="w-32 shrink-0 text-xs sm:text-sm font-medium text-text-secondary">Story</dt>
             <dd className="text-sm">{application.story}</dd>
           </div>
         )}
         {application.summary && (
-          <div className="flex gap-4 py-3">
-            <dt className="w-32 shrink-0 text-sm font-medium text-text-secondary">Summary</dt>
+          <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 py-3">
+            <dt className="w-32 shrink-0 text-xs sm:text-sm font-medium text-text-secondary">Summary</dt>
             <dd className="text-sm italic text-accent">{application.summary}</dd>
           </div>
         )}
-        <div className="flex gap-4 py-3">
-          <dt className="w-32 text-sm font-medium text-text-secondary">Applied</dt>
+        <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 py-3">
+          <dt className="w-32 text-xs sm:text-sm font-medium text-text-secondary">Applied</dt>
           <dd className="text-sm">{formatDate(application.createdAt)}</dd>
         </div>
         {application.termsAcceptedAt && (
-          <div className="flex gap-4 py-3">
-            <dt className="w-32 text-sm font-medium text-text-secondary">Terms accepted</dt>
+          <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 py-3">
+            <dt className="w-32 text-xs sm:text-sm font-medium text-text-secondary">Terms accepted</dt>
             <dd className="text-sm">{formatDate(application.termsAcceptedAt)}</dd>
           </div>
         )}
         {application.verifiedAt && (
-          <div className="flex gap-4 py-3">
-            <dt className="w-32 text-sm font-medium text-text-secondary">Verified</dt>
+          <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 py-3">
+            <dt className="w-32 text-xs sm:text-sm font-medium text-text-secondary">Verified</dt>
             <dd className="text-sm">{formatDate(application.verifiedAt)}</dd>
           </div>
         )}
         {application.editedAt && (
-          <div className="flex gap-4 py-3">
-            <dt className="w-32 text-sm font-medium text-text-secondary">Edited</dt>
+          <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 py-3">
+            <dt className="w-32 text-xs sm:text-sm font-medium text-text-secondary">Edited</dt>
             <dd className="text-sm">{formatDate(application.editedAt)}</dd>
           </div>
         )}
         {application.approvedAt && (
-          <div className="flex gap-4 py-3">
-            <dt className="w-32 text-sm font-medium text-text-secondary">Approved</dt>
+          <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 py-3">
+            <dt className="w-32 text-xs sm:text-sm font-medium text-text-secondary">Approved</dt>
             <dd className="text-sm">{formatDate(application.approvedAt)}</dd>
           </div>
         )}
         {application.rejectedAt && (
-          <div className="flex gap-4 py-3">
-            <dt className="w-32 text-sm font-medium text-text-secondary">Rejected</dt>
+          <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 py-3">
+            <dt className="w-32 text-xs sm:text-sm font-medium text-text-secondary">Rejected</dt>
             <dd className="text-sm">{formatDate(application.rejectedAt)}</dd>
           </div>
         )}
