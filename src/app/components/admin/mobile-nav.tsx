@@ -18,6 +18,7 @@ export function MobileNav({ displayEmailAddress, isDev }: MobileNavProps) {
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         className="rounded-md border border-border bg-bg p-2 text-text-secondary hover:bg-bg-muted"
         aria-label="Toggle menu"
+        aria-expanded={mobileMenuOpen}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -35,7 +36,7 @@ export function MobileNav({ displayEmailAddress, isDev }: MobileNavProps) {
 
       {/* Mobile nav menu - rendered outside the header flex container */}
       {mobileMenuOpen && (
-        <div className="absolute left-0 right-0 top-[57px] border-b border-border bg-bg-soft px-4 py-3 z-50">
+        <div className="absolute left-0 right-0 top-full border-b border-border bg-bg-soft px-4 py-3 z-50">
           <div className="mx-auto max-w-[1200px]">
             <div className="flex flex-col gap-2">
               {displayEmailAddress && (

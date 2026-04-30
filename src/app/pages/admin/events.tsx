@@ -40,7 +40,7 @@ export const AdminEvents = async ({
         />
         <main className="mx-auto max-w-[1200px] px-6 py-16 sm:px-8 sm:py-20">
           <div className="flex items-center justify-between">
-            <h1 className="font-serif text-3xl font-bold sm:text-4xl leading-snug">
+            <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl leading-snug">
               Events
             </h1>
           </div>
@@ -85,7 +85,7 @@ export const AdminEvents = async ({
           noIndex
         />
         <main className="mx-auto max-w-[1200px] px-6 py-16 sm:px-8 sm:py-20">
-          <h1 className="font-serif text-3xl font-bold sm:text-4xl leading-snug">
+          <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl leading-snug">
             Events
           </h1>
           <p className="mt-6 text-text-secondary">

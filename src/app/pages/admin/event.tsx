@@ -210,7 +210,7 @@ export async function AdminEventDetail({
 
         {hosts && hosts.length > 0 && (
           <>
-            <h2 className="mt-10 font-serif text-xl font-bold">
+            <h2 className="mt-10 font-serif text-xl font-bold tracking-tight">
               Hosts
             </h2>
             <div className="mt-4 rounded-lg border border-border bg-bg-soft p-6 sm:p-8">
@@ -225,7 +225,7 @@ export async function AdminEventDetail({
 
         {guests.length > 0 && (
           <>
-            <h2 className="mt-10 font-serif text-xl font-bold">
+            <h2 className="mt-10 font-serif text-xl font-bold tracking-tight">
               Guests ({guests.length}
               {guestsHasMore ? "+" : ""})
             </h2>
@@ -257,7 +257,7 @@ export async function AdminEventDetail({
 
         {(event.description || event.description_mirror) && (
           <>
-            <h2 className="mt-10 font-serif text-xl font-bold">
+            <h2 className="mt-10 font-serif text-xl font-bold tracking-tight">
               Description
             </h2>
             <div className="mt-4">

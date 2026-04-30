@@ -15,7 +15,7 @@ export function AdminLayout({
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-border bg-bg-muted">
+      <header className="relative border-b border-border bg-bg-muted">
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-3 sm:px-8">
           <div className="flex items-center gap-3">
             <span className="font-mono text-xs font-medium uppercase tracking-widest text-text-secondary">
