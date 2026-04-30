@@ -8,11 +8,6 @@ export const Document: React.FC<{
     <head>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>AgentCribs &mdash; PWV Community + May 6 Event in San Francisco</title>
-      <meta
-        name="description"
-        content="AgentCribs is a curated PWV community for builders working with AI agents. Apply for May 6 in San Francisco with Peter Levine and Tom Preston-Werner."
-      />
       <meta name="theme-color" content="#5a6b5e" />
 
       {/* Favicon */}

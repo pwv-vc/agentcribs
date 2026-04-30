@@ -1,4 +1,4 @@
 ---
 id: "rag-patterns"
-label: "RAG Patterns & Knowledge Retrieval"
+label: "Knowledge, Retrieval & Context Engineering"
 ---

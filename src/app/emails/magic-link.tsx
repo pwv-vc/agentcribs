@@ -14,19 +14,25 @@ export default function MagicLinkEmail({ verifyUrl }: { verifyUrl: string }) {
   return (
     <Html>
       <Head />
-      <Preview>Verify your email for AgentCribs</Preview>
+      <Preview>Final step for your AgentCribs application</Preview>
       <Body style={body}>
         <Container style={container}>
-          <Text style={heading}>AgentCribs</Text>
+          <Text style={heading}>Final step for your AgentCribs application</Text>
           <Text style={paragraph}>
-            Verify your email address to complete your application.
+            There is one more step. Verify your email address to complete your
+            AgentCribs application and make it visible to our review team.
           </Text>
           <Button href={verifyUrl} style={button}>
-            Verify email
+            Verify email and complete application
           </Button>
           <Text style={footnote}>
-            This link expires in 1 hour. If you didn't apply to AgentCribs, you
-            can safely ignore this email.
+            This link expires in 1 hour. If you need support, reply to this
+            email or email{" "}
+            <Link href="mailto:support@agentcribs.com" style={linkStyle}>
+              support@agentcribs.com
+            </Link>
+            . If you didn't apply to AgentCribs, you can safely ignore this
+            email.
           </Text>
           <Text style={footnote}>
             Or paste this link into your browser:
@@ -42,11 +48,15 @@ export default function MagicLinkEmail({ verifyUrl }: { verifyUrl: string }) {
 }
 
 export function magicLinkText({ verifyUrl }: { verifyUrl: string }) {
-  return `Verify your email for AgentCribs
+  return `Final step for your AgentCribs application
 
-Click this link to verify: ${verifyUrl}
+There is one more step. Verify your email address to complete your AgentCribs application and make it visible to our review team.
 
-This link expires in 1 hour. If you didn't apply to AgentCribs, you can safely ignore this email.`;
+Click this link to verify and complete your application: ${verifyUrl}
+
+This link expires in 1 hour. If you need support, reply to this email or email support@agentcribs.com.
+
+If you didn't apply to AgentCribs, you can safely ignore this email.`;
 }
 
 const body = {

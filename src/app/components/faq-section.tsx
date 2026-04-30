@@ -26,6 +26,11 @@ export function FaqSection() {
         />
 
         <FaqItem
+          question="How do applications work?"
+          answer="We are prioritizing invitations for the May 6 AgentCribs event right now. Selected applicants will receive a separate registration invite for the event. If you are not invited to the May 6 event, or if you cannot attend, you will remain on our list for future AgentCribs opportunities online and in person."
+        />
+
+        <FaqItem
           question="What if I cannot attend on May 6?"
           answer="You should still apply. We will follow up with selected applicants about future AgentCribs opportunities online and in person."
         />
@@ -63,10 +68,10 @@ export function FaqSection() {
           <p className="mt-2 leading-relaxed">
             Need help? Email{" "}
             <a
-              href="mailto:agentcribs@pwv.com"
+              href="mailto:contact@agentcribs.com"
               className="font-bold text-accent no-underline hover:text-accent-hover"
             >
-              agentcribs@pwv.com
+              contact@agentcribs.com
             </a>
             .
           </p>

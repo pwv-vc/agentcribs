@@ -1,4 +1,4 @@
 ---
 id: "ai-design"
-label: "AI-Assisted Design & Prototyping"
+label: "Design, Prototyping & Product UX"
 ---

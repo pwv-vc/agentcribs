@@ -1,4 +1,4 @@
 ---
 id: "multi-agent"
-label: "Multi-Agent Systems & Orchestration"
+label: "Agent Harnesses, Multi-Agent Systems & Orchestration"
 ---

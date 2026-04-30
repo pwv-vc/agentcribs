@@ -277,8 +277,11 @@ export const ApplyForm = ({
           Tell us more <span className="text-accent">*</span>
         </span>
         <p className="text-xs leading-relaxed text-text-secondary">
-          What are you building with AI agents? What interests you about
-          AgentCribs? What do you want to see in an agent platform?
+          Tell us what you're building with AI agents, what you love and
+          despise about the current tools, and what you want to explore with
+          peers. Include relevant links to projects, demos, repos, writing, or
+          collaborative communities you have helped build or actively
+          participate in.
         </p>
         <textarea
           name="story"
@@ -321,7 +324,7 @@ export const ApplyForm = ({
             }
           }}
           className="rounded-lg border border-border bg-bg-soft px-4 py-2.5 text-sm text-text placeholder:text-text-secondary/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent sm:text-base"
-          placeholder="Tell us what you're building, what excites you about AI agents, and why AgentCribs..."
+          placeholder="What are you building? What is working, what is broken, and where would your perspective add something distinct?"
         />
         {isSummarizing && (
           <p className="text-xs text-accent">Distilling your story...</p>

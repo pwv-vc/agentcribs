@@ -1,4 +1,4 @@
 ---
 id: "ai-products"
-label: "Building AI-Native Products"
+label: "AI-Native Products & Agent Platforms"
 ---

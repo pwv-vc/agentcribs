@@ -2,9 +2,7 @@ import { CommunitySection } from "@/app/components/community-section";
 import { EventSection } from "@/app/components/event-section";
 import { FaqSection } from "@/app/components/faq-section";
 import { HeroSection } from "@/app/components/hero-section";
-import { HowItWorksSection } from "@/app/components/how-it-works-section";
 import { JsonLd } from "@/app/components/json-ld";
-import { PwvSection } from "@/app/components/pwv-section";
 import { Seo } from "@/app/components/seo";
 
 const schema = {
@@ -23,6 +21,11 @@ const schema = {
         url: "https://pwv.com/",
       },
       sameAs: ["https://pwv.com/"],
+      potentialAction: {
+        "@type": "JoinAction",
+        name: "Apply to join AgentCribs",
+        target: "https://agentcribs.com/apply",
+      },
     },
     {
       "@type": "WebPage",
@@ -31,7 +34,14 @@ const schema = {
       name: "AgentCribs | PWV Community + May 6 Event in San Francisco",
       description:
         "AgentCribs is a curated PWV community for builders working with AI agents. Apply for May 6 in San Francisco with Peter Levine and Tom Preston-Werner.",
+      inLanguage: "en-US",
       about: { "@id": "https://agentcribs.com/#organization" },
+      primaryImageOfPage: {
+        "@type": "ImageObject",
+        url: "https://agentcribs.com/og-image.png",
+        width: 1200,
+        height: 630,
+      },
       isPartOf: {
         "@type": "WebSite",
         name: "AgentCribs",
@@ -41,7 +51,7 @@ const schema = {
     {
       "@type": "Event",
       "@id": "https://agentcribs.com/#may-6-event",
-      name: "AgentCribs: Show & Tell, hosted by PWV",
+      name: "PWV Founders + AgentCribs",
       description:
         "An evening gathering in San Francisco for PWV founders, seasoned developers, and selected builders focused on agentic software development, featuring a fireside chat between Peter Levine and Tom Preston-Werner.",
       startDate: "2026-05-06",
@@ -62,6 +72,11 @@ const schema = {
         "@type": "Organization",
         name: "PWV",
         url: "https://pwv.com/",
+      },
+      potentialAction: {
+        "@type": "RegisterAction",
+        name: "Apply to join AgentCribs",
+        target: "https://agentcribs.com/apply",
       },
       performer: [
         {
@@ -98,10 +113,26 @@ const schema = {
         },
         {
           "@type": "Question",
+          name: "How do applications work?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "AgentCribs is prioritizing invitations for the May 6 event right now. Selected applicants will receive a separate registration invite for the event. If you are not invited to the May 6 event, or if you cannot attend, you will remain on the list for future AgentCribs opportunities online and in person.",
+          },
+        },
+        {
+          "@type": "Question",
           name: "What if I cannot attend on May 6?",
           acceptedAnswer: {
             "@type": "Answer",
             text: "You should still apply. AgentCribs will follow up with selected applicants about future opportunities online and in person.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Where is the event?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "The event is in San Francisco. Venue details will be shared with registered attendees.",
           },
         },
       ],
@@ -120,8 +151,6 @@ export const Home = () => {
       <HeroSection />
       <EventSection />
       <CommunitySection />
-      <HowItWorksSection />
-      <PwvSection />
       <FaqSection />
     </>
   );

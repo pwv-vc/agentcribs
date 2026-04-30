@@ -7,7 +7,6 @@ import type {
   ApplicationData,
   ApplicationStatus,
 } from "../actions/application";
-import { allPlaylists } from "content-collections";
 
 type Topic = (typeof allTopics)[number];
 
@@ -100,19 +99,3 @@ export const queryApplications = serverQuery(
 export const getTopics = serverQuery(async (): Promise<Topic[]> => {
   return [...allTopics].sort((a, b) => a.label.localeCompare(b.label));
 });
-
-export type PlaylistData = (typeof allPlaylists)[number];
-
-export const getPlaylist = serverQuery(
-  async (): Promise<PlaylistData | null> => {
-    const list = allPlaylists[0];
-    if (!list) return null;
-    return {
-      ...list,
-      videos: [...list.videos].sort(
-        (a, b) =>
-          new Date(b.published).getTime() - new Date(a.published).getTime(),
-      ),
-    };
-  },
-);

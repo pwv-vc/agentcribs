@@ -8,7 +8,7 @@ export function EventSection() {
           May 6 in San Francisco
         </h2>
         <p className="mt-3 text-lg font-semibold sm:text-xl">
-          AgentCribs: Show & Tell, hosted by PWV
+          PWV Founders + AgentCribs
         </p>
 
         <p className="mt-6 leading-relaxed">
