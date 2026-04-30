@@ -38,7 +38,7 @@ const schema = {
       about: { "@id": "https://agentcribs.com/#organization" },
       primaryImageOfPage: {
         "@type": "ImageObject",
-        url: "https://agentcribs.com/og-image.png",
+        url: "https://agentcribs.com/og-image.png?v=5",
         width: 1200,
         height: 630,
       },
