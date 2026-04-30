@@ -2,12 +2,9 @@ import { CtaButton } from "@/app/shared/cta-button";
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden border-b border-border bg-bg">
-      <div className="pointer-events-none absolute right-0 top-16 hidden h-64 w-64 border border-cyan/60 lg:block" aria-hidden="true" />
-      <div className="pointer-events-none absolute right-16 top-32 hidden h-28 w-28 bg-brand-green lg:block" aria-hidden="true" />
-
-      <div className="mx-auto grid max-w-[1040px] gap-12 px-6 py-14 sm:px-8 sm:py-20 lg:grid-cols-[1fr_300px] lg:items-end">
-        <div>
+    <section className="border-b border-border bg-bg">
+      <div className="mx-auto max-w-[1040px] px-6 py-14 sm:px-8 sm:py-20">
+        <div className="mx-auto max-w-[820px] lg:mx-auto">
           <p className="label-text mb-8 text-base sm:text-xl">
             May 6 in San Francisco
           </p>
@@ -16,8 +13,9 @@ export function HeroSection() {
           </h1>
           <p className="mt-8 max-w-[820px] text-2xl font-black leading-[1.05] text-text sm:text-4xl md:text-5xl">
             Peter Levine +{" "}
-            <span className="whitespace-nowrap">Tom Preston-Werner</span>. One
-            night in San Francisco.
+            <span className="whitespace-nowrap">Tom Preston-Werner</span>.
+            <br />
+            One night in San Francisco.
           </p>
           <p className="mt-8 max-w-[720px] text-lg leading-relaxed text-text-secondary sm:text-xl">
             AgentCribs is a PWV community project for people already building
@@ -39,8 +37,6 @@ export function HeroSection() {
             opportunities online and in person.
           </p>
         </div>
-
-        <div className="hidden lg:block" aria-hidden="true" />
       </div>
     </section>
   );
