@@ -30,7 +30,10 @@ export const Document: React.FC<{
         dangerouslySetInnerHTML={{
           __html: `
             (function() {
-              document.documentElement.classList.toggle("dark", window.matchMedia("(prefers-color-scheme: dark)").matches);
+              var t = localStorage.getItem("theme");
+              if (t === "dark" || (t !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+                document.documentElement.classList.add("dark");
+              }
             })();
           `,
         }}
