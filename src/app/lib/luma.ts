@@ -2,6 +2,9 @@ import { env } from "cloudflare:workers";
 
 const BASE_URL = "https://public-api.luma.com/v1";
 const PER_PAGE = 30;
+const CACHE_TTL_SECONDS = 300; // 5 minutes
+const MAX_RETRIES = 3;
+const INITIAL_BACKOFF_MS = 1000;
 
 export interface GeoAddressJson {
   address: string;
@@ -143,13 +146,30 @@ export interface LumaClient {
   listEvents(params?: ListEventsParams): Promise<CalendarListEventsResponse>;
 }
 
+function getCacheKey(type: string, params: Record<string, string | undefined>): string {
+  const sortedParams = Object.entries(params)
+    .filter(([, v]) => v !== undefined && v !== null)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([k, v]) => `${k}=${v}`)
+    .join("&");
+  return `luma:${type}:${sortedParams}`;
+}
+
+async function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export function getLumaClient(): LumaClient {
   const apiKey = env.LUMA_API_SECRET;
   if (!apiKey) {
     throw new Error("LUMA_API_SECRET environment variable is not set");
   }
 
-  async function request<T>(path: string, params?: Record<string, string>): Promise<T> {
+  async function requestWithRetry<T>(
+    path: string,
+    params?: Record<string, string>,
+    attempt = 1,
+  ): Promise<T> {
     const url = new URL(path, BASE_URL);
     if (params) {
       for (const [key, value] of Object.entries(params)) {
@@ -166,6 +186,19 @@ export function getLumaClient(): LumaClient {
       },
     });
 
+    // Handle rate limiting with exponential backoff
+    if (response.status === 429) {
+      if (attempt >= MAX_RETRIES) {
+        throw new LumaApiError(
+          "Luma API rate limit exceeded after " + MAX_RETRIES + " retries",
+          429,
+        );
+      }
+      const backoffMs = INITIAL_BACKOFF_MS * Math.pow(2, attempt - 1);
+      await sleep(backoffMs);
+      return requestWithRetry<T>(path, params, attempt + 1);
+    }
+
     if (!response.ok) {
       const body = await response.text().catch(() => "");
       throw new LumaApiError(
@@ -177,16 +210,49 @@ export function getLumaClient(): LumaClient {
     return response.json() as Promise<T>;
   }
 
+  async function getCached<T>(
+    cacheKey: string,
+    fetcher: () => Promise<T>,
+  ): Promise<T> {
+    // Try to get from cache first
+    try {
+      const cached = await env.AGENTCRIBS_KV.get(cacheKey);
+      if (cached) {
+        return JSON.parse(cached) as T;
+      }
+    } catch {
+      // Cache miss or error, continue to fetch
+    }
+
+    // Fetch from API
+    const data = await fetcher();
+
+    // Store in cache
+    try {
+      await env.AGENTCRIBS_KV.put(cacheKey, JSON.stringify(data), {
+        expirationTtl: CACHE_TTL_SECONDS,
+      });
+    } catch {
+      // Cache write failure is non-fatal
+    }
+
+    return data;
+  }
+
   return {
     async getEvent(id: string): Promise<GetEventResponse> {
-      return request<GetEventResponse>("/v1/event/get", { id });
+      const cacheKey = getCacheKey("event", { id });
+      return getCached(cacheKey, () =>
+        requestWithRetry<GetEventResponse>("/v1/event/get", { id }),
+      );
     },
 
     async getGuests(
       eventId: string,
       params?: GetGuestsParams,
     ): Promise<GetGuestsResponse> {
-      return request<GetGuestsResponse>("/v1/event/get-guests", {
+      // Guest lists change frequently, don't cache
+      return requestWithRetry<GetGuestsResponse>("/v1/event/get-guests", {
         event_id: eventId,
         ...(params?.pagination_cursor && { pagination_cursor: params.pagination_cursor }),
         ...(params?.pagination_limit && { pagination_limit: String(params.pagination_limit) }),
@@ -199,10 +265,18 @@ export function getLumaClient(): LumaClient {
     async listEvents(
       params?: ListEventsParams,
     ): Promise<CalendarListEventsResponse> {
-      return request<CalendarListEventsResponse>("/v1/calendar/list-events", {
-        ...params,
+      const cacheKey = getCacheKey("events", {
+        after: params?.after,
+        sort_column: params?.sort_column,
+        sort_direction: params?.sort_direction,
         limit: String(params?.limit ?? PER_PAGE),
       });
+      return getCached(cacheKey, () =>
+        requestWithRetry<CalendarListEventsResponse>("/v1/calendar/list-events", {
+          ...params,
+          limit: String(params?.limit ?? PER_PAGE),
+        }),
+      );
     },
   };
 }

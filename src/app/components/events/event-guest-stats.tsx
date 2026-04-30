@@ -15,27 +15,42 @@ const GUEST_STATUS_CONFIG: {
   { status: "waitlist", label: "Waitlist", bg: "bg-purple-50 dark:bg-purple-950", text: "text-purple-700 dark:text-purple-300" },
 ];
 
-export function EventGuestStats({ guests }: { guests: LumaGuest[] }) {
+export function EventGuestStats({
+  guests,
+  totalShown,
+  hasMore,
+}: {
+  guests: LumaGuest[];
+  totalShown: number;
+  hasMore: boolean;
+}) {
   const counts = getGuestStatusCounts(guests);
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-      {GUEST_STATUS_CONFIG.map(({ status, label, bg, text }) => {
-        const count = counts[status];
-        return (
-          <div
-            key={status}
-            className={`rounded-lg border border-border p-3 ${bg}`}
-          >
-            <p className={`text-xs font-semibold uppercase tracking-wider ${text}`}>
-              {label}
-            </p>
-            <p className={`mt-1 text-2xl font-bold tabular-nums ${text}`}>
-              {count}
-            </p>
-          </div>
-        );
-      })}
+    <div>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        {GUEST_STATUS_CONFIG.map(({ status, label, bg, text }) => {
+          const count = counts[status];
+          return (
+            <div
+              key={status}
+              className={`rounded-lg border border-border p-3 ${bg}`}
+            >
+              <p className={`text-xs font-semibold uppercase tracking-wider ${text}`}>
+                {label}
+              </p>
+              <p className={`mt-1 text-2xl font-bold tabular-nums ${text}`}>
+                {count}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+      {hasMore && (
+        <p className="mt-2 text-xs text-text-secondary">
+          Showing counts from first {totalShown} guests only
+        </p>
+      )}
     </div>
   );
 }

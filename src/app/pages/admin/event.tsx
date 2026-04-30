@@ -231,7 +231,11 @@ export async function AdminEventDetail({
             </h2>
 
             <div className="mt-4 space-y-4">
-              <EventGuestStats guests={guests} />
+              <EventGuestStats
+                guests={guests}
+                totalShown={guests.length}
+                hasMore={guestsHasMore}
+              />
               <GuestFilters current={guestStatus} buildHref={buildGuestHref} />
               <GuestsTable guests={guests} />
               <GuestPagination

@@ -4,7 +4,7 @@ export function ExternalLink({ href, label }: { href: string; label: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 rounded-lg border border-border bg-bg px-4 py-2 text-sm font-medium text-text no-underline transition-colors hover:bg-bg-muted bg-white"
+      className="inline-flex items-center gap-2 rounded-lg border border-border bg-bg px-4 py-2 text-sm font-medium text-text no-underline transition-colors hover:bg-bg-muted"
     >
       {label}
       <svg
