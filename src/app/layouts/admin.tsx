@@ -1,3 +1,5 @@
+import { link } from "@/app/shared/links";
+
 export function AdminLayout({
   children,
   requestInfo,
@@ -34,10 +36,16 @@ export function AdminLayout({
           </div>
           <nav className="flex items-center gap-6">
             <a
-              href="/admin/applications"
+              href={link("/admin/applications")}
               className="text-sm font-medium text-text-secondary no-underline transition-colors hover:text-text"
             >
               Applications
+            </a>
+            <a
+              href={link("/admin/events")}
+              className="text-sm font-medium text-text-secondary no-underline transition-colors hover:text-text"
+            >
+              Events
             </a>
             <a
               href="/"

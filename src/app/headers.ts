@@ -26,6 +26,6 @@ export const setCommonHeaders =
     // Defines trusted sources for content loading and script execution:
     response.headers.set(
       "Content-Security-Policy",
-      `default-src 'self'; script-src 'self' 'unsafe-eval' 'nonce-${nonce}' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-ancestors 'self'; frame-src 'self' https://challenges.cloudflare.com https://www.youtube.com https://www.youtube-nocookie.com; img-src 'self' https://avatars.githubusercontent.com https://*.githubusercontent.com https://i.ytimg.com; connect-src 'self' https://agentcribs.com https://*.cloudflare.com https://www.youtube.com; media-src 'self' https://www.youtube.com; object-src 'none';`,
+      `default-src 'self'; script-src 'self' 'unsafe-eval' 'nonce-${nonce}' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-ancestors 'self'; frame-src 'self' https://challenges.cloudflare.com https://www.youtube.com https://www.youtube-nocookie.com; img-src 'self' https://avatars.githubusercontent.com https://*.githubusercontent.com https://i.ytimg.com https://images.lumacdn.com https://cdn.lu.ma; connect-src 'self' https://agentcribs.com https://*.cloudflare.com https://www.youtube.com; media-src 'self' https://www.youtube.com; object-src 'none';`,
     );
   };

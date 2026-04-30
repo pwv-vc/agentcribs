@@ -86,6 +86,7 @@
       "CLOUDFLARE_ACCOUNT_ID",
       "AI_GATEWAY_NAME",
       "CF_AIG_TOKEN",
+      "LUMA_API_SECRET",
     ],
   },
   // ---- Environments ----
