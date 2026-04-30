@@ -427,7 +427,7 @@ export const ApplyForm = ({
       <button
         type="submit"
         disabled={isPending || !acceptedTerms || !summary}
-        className="block w-full rounded-lg bg-accent px-6 py-3 text-center text-base font-bold text-accent-text no-underline transition-colors hover:bg-accent-hover disabled:opacity-50 sm:inline-block sm:w-auto sm:px-10 sm:py-3.5 sm:text-lg"
+        className="block w-full rounded-lg bg-brand-green px-6 py-3 text-center text-base font-bold text-accent-text no-underline transition-colors hover:bg-brand-green-hover disabled:opacity-50 sm:inline-block sm:w-auto sm:px-10 sm:py-3.5 sm:text-lg"
       >
         {isPending ? "Submitting..." : "Submit application"}
       </button>

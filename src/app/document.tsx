@@ -8,7 +8,8 @@ export const Document: React.FC<{
     <head>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <meta name="theme-color" content="#5a6b5e" />
+      <meta name="theme-color" content="#f7f1dc" media="(prefers-color-scheme: light)" />
+      <meta name="theme-color" content="#090907" media="(prefers-color-scheme: dark)" />
 
       {/* Favicon */}
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -29,10 +30,7 @@ export const Document: React.FC<{
         dangerouslySetInnerHTML={{
           __html: `
             (function() {
-              var stored = localStorage.getItem("theme");
-              var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-              document.documentElement.classList.toggle("dark", theme === "dark");
-              if (!stored) localStorage.setItem("theme", theme);
+              document.documentElement.classList.toggle("dark", window.matchMedia("(prefers-color-scheme: dark)").matches);
             })();
           `,
         }}

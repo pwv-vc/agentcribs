@@ -2,18 +2,18 @@ import { CtaButton } from "@/app/shared/cta-button";
 
 function FaqItem({ question, answer }: { question: string; answer: string }) {
   return (
-    <div className="mt-8 sm:mt-10">
-      <h3 className="font-serif text-xl font-bold tracking-tight sm:text-2xl">{question}</h3>
-      <p className="mt-3 leading-relaxed">{answer}</p>
+    <div className="border-t border-border py-6">
+      <h3 className="text-xl font-black leading-tight sm:text-2xl">{question}</h3>
+      <p className="mt-3 leading-relaxed text-text-secondary">{answer}</p>
     </div>
   );
 }
 
 export function FaqSection() {
   return (
-    <section className="bg-bg-soft border-y border-border">
-      <div className="mx-auto max-w-[720px] px-6 py-16 sm:px-8 sm:py-24">
-        <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">FAQ</h2>
+    <section className="bg-bg">
+      <div className="mx-auto max-w-[900px] px-6 py-16 sm:px-8 sm:py-24">
+        <h2 className="text-4xl font-black leading-none sm:text-5xl">FAQ</h2>
 
         <FaqItem
           question="Who should apply?"
@@ -40,12 +40,12 @@ export function FaqSection() {
           answer="The event is in San Francisco. Venue details will be shared with registered attendees."
         />
 
-        <div className="mt-16 border-t border-border pt-12">
-          <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
+        <div className="mt-10 border-t border-border pt-12">
+          <h2 className="max-w-[720px] text-4xl font-black leading-none sm:text-5xl">
             AgentCribs is publicly soft launching now.
           </h2>
 
-          <p className="mt-6 text-lg leading-relaxed">
+          <p className="mt-6 max-w-[720px] text-lg leading-relaxed text-text-secondary">
             Apply to join the community and receive consideration for the May 6
             San Francisco event featuring Peter Levine and Tom Preston-Werner.
           </p>
