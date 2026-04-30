@@ -1,7 +1,7 @@
 "use client";
 
-import "@react-email/render";
-import { render } from "@react-email/render";
+import "react-email";
+import { render } from "react-email";
 
 import MagicLinkEmail, { magicLinkText } from "@/app/emails/magic-link";
 import PendingReviewEmail, {

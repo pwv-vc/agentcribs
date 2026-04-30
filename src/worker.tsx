@@ -5,9 +5,9 @@ import { Document } from "@/app/document";
 import { setCommonHeaders } from "@/app/headers";
 import { Layout } from "@/app/layouts/default";
 import { AdminLayout } from "@/app/layouts/admin";
-import { requireAdminPassword } from "@/app/middleware/auth/basic";
 import { handleGitHubCallback } from "@/app/middleware/github/callback";
 import { handleVerificationCallback } from "@/app/middleware/verify/callback";
+import { requireCloudflareAccess } from "@/app/middleware/auth/cloudflare-access";
 import { AdminApplications } from "@/app/pages/admin/applications";
 import { AdminApplicationDetail } from "@/app/pages/admin/application";
 import { Apply } from "@/app/pages/apply";
@@ -17,6 +17,7 @@ import { VerifyError } from "@/app/pages/verify-error";
 import { Terms } from "@/app/pages/terms";
 import { Privacy } from "@/app/pages/privacy";
 import { Home } from "@/app/pages/home";
+import { NotFound } from "@/app/pages/not-found";
 import {
   handleProcessApplication,
   handleSendEmail,
@@ -25,9 +26,9 @@ import {
 } from "@/app/actions/queue";
 import type { ApplicationPayload } from "@/app/actions/application";
 
-export type AppContext = {};
-
-const adminAuth = requireAdminPassword();
+export type AppContext = {
+  session?: { email: string; sub: string };
+};
 
 export const app = defineApp([
   setCommonHeaders(),
@@ -47,13 +48,15 @@ export const app = defineApp([
       route("/apply/verify/success", VerifySuccess),
       route("/apply/verify/error", VerifyError),
     ]),
+    // Authentication in production handled by Cloudflare One Access policies
     layout(AdminLayout, [
-      route("/admin/applications", [adminAuth, AdminApplications]),
+      route("/admin/applications", [requireCloudflareAccess(), AdminApplications]),
       route("/admin/applications/:id", [
-        adminAuth,
+        requireCloudflareAccess(),
         ({ params }) => <AdminApplicationDetail id={params.id} />,
       ]),
     ]),
+    layout(Layout, [route("/*", NotFound)]),
   ]),
 ]);
 

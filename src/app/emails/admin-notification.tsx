@@ -6,7 +6,7 @@ import {
   Html,
   Link,
   Text,
-} from "@react-email/components";
+} from "react-email";
 import * as React from "react";
 
 export default function AdminNotificationEmail({

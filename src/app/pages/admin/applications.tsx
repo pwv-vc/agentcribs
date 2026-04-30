@@ -1,6 +1,7 @@
 import { queryApplications } from "@/app/queries/application";
 import { CtaButton } from "@/app/shared/cta-button";
 import { ApplicationsTable } from "@/app/shared/applications-table";
+import { Seo } from "@/app/components/seo";
 import type { ApplicationStatus } from "@/app/actions/application";
 
 export const AdminApplications = async ({
@@ -38,7 +39,9 @@ export const AdminApplications = async ({
   };
 
   return (
-    <main className="mx-auto max-w-[1200px] px-6 py-16 sm:px-8 sm:py-20">
+    <>
+      <Seo title="Applications | Admin | AgentCribs" description="AgentCribs applications admin panel." noIndex />
+      <main className="mx-auto max-w-[1200px] px-6 py-16 sm:px-8 sm:py-20">
       <div className="flex items-center justify-between">
         <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
           Applications
@@ -125,5 +128,6 @@ export const AdminApplications = async ({
         </div>
       )}
     </main>
+    </>
   );
 };

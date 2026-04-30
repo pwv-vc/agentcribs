@@ -1,4 +1,4 @@
-import { Body, Container, Head, Html, Text, Link } from "@react-email/components";
+import { Body, Container, Head, Html, Text, Link } from "react-email";
 import * as React from "react";
 
 export default function AcceptedEmail({

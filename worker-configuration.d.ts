@@ -21,6 +21,7 @@ declare namespace Cloudflare {
     GITHUB_CALLBACK_URL: string;
     SEND_EMAIL_FROM: string;
     APP_URL: string;
+    POLICY_AUD: string;
     SLACK_WEBHOOK_URL: string;
     CLOUDFLARE_ACCOUNT_ID: string;
     AI_GATEWAY_NAME: string;
