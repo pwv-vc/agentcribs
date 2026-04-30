@@ -28,7 +28,7 @@
 - [x] add location to apply form
 - [x] add how found out about agentcribs
 - [ ] remove videos and data so don't show urls to view
-- [ ] try auth with cloudflare for admin in prod
+- [x] try auth with cloudflare for admin in prod
 - [x] check all email addresses for consistency
 - [x] sent sender friendly name in send emails
 - [x] revise topic list
@@ -36,3 +36,4 @@
 - [x] change in cloudflare the app url to prod
 - [x] change slack webhook to whatever new channel is (setup and update CF secret)
 - [x] toggle light/dark mode
+- [x] 404 and error pages

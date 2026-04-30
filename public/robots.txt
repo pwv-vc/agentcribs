@@ -1,12 +1,15 @@
 User-agent: *
 Allow: /
+Disallow: /admin
 
 # Allow AI search and user-directed retrieval
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /admin
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /admin
 
 User-agent: PerplexityBot
 Allow: /
