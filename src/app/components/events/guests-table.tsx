@@ -39,14 +39,14 @@ export function GuestsTable({ guests }: { guests: LumaGuest[] }) {
           <th className="px-6 py-4 font-semibold">Check-in</th>
         </tr>
       </thead>
-      {guests.map((guest, idx) => {
-        const rowBg = idx % 2 === 0 ? "bg-bg" : "bg-bg-soft";
-        return (
-          <tbody
-            key={guest.api_id}
-            className={`${rowBg} transition-colors hover:bg-bg-muted/50`}
-          >
-            <tr>
+      <tbody>
+        {guests.map((guest, idx) => {
+          const rowBg = idx % 2 === 0 ? "bg-bg" : "bg-bg-soft";
+          return (
+            <tr
+              key={guest.api_id}
+              className={`${rowBg} transition-colors hover:bg-bg-muted/50`}
+            >
               <td className="px-6 py-5 font-medium text-text">{guest.name}</td>
               <td className="px-6 py-5 text-text-secondary">{guest.email}</td>
               <td className="px-6 py-5">
@@ -66,9 +66,9 @@ export function GuestsTable({ guests }: { guests: LumaGuest[] }) {
                 {formatCheckIn(guest.checked_in_at)}
               </td>
             </tr>
-          </tbody>
-        );
-      })}
+          );
+        })}
+      </tbody>
     </table>
   );
 }

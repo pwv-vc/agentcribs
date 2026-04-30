@@ -57,7 +57,10 @@ export const app = defineApp([
         requireCloudflareAccess(),
         ({ params }) => <AdminApplicationDetail id={params.id} />,
       ]),
-      route("/admin/events", [requireCloudflareAccess(), AdminEvents]),
+      route("/admin/events", [
+        requireCloudflareAccess(),
+        ({ request }) => <AdminEvents request={request} />,
+      ]),
       route("/admin/events/:id", [
         requireCloudflareAccess(),
         ({ params, request }) => <AdminEventDetail id={params.id} request={request} />,

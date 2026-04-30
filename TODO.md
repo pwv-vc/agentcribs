@@ -37,3 +37,4 @@
 - [x] change slack webhook to whatever new channel is (setup and update CF secret)
 - [x] toggle light/dark mode
 - [x] 404 and error pages
+- [ ] consider caching Luma data in kv

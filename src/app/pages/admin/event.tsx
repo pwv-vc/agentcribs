@@ -128,6 +128,9 @@ export async function AdminEventDetail({
     );
   }
 
+  const eventLocation = location(event);
+  const eventMapsId = googleMapsPlaceId(event);
+
   return (
     <>
       <Seo
@@ -175,10 +178,8 @@ export async function AdminEventDetail({
               label="Timezone"
               value={event.timezone ?? "-"}
             />
-            <EventDetailSection label="Location" value={location(event)} />
-            {googleMapsPlaceId(event) && (
-              <LumaMapLink googleMapsPlaceId={googleMapsPlaceId(event)!} />
-            )}
+            <EventDetailSection label="Location" value={eventLocation} />
+            {eventMapsId && <LumaMapLink googleMapsPlaceId={eventMapsId} />}
             <EventDetailSection
               label="Tickets"
               value={

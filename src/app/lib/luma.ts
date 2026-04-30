@@ -130,7 +130,20 @@ class LumaApiError extends Error {
   }
 }
 
-export function getLumaClient() {
+export interface ListEventsParams {
+  after?: string;
+  sort_column?: "start_at" | "created_at";
+  sort_direction?: "asc" | "desc";
+  limit?: number;
+}
+
+export interface LumaClient {
+  getEvent(id: string): Promise<GetEventResponse>;
+  getGuests(eventId: string, params?: GetGuestsParams): Promise<GetGuestsResponse>;
+  listEvents(params?: ListEventsParams): Promise<CalendarListEventsResponse>;
+}
+
+export function getLumaClient(): LumaClient {
   const apiKey = env.LUMA_API_SECRET;
   if (!apiKey) {
     throw new Error("LUMA_API_SECRET environment variable is not set");
@@ -183,12 +196,9 @@ export function getLumaClient() {
       });
     },
 
-    async listEvents(params?: {
-      after?: string;
-      sort_column?: "start_at" | "created_at";
-      sort_direction?: "asc" | "desc";
-      limit?: number;
-    }): Promise<CalendarListEventsResponse> {
+    async listEvents(
+      params?: ListEventsParams,
+    ): Promise<CalendarListEventsResponse> {
       return request<CalendarListEventsResponse>("/v1/calendar/list-events", {
         ...params,
         limit: String(params?.limit ?? PER_PAGE),
@@ -196,5 +206,3 @@ export function getLumaClient() {
     },
   };
 }
-
-export type LumaClient = ReturnType<typeof getLumaClient>;
