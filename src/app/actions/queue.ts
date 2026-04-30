@@ -17,8 +17,11 @@ import type {
   ApplicationPayload,
 } from "@/app/actions/application";
 
-function sendEmailFrom() {
-  return env.SEND_EMAIL_FROM || "agentcribs@agentcribs.com";
+function sendEmailFrom(): EmailAddress {
+  if (env.SEND_EMAIL_FROM) {
+    return { name: "David from AgentCribs", email: env.SEND_EMAIL_FROM };
+  }
+  return { name: "David from AgentCribs", email: "apply@agentcribs.com" };
 }
 
 async function sendSlackNotification(body: string): Promise<void> {
@@ -148,11 +151,13 @@ export async function handleSendNotification(payload: {
     });
   } else if (type === "accepted") {
     console.log(`[queue/notification] Sending accepted email to ${email}`);
+    const baseUrl = env.APP_URL || "https://agentcribs.com";
     await sendAcceptedEmail({
       sendEmail: env.SEND_EMAIL,
       from: sendEmailFrom(),
       email,
       name,
+      baseUrl,
     });
   } else if (type === "rejected") {
     console.log(`[queue/notification] Sending rejected email to ${email}`);
@@ -260,5 +265,7 @@ export async function handleSendSlack(payload: {
 
   console.log(`[queue/slack] Posting to Slack`);
   await sendSlackNotification(JSON.stringify(slackPayload));
-  console.log(`[queue/slack] Done: Slack notification sent for ${applicationId}`);
+  console.log(
+    `[queue/slack] Done: Slack notification sent for ${applicationId}`,
+  );
 }

@@ -1,7 +1,15 @@
-import { Body, Container, Head, Html, Text } from "@react-email/components";
+import { Body, Container, Head, Html, Text, Link } from "@react-email/components";
 import * as React from "react";
 
-export default function AcceptedEmail({ name }: { name: string }) {
+export default function AcceptedEmail({
+  name,
+  registrationCode,
+  eventUrl,
+}: {
+  name: string;
+  registrationCode: string;
+  eventUrl: string;
+}) {
   return (
     <Html>
       <Head />
@@ -14,7 +22,16 @@ export default function AcceptedEmail({ name }: { name: string }) {
             been <strong>accepted</strong>.
           </Text>
           <Text style={paragraph}>
-            Stay tuned for more details about the event.
+            Here's the invite link to the event:
+          </Text>
+          <Text style={linkBlock}>
+            <Link href={eventUrl} style={link}>
+              {eventUrl}
+            </Link>
+          </Text>
+          <Text style={paragraph}>
+            Use this registration code:{" "}
+            <strong style={code}>{registrationCode}</strong>
           </Text>
           <Text style={closing}>— AgentCribs Team</Text>
         </Container>
@@ -23,12 +40,23 @@ export default function AcceptedEmail({ name }: { name: string }) {
   );
 }
 
-export function acceptedText({ name }: { name: string }) {
+export function acceptedText({
+  name,
+  registrationCode,
+  eventUrl,
+}: {
+  name: string;
+  registrationCode: string;
+  eventUrl: string;
+}) {
   return `Hi ${name},
 
 We're thrilled to welcome you to AgentCribs! Your application has been accepted.
 
-Stay tuned for more details about the event.
+Here's the invite link to the event:
+${eventUrl}
+
+Use this registration code: ${registrationCode}
 
 — AgentCribs Team`;
 }
@@ -60,6 +88,27 @@ const paragraph = {
   fontSize: "14px",
   color: "#555555",
   margin: "0 0 16px",
+};
+
+const linkBlock = {
+  fontSize: "14px",
+  margin: "0 0 16px",
+  padding: "12px",
+  background: "#f5f5f5",
+  borderRadius: "8px",
+  textAlign: "center" as const,
+};
+
+const link = {
+  color: "#000000",
+  fontWeight: 600,
+};
+
+const code = {
+  fontSize: "18px",
+  letterSpacing: "2px",
+  fontFamily: "monospace",
+  color: "#000000",
 };
 
 const closing = {

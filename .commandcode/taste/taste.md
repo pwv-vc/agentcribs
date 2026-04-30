@@ -2,6 +2,10 @@
 
 See [brand/taste.md](brand/taste.md)
 
+# ui
+
+- Use single-column layout (no two-column grids) for form fields in the apply form. Confidence: 0.65
+
 # css
 
 - For dark mode: Use sage green accent colors matching the light theme instead of orange/different tones for buttons and accents. Confidence: 0.70

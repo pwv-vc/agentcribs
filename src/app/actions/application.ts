@@ -54,6 +54,8 @@ export interface ApplicationData {
   githubEmails?: GitHubEmail[];
   termsAcceptedAt?: string;
   verifiedAt?: string;
+  location?: string;
+  howHeard?: string;
 }
 
 export interface ApplicationPayload {
@@ -85,6 +87,8 @@ export function r2Meta(app: {
   updatedAt: string;
   status: string;
   githubHandle?: string;
+  location?: string;
+  howHeard?: string;
 }) {
   return {
     customMetadata: {
@@ -94,6 +98,8 @@ export function r2Meta(app: {
       created: app.createdAt,
       updated: app.updatedAt,
       ...(app.githubHandle ? { github: app.githubHandle } : {}),
+      ...(app.location ? { location: app.location } : {}),
+      ...(app.howHeard ? { howHeard: app.howHeard } : {}),
     },
   };
 }
@@ -103,6 +109,8 @@ export const submitApplication = serverAction(async (formData: FormData) => {
   const lastName = formData.get("lastName") as string;
   const email = ((formData.get("email") as string) ?? "").trim().toLowerCase();
   const organization = (formData.get("organization") as string) ?? "";
+  const location = (formData.get("location") as string) ?? "";
+  const howHeard = (formData.get("howHeard") as string) ?? "";
   const topics = formData.getAll("topics") as string[];
   const story = (formData.get("story") as string) ?? "";
   const summary = (formData.get("summary") as string) ?? "";
@@ -155,6 +163,8 @@ export const submitApplication = serverAction(async (formData: FormData) => {
         firstName,
         lastName,
         organization,
+        location,
+        howHeard,
         topics,
         story,
         summary,
@@ -191,6 +201,8 @@ export const submitApplication = serverAction(async (formData: FormData) => {
         lastName,
         email,
         organization,
+        location,
+        howHeard,
         topics,
         story,
         status: "unverified",
@@ -217,6 +229,8 @@ export const submitApplication = serverAction(async (formData: FormData) => {
       lastName,
       email,
       organization,
+      location,
+      howHeard,
       topics,
       story,
       status: "unverified",
