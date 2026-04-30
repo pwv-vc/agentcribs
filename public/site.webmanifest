@@ -4,8 +4,8 @@
   "description": "A PWV community project for people building the future of agentic software development.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f7f3eb",
-  "theme_color": "#5a6b5e",
+  "background_color": "#fff9da",
+  "theme_color": "#090907",
   "icons": [
     { "src": "/favicon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/favicon-512.png", "sizes": "512x512", "type": "image/png" }
