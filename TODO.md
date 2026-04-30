@@ -35,3 +35,4 @@
 - [x] generate registration code and add it and link to luma event in accept email
 - [x] change in cloudflare the app url to prod
 - [x] change slack webhook to whatever new channel is (setup and update CF secret)
+- [x] toggle light/dark mode
