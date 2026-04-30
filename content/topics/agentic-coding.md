@@ -1,4 +1,4 @@
 ---
 id: "agentic-coding"
-label: "Agentic Coding Tools (Devin, Factory, Augment)"
+label: "Agentic Coding, CLI Agents & Terminal Workflows"
 ---

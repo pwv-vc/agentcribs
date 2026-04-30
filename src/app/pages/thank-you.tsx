@@ -5,21 +5,33 @@ export const ThankYou = () => {
   return (
     <>
       <Seo
-        title="Application received"
-        description="Thanks for applying to AgentCribs. We'll review your application and be in touch."
+        title="One more step"
+        description="There's one more step for your AgentCribs application. Check your email for the final verification link."
         canonical="https://agentcribs.com/apply/thank-you"
       />
       <main className="mx-auto max-w-[640px] px-6 py-24 sm:px-8 sm:py-32">
       <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-        Application received
+        There's one more step!
       </h1>
       <p className="mt-6 text-lg leading-relaxed">
-        Thanks for applying to join AgentCribs!
+        Thanks for applying to join AgentCribs. We sent you an email with the
+        final verification step for your application.
       </p>
       <p className="mt-5 text-base leading-relaxed text-text-secondary">
-        We've sent a verification link to your email. Click it to confirm your
-        application and make it visible to our review team. The link expires in
-        1 hour.
+        Open the email titled "Final step for your AgentCribs application" and
+        click the verification link. That confirms your email address and makes
+        your application visible to our review team. The link expires in 1 hour.
+      </p>
+      <p className="mt-5 text-base leading-relaxed text-text-secondary">
+        If you do not see it, check your spam folder. If you still need help,
+        email{" "}
+        <a
+          href="mailto:support@agentcribs.com"
+          className="font-medium text-accent underline decoration-border underline-offset-2 transition-colors hover:text-accent-hover"
+        >
+          support@agentcribs.com
+        </a>
+        .
       </p>
       <p className="mt-5 text-base leading-relaxed text-text-secondary">
         If you're selected for the May 6 event in San Francisco, you'll receive

@@ -24,12 +24,9 @@ export function PwvSection() {
 
       <p className="mt-6 leading-relaxed">
         Read more from PWV about AgentCribs:{" "}
-        <a
-          href="#"
-          className="font-bold text-accent no-underline hover:text-accent-hover"
-        >
+        <span className="font-bold text-text-secondary">
           PWV AgentCribs post coming soon
-        </a>
+        </span>
         .
       </p>
     </section>

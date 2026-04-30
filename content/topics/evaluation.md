@@ -1,4 +1,4 @@
 ---
 id: "evaluation"
-label: "Evaluation & Testing of AI Outputs"
+label: "Evaluation, Testing & Reliability"
 ---

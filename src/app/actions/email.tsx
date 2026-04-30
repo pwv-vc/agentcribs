@@ -27,7 +27,7 @@ export async function sendMagicLink({
   await sendEmail.send({
     from,
     to: email,
-    subject: "Verify your email for AgentCribs",
+    subject: "Final step for your AgentCribs application",
     text: magicLinkText({ verifyUrl }),
     html: await render(<MagicLinkEmail verifyUrl={verifyUrl} />),
   });

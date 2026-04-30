@@ -8,11 +8,6 @@ export const Document: React.FC<{
     <head>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>AgentCribs &mdash; A community for agentic software builders</title>
-      <meta
-        name="description"
-        content="AgentCribs is a PWV community project for people building the future of agentic software development. Join us in San Francisco on May 6."
-      />
       <meta name="theme-color" content="#5a6b5e" />
 
       {/* Favicon */}

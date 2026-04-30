@@ -3,7 +3,7 @@ export function Footer() {
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-[900px] flex-col items-center justify-between gap-4 px-6 py-10 sm:flex-row sm:px-8">
         <p className="text-sm leading-relaxed text-text-secondary">
-          AgentCribs is a{" "}
+          &copy; 2026 PWV. AgentCribs is a{" "}
           <a href="https://pwv.com" className="font-medium text-text underline decoration-border underline-offset-2 transition-colors hover:text-accent">
             PWV
           </a>{" "}
@@ -16,7 +16,7 @@ export function Footer() {
           <a href="/privacy" className="text-sm text-text-secondary no-underline underline-offset-2 transition-colors hover:text-text hover:underline">
             Privacy
           </a>
-          <a href="mailto:agentcribs@pwv.com" className="text-sm text-text-secondary no-underline underline-offset-2 transition-colors hover:text-text hover:underline">
+          <a href="mailto:contact@agentcribs.com" className="text-sm text-text-secondary no-underline underline-offset-2 transition-colors hover:text-text hover:underline">
             Contact
           </a>
         </div>
