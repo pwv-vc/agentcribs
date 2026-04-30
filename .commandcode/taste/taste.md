@@ -33,10 +33,13 @@ See [brand/taste.md](brand/taste.md)
 # code-style
 
 - Use numeric separator underscores (e.g., `1_000` instead of `1000`) for readable large number literals. Confidence: 0.70
+- Extract page inline markup into reusable UI components to DRY up large page files. Confidence: 0.60
+- Place domain-specific shared components in subdirectories under `src/app/components/` (e.g., `src/app/components/events/`) rather than directly in `src/app/shared/`. Confidence: 0.70
 
 # security
 
 - Include `i.ytimg.com` in the `img-src` Content-Security-Policy directive when the project embeds YouTube videos. Confidence: 0.70
+- Include `images.lumacdn.com` and `cdn.lu.ma` in the `img-src` Content-Security-Policy directive when displaying Luma event cover images and host avatars. Confidence: 0.70
 
 # slack
 

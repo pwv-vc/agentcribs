@@ -34,6 +34,7 @@
 - Place server queries in individual files under `src/app/queries/<name>.ts` with `"use server"` directive. Confidence: 0.70
 - Place the typed link helper at `src/app/shared/links.ts`. Confidence: 0.95
 - Place reusable constants and configuration in `src/app/lib/`. Confidence: 0.85
+- Place API client/library code (e.g., Luma, GitHub API wrappers) in `src/app/lib/`, not in `src/applib/` or other locations. Confidence: 0.65
 - Place static data files in `src/app/data/`. Confidence: 0.85
 - Place utility functions in `src/app/utils/`. Confidence: 0.85
 - Place tests in `src/tests/` directory. Confidence: 0.95

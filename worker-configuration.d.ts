@@ -21,32 +21,33 @@ declare namespace Cloudflare {
     GITHUB_CALLBACK_URL: string;
     SEND_EMAIL_FROM: string;
     APP_URL: string;
-    POLICY_AUD: string;
     SLACK_WEBHOOK_URL: string;
     CLOUDFLARE_ACCOUNT_ID: string;
     AI_GATEWAY_NAME: string;
     CF_AIG_TOKEN: string;
+    LUMA_API_SECRET: string;
   }
   interface ProductionEnv extends Env {}
   interface StagingEnv extends Env {}
 }
 interface Env extends Cloudflare.Env {}
 type StringifyValues<EnvType extends Record<string, unknown>> = {
-  [Binding in keyof EnvType]: EnvType[Binding] extends string ? EnvType[Binding] : string;
+  [Binding in keyof EnvType]: EnvType[Binding] extends string
+    ? EnvType[Binding]
+    : string;
 };
 declare namespace NodeJS {
-  interface ProcessEnv
-    extends StringifyValues<
-      Pick<
-        Cloudflare.Env,
-        | "ADMIN_PASSWORD"
-        | "ADMIN_COOKIE_NAME"
-        | "GITHUB_CLIENT_ID"
-        | "GITHUB_CLIENT_SECRET"
-        | "GITHUB_CALLBACK_URL"
-        | "SEND_EMAIL_FROM"
-        | "APP_URL"
-        | "SLACK_WEBHOOK_URL"
-      >
-    > {}
+  interface ProcessEnv extends StringifyValues<
+    Pick<
+      Cloudflare.Env,
+      | "ADMIN_PASSWORD"
+      | "ADMIN_COOKIE_NAME"
+      | "GITHUB_CLIENT_ID"
+      | "GITHUB_CLIENT_SECRET"
+      | "GITHUB_CALLBACK_URL"
+      | "SEND_EMAIL_FROM"
+      | "APP_URL"
+      | "SLACK_WEBHOOK_URL"
+    >
+  > {}
 }
