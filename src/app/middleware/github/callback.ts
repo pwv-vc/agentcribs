@@ -26,18 +26,19 @@ interface GitHubUser {
 }
 
 async function exchangeCode(code: string, redirectUri: string) {
+  const body = JSON.stringify({
+    client_id: env.GITHUB_CLIENT_ID,
+    client_secret: env.GITHUB_CLIENT_SECRET,
+    code,
+    redirect_uri: redirectUri,
+  });
   const res = await fetch("https://github.com/login/oauth/access_token", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-    body: JSON.stringify({
-      client_id: env.GITHUB_CLIENT_ID,
-      client_secret: env.GITHUB_CLIENT_SECRET,
-      code,
-      redirect_uri: redirectUri,
-    }),
+    body,
   });
 
   const text = await res.text();
@@ -98,6 +99,7 @@ export const handleGitHubCallback: RouteMiddleware = async (requestInfo) => {
   const url = new URL(requestInfo.request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
+
 
   if (!code || !state) {
     return Response.redirect(
@@ -170,7 +172,7 @@ export const handleGitHubCallback: RouteMiddleware = async (requestInfo) => {
       : `${url.origin}/apply?github_state=${verifyNonce}`;
 
     return Response.redirect(redirectUrl, 303);
-  } catch (err) {
+  } catch {
     await env.AGENTCRIBS_KV.delete(`oauth:state:${state}`);
     return Response.redirect(
       `${url.origin}/apply?github_error=api_error`,

@@ -29,9 +29,9 @@
 - [x] add how found out about agentcribs
 - [ ] remove videos and data so don't show urls to view
 - [ ] try auth with cloudflare for admin in prod
-- [ ] check all email addresses for consistency
+- [x] check all email addresses for consistency
 - [x] sent sender friendly name in send emails
-- [ ] revise topic list
+- [x] revise topic list
 - [x] generate registration code and add it and link to luma event in accept email
-- [ ] change in cloudflare the app url to prod
-- [ ] change slack webhook to whatever new channel is (setup and update CF secret)
+- [x] change in cloudflare the app url to prod
+- [x] change slack webhook to whatever new channel is (setup and update CF secret)

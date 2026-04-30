@@ -4,8 +4,12 @@ import "@react-email/render";
 import { render } from "@react-email/render";
 
 import MagicLinkEmail, { magicLinkText } from "@/app/emails/magic-link";
-import PendingReviewEmail, { pendingReviewText } from "@/app/emails/pending-review";
-import AdminNotificationEmail, { adminNotificationText } from "@/app/emails/admin-notification";
+import PendingReviewEmail, {
+  pendingReviewText,
+} from "@/app/emails/pending-review";
+import AdminNotificationEmail, {
+  adminNotificationText,
+} from "@/app/emails/admin-notification";
 import AcceptedEmail, { acceptedText } from "@/app/emails/accepted";
 import RejectedEmail, { rejectedText } from "@/app/emails/rejected";
 import { generateRegistrationCode } from "@/app/lib/registration-code";
@@ -57,7 +61,12 @@ export async function sendPendingReviewEmail({
     subject: "Your AgentCribs application is under review",
     text: pendingReviewText({ name, topics, story, summary }),
     html: await render(
-      <PendingReviewEmail name={name} topics={topics} story={story} summary={summary} />,
+      <PendingReviewEmail
+        name={name}
+        topics={topics}
+        story={story}
+        summary={summary}
+      />,
     ),
   });
 }
@@ -83,7 +92,7 @@ export async function sendAdminNotificationEmail({
 }): Promise<void> {
   await sendEmail.send({
     from,
-    to: "dt@pwv.com",
+    to: "agentcribs@pwv.com",
     subject: `New AgentCribs application to review: ${name}`,
     text: adminNotificationText({
       name,
@@ -128,7 +137,11 @@ export async function sendAcceptedEmail({
     subject: "Welcome to AgentCribs!",
     text: acceptedText({ name, registrationCode, eventUrl }),
     html: await render(
-      <AcceptedEmail name={name} registrationCode={registrationCode} eventUrl={eventUrl} />,
+      <AcceptedEmail
+        name={name}
+        registrationCode={registrationCode}
+        eventUrl={eventUrl}
+      />,
     ),
   });
 }

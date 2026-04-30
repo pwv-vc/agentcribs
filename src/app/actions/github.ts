@@ -31,7 +31,8 @@ function authorizeUrl(state: string): string {
     scope: "read:user,user:email",
     state,
   });
-  return `https://github.com/login/oauth/authorize?${params}`;
+  const url = `https://github.com/login/oauth/authorize?${params}`;
+  return url;
 }
 
 export async function startGitHubOAuth(
