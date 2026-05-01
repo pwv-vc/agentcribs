@@ -278,6 +278,7 @@ export async function handleSendSlack(payload: {
 }
 
 async function sendSlackBody(body: string): Promise<void> {
+  if (!env.SLACK_WEBHOOK_URL) return;
   const resp = await fetch(env.SLACK_WEBHOOK_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
