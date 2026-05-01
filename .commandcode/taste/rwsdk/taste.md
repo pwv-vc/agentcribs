@@ -176,7 +176,7 @@
 - Maintain an `AGENTS.md` file at the project root documenting the codebase structure and architecture, and keep it up to date, instead of re-exploring the codebase from scratch on each conversation. Confidence: 0.65
 - Use `pnpm check` (aliased as `pn check`) to run both code generation and type checking together as the standard build/validation command. Confidence: 0.70
 - Place cron/scheduled jobs in `src/app/jobs/` organized by purpose (one file per job or related jobs). Confidence: 0.70
-- Import `env` directly from `"cloudflare:workers"` to access Cloudflare bindings (R2, Queues, etc.) inside server actions and queries, rather than storing `env` on `globalThis`. Confidence: 0.75
+- Import `env` directly from `"cloudflare:workers"` to access Cloudflare bindings (R2, Queues, etc.) inside server actions, queries, and helper functions — rather than passing `env` around as a parameter or storing it on `globalThis`. Confidence: 0.80
 - Store cookie names and similar configurable constants as environment variables rather than hardcoded `const` values, and prefix them with the environment name (e.g., `agentcribs-dev-` for dev). Confidence: 0.65
 - Keep admin table/list components as async server components instead of client components; handle filtering, sorting, and pagination server-side in queries rather than client-side in JS. Confidence: 0.70
 - Use pill-style toggle buttons (not select dropdowns) for filter controls in admin UIs. Confidence: 0.70

@@ -49,6 +49,10 @@
         "binding": "SLACK_QUEUE",
         "queue": "agentcribs-slack",
       },
+      {
+        "binding": "DEAD_LETTER_QUEUE",
+        "queue": "agentcribs-dead-letter",
+      },
     ],
     "consumers": [
       {
@@ -70,6 +74,12 @@
         "queue": "agentcribs-slack",
         "max_batch_size": 10,
         "max_batch_timeout": 5,
+      },
+      {
+        "queue": "agentcribs-dead-letter",
+        "max_batch_size": 1,
+        "max_batch_timeout": 5,
+        "max_retries": 0,
       },
     ],
   },

@@ -26,6 +26,8 @@ import {
   handleSendEmail,
   handleSendNotification,
   handleSendSlack,
+  handleDeadLetter,
+  processRetries,
 } from "@/app/actions/queue";
 import type { ApplicationPayload } from "@/app/actions/application";
 
@@ -53,7 +55,10 @@ export const app = defineApp([
     ]),
     // Authentication in production handled by Cloudflare One Access policies
     layout(AdminLayout, [
-      route("/admin/applications", [requireCloudflareAccess(), AdminApplications]),
+      route("/admin/applications", [
+        requireCloudflareAccess(),
+        AdminApplications,
+      ]),
       route("/admin/applications/:id", [
         requireCloudflareAccess(),
         ({ params }) => <AdminApplicationDetail id={params.id} />,
@@ -68,7 +73,9 @@ export const app = defineApp([
       ]),
       route("/admin/events/:id", [
         requireCloudflareAccess(),
-        ({ params, request }) => <AdminEventDetail id={params.id} request={request} />,
+        ({ params, request }) => (
+          <AdminEventDetail id={params.id} request={request} />
+        ),
       ]),
     ]),
     layout(Layout, [route("/*", NotFound)]),
@@ -79,13 +86,12 @@ export default {
   fetch: app.fetch,
   async queue(batch: MessageBatch) {
     if (batch.queue === "agentcribs-process-application") {
-      for (const message of batch.messages) {
+      await processRetries(batch.queue, batch.messages, async (message) => {
         const payload = message.body as ApplicationPayload;
         await handleProcessApplication(payload);
-        message.ack();
-      }
+      });
     } else if (batch.queue === "agentcribs-send-email") {
-      for (const message of batch.messages) {
+      await processRetries(batch.queue, batch.messages, async (message) => {
         const payload = message.body as {
           type: "application" | "update";
           email: string;
@@ -93,10 +99,9 @@ export default {
           applicationId: string;
         };
         await handleSendEmail(payload);
-        message.ack();
-      }
+      });
     } else if (batch.queue === "agentcribs-notifications") {
-      for (const message of batch.messages) {
+      await processRetries(batch.queue, batch.messages, async (message) => {
         const payload = message.body as {
           type: "pending-review" | "accepted" | "rejected";
           email: string;
@@ -104,10 +109,9 @@ export default {
           applicationId: string;
         };
         await handleSendNotification(payload);
-        message.ack();
-      }
+      });
     } else if (batch.queue === "agentcribs-slack") {
-      for (const message of batch.messages) {
+      await processRetries(batch.queue, batch.messages, async (message) => {
         const payload = message.body as {
           type: "pending-review" | "accepted" | "rejected";
           email: string;
@@ -115,6 +119,15 @@ export default {
           applicationId: string;
         };
         await handleSendSlack(payload);
+      });
+    } else if (batch.queue === "agentcribs-dead-letter") {
+      for (const message of batch.messages) {
+        const payload = message.body as {
+          queue: string;
+          error: string;
+          body: unknown;
+        };
+        await handleDeadLetter(payload);
         message.ack();
       }
     }
