@@ -165,6 +165,18 @@ export const submitApplication = serverAction(async (formData: FormData) => {
     const existingRaw = await env.AGENTCRIBS_KV.get(kvKey(existingId));
     if (existingRaw) {
       const existing: ApplicationData = JSON.parse(existingRaw);
+
+      // Status-based guard: prevent overwriting accepted applications
+      if (existing.status === "accepted") {
+        return new Response(
+          "Your application has already been accepted and cannot be modified.",
+          { status: 403 },
+        );
+      }
+
+      // For rejected applications, treat as a fresh re-application
+      const resetRejection = existing.status === "rejected";
+
       const updated: ApplicationData = {
         ...existing,
         firstName,
@@ -177,8 +189,17 @@ export const submitApplication = serverAction(async (formData: FormData) => {
         summary,
         updatedAt: now,
         editedAt: now,
+        status: resetRejection ? "unverified" : existing.status,
         ...(acceptedTerms && !existing.termsAcceptedAt && { termsAcceptedAt: now }),
       };
+
+      // If resetting from rejected, clear status timestamps
+      if (resetRejection) {
+        delete updated.rejectedAt;
+        delete updated.verifiedAt;
+        delete updated.approvedAt;
+      }
+
       if (githubHandle) {
         updated.githubHandle = githubHandle;
         updated.githubId = githubId;
@@ -294,6 +315,17 @@ export const verifyApplication = serverAction(
 
     const now = new Date().toISOString();
     const app: ApplicationData = JSON.parse(appRaw);
+
+    // Guard: only verify if the application is still unverified.
+    // If admin already accepted/rejected, don't revert their decision.
+    if (app.status !== "unverified") {
+      await env.AGENTCRIBS_KV.delete(`verify:${token}`);
+      return new Response(null, {
+        status: 303,
+        headers: { Location: "/apply/verify/success" },
+      });
+    }
+
     app.status = "pending";
     app.verifiedAt = now;
     app.updatedAt = now;
