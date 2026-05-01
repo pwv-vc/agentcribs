@@ -43,5 +43,5 @@
 - [x] resend emails
 - [x] improve error reporting if application fails to process or email fails
 - [x] customize cloudflare one login page
-- [ ] rethink application email uniqueness key
+- [x] rethink application email uniqueness key
 - [ ] admin view for deal letter q (though will slack if happens)
