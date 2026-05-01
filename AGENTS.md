@@ -2,6 +2,13 @@
 
 AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-based React 19 framework running on Cloudflare Workers. It uses Cloudflare for all infrastructure: KV for fast lookups, R2 for durable backups, and `wrangler deploy` for deployment. No separate database — state lives in KV/R2 and Cloudflare's Send Email binding handles transactional mail.
 
+## Commands
+
+- Use pnpm
+- Build - pnpm build
+- Typecheck and wrangler checks - pnpm check
+- Generate Cloudflare types - pnpm generate
+
 ## Project Structure
 
 ```
@@ -15,10 +22,13 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   │   │   ├── thank-you.tsx
 │   │   │   ├── verify-success.tsx
 │   │   │   ├── verify-error.tsx
-│   │   │   └── admin/
+│   │   │   └── admin/         # Admin area authenticated using Cloudflare Access in production
 │   │   │       ├── applications.tsx
-│   │   │       └── application.tsx
-│   │   ├── components/        # Reusable UI components (hero, faq, seo, etc.)
+│   │   │       ├── application.tsx
+│   │   │       ├── events.tsx
+│   │   │       ├── events.tsx
+│   │   │       └── ... other application, event and admin pages
+│   │   ├── components/        # Reusable UI components (hero, faq, seo, etc.), icons
 │   │   ├── layouts/           # default.tsx, admin.tsx
 │   │   ├── actions/           # Server actions
 │   │   │   ├── application.ts # Submit/get/update applications, types, KV/R2 helpers
@@ -29,7 +39,6 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   │   ├── lib/               # ai.ts (streamText via AI Gateway), seo.ts
 │   │   ├── queries/           # Data fetching: application.ts
 │   │   ├── middleware/        # Route middleware
-│   │   │   ├── auth/basic.ts  # Basic auth for admin
 │   │   │   ├── github/callback.ts
 │   │   │   └── verify/callback.ts
 │   │   ├── shared/            # Shared UI bits: apply-form, cta-button, links, status-badge

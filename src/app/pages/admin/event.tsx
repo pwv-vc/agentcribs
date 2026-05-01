@@ -22,6 +22,7 @@ import { GuestsTable } from "@/app/components/events/guests-table";
 import { GuestPagination } from "@/app/components/events/guest-pagination";
 import { ExternalLink } from "@/app/components/events/external-link";
 import { EventDescription } from "@/app/components/events/event-description";
+import { EventStatusBadge } from "@/app/components/events/event-status-badge";
 
 function location(event: LumaEvent): string {
   if (event.location_type === "online") return "Online";
@@ -155,7 +156,16 @@ export async function AdminEventDetail({
         <div className="mt-8 rounded-lg border border-border bg-bg-soft p-6 sm:p-8">
           <dl className="divide-y divide-border">
             <EventDetailSection label="Event ID" value={event.api_id} />
-            <EventDetailSection label="Status" value={event.status ?? "-"} />
+            <EventDetailSection
+              label="Status"
+              value={
+                event.status ? (
+                  <EventStatusBadge status={event.status} />
+                ) : (
+                  "-"
+                )
+              }
+            />
             <EventDetailSection
               label="Date"
               value={formatDateShort(event.start_at, event.timezone)}
@@ -223,7 +233,7 @@ export async function AdminEventDetail({
           </>
         )}
 
-        {guests.length > 0 && (
+        {guests.length > 0 ? (
           <>
             <h2 className="mt-10 font-serif text-xl font-bold tracking-tight">
               Guests ({guests.length}
@@ -245,6 +255,19 @@ export async function AdminEventDetail({
                 nextCursor={guestsNextCursor}
                 buildHref={buildGuestHref}
               />
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className="mt-10 font-serif text-xl font-bold tracking-tight">
+              Guests
+            </h2>
+
+            <div className="mt-4 space-y-4">
+              <GuestFilters current={guestStatus} buildHref={buildGuestHref} />
+              <p className="text-sm text-text-secondary">
+                No guests match the selected filter.
+              </p>
             </div>
           </>
         )}

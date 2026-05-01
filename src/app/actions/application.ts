@@ -123,6 +123,13 @@ export const submitApplication = serverAction(async (formData: FormData) => {
     });
   }
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!emailRegex.test(email)) {
+    return new Response("Please provide a valid email address.", {
+      status: 400,
+    });
+  }
+
   // Consume GitHub verification if present
   let githubHandle: string | undefined;
   let githubId: number | undefined;
@@ -355,5 +362,127 @@ export const setApplicationStatus = serverAction(
         applicationId: id,
       });
     }
+  },
+);
+
+export const resendVerificationEmail = serverAction(
+  async (id: string) => {
+    const raw = await env.AGENTCRIBS_KV.get(kvKey(id));
+    if (!raw) {
+      return new Response("Application not found", { status: 404 });
+    }
+
+    const app: ApplicationData = JSON.parse(raw);
+    if (app.status !== "unverified") {
+      return new Response("Application is already verified", { status: 400 });
+    }
+
+    const now = new Date().toISOString();
+    const token = crypto.randomUUID();
+
+    await env.AGENTCRIBS_KV.put(
+      `verify:${token}`,
+      JSON.stringify({ applicationId: id, email: app.email, createdAt: now }),
+      { expirationTtl: 3600 },
+    );
+
+    await env.SEND_EMAIL_QUEUE.send({
+      type: "application",
+      email: app.email,
+      token,
+      applicationId: id,
+    });
+
+    return new Response(null, { status: 200 });
+  },
+);
+
+export const resendNotificationEmail = serverAction(
+  async (id: string) => {
+    const raw = await env.AGENTCRIBS_KV.get(kvKey(id));
+    if (!raw) {
+      return new Response("Application not found", { status: 404 });
+    }
+
+    const app: ApplicationData = JSON.parse(raw);
+
+    const typeMap: Record<string, "pending-review" | "accepted" | "rejected"> = {
+      pending: "pending-review",
+      accepted: "accepted",
+      rejected: "rejected",
+    };
+
+    const queueType = typeMap[app.status];
+    if (!queueType) {
+      return new Response("No notification email available for this status", { status: 400 });
+    }
+
+    await env.NOTIFICATION_QUEUE.send({
+      type: queueType,
+      email: app.email,
+      name: `${app.firstName} ${app.lastName}`,
+      applicationId: id,
+    });
+
+    return new Response(null, { status: 200 });
+  },
+);
+
+export const updateApplication = serverAction(
+  async (
+    id: string,
+    data: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      location: string;
+    },
+  ) => {
+    const { firstName, lastName, email, location } = data;
+
+    // Validation
+    if (!firstName || !lastName || !email) {
+      return new Response("First name, last name, and email are required.", {
+        status: 400,
+      });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return new Response("Please provide a valid email address.", {
+        status: 400,
+      });
+    }
+
+    const raw = await env.AGENTCRIBS_KV.get(kvKey(id));
+    if (!raw) {
+      return new Response("Application not found", { status: 404 });
+    }
+
+    const app: ApplicationData = JSON.parse(raw);
+    const now = new Date().toISOString();
+
+    // Update fields
+    app.firstName = firstName.trim();
+    app.lastName = lastName.trim();
+    app.email = email.trim().toLowerCase();
+    app.location = location?.trim() || undefined;
+    app.updatedAt = now;
+    app.editedAt = now;
+
+    const serialized = JSON.stringify(app);
+    await Promise.all([
+      env.AGENTCRIBS_KV.put(kvKey(id), serialized),
+      env.AGENTCRIBS_R2.put(
+        `${R2_KEY_PREFIX}${id}.json`,
+        serialized,
+        r2Meta(app),
+      ),
+    ]);
+
+    return new Response(null, {
+      status: 303,
+      headers: { Location: `/admin/applications/${id}` },
+    });
   },
 );

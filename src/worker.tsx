@@ -10,6 +10,7 @@ import { handleVerificationCallback } from "@/app/middleware/verify/callback";
 import { requireCloudflareAccess } from "@/app/middleware/auth/cloudflare-access";
 import { AdminApplications } from "@/app/pages/admin/applications";
 import { AdminApplicationDetail } from "@/app/pages/admin/application";
+import { AdminApplicationEditPage } from "@/app/pages/admin/application-edit-page";
 import { AdminEvents } from "@/app/pages/admin/events";
 import { AdminEventDetail } from "@/app/pages/admin/event";
 import { Apply } from "@/app/pages/apply";
@@ -56,6 +57,10 @@ export const app = defineApp([
       route("/admin/applications/:id", [
         requireCloudflareAccess(),
         ({ params }) => <AdminApplicationDetail id={params.id} />,
+      ]),
+      route("/admin/applications/:id/edit", [
+        requireCloudflareAccess(),
+        ({ params }) => <AdminApplicationEditPage id={params.id} />,
       ]),
       route("/admin/events", [
         requireCloudflareAccess(),

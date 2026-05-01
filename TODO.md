@@ -38,3 +38,5 @@
 - [x] toggle light/dark mode
 - [x] 404 and error pages
 - [x] cache Luma data in kv
+- [ ] improve application email validation
+- [ ] admin edit application to fix issues in case of incorrect data like email

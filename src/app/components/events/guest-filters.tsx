@@ -1,14 +1,27 @@
 import type { GuestApprovalStatus } from "@/app/lib/luma";
+import {
+  ListIcon,
+  CheckCircleIcon,
+  CalendarIcon,
+  ClockIcon,
+  UserPlusIcon,
+  XCircleIcon,
+  UsersIcon,
+} from "@/app/components/icons";
 
-const FILTERS = [
-  "",
-  "approved",
-  "session",
-  "pending_approval",
-  "invited",
-  "declined",
-  "waitlist",
-] as const;
+const FILTERS: {
+  value: "" | GuestApprovalStatus;
+  label: string;
+  icon: typeof ListIcon;
+}[] = [
+  { value: "", label: "All", icon: UsersIcon },
+  { value: "approved", label: "Approved", icon: CheckCircleIcon },
+  { value: "session", label: "Session", icon: CalendarIcon },
+  { value: "pending_approval", label: "Pending", icon: ClockIcon },
+  { value: "invited", label: "Invited", icon: UserPlusIcon },
+  { value: "declined", label: "Declined", icon: XCircleIcon },
+  { value: "waitlist", label: "Waitlist", icon: ListIcon },
+];
 
 export function GuestFilters({
   current,
@@ -19,20 +32,21 @@ export function GuestFilters({
 }) {
   return (
     <div className="flex flex-wrap gap-2">
-      {FILTERS.map((s) => {
-        const active = current === s || (!current && !s);
+      {FILTERS.map(({ value, label, icon: Icon }) => {
+        const active = current === value || (!current && !value);
         return (
           <a
-            key={s}
-            href={buildHref({ guest_status: s, guest_cursor: "" })}
+            key={value}
+            href={buildHref({ guest_status: value, guest_cursor: "" })}
             className={
-              "rounded-full px-3 py-1 text-xs font-medium no-underline " +
+              "inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium no-underline " +
               (active
                 ? "bg-accent text-white"
                 : "border border-border bg-bg text-text-secondary hover:bg-bg-muted")
             }
           >
-            {s || "All"}
+            <Icon />
+            {label}
           </a>
         );
       })}

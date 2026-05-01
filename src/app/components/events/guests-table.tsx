@@ -1,21 +1,5 @@
 import type { LumaGuest } from "@/app/lib/luma";
-
-const guestStatusStyles: Record<string, string> = {
-  approved: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
-  session: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
-  pending_approval:
-    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
-  invited:
-    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
-  declined: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
-};
-
-function statusClass(status: string): string {
-  return (
-    guestStatusStyles[status] ??
-    "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
-  );
-}
+import { GuestStatusBadge } from "@/app/components/events/guest-status-badge";
 
 function formatCheckIn(iso?: string | null): string {
   if (!iso) return "-";
@@ -53,14 +37,7 @@ export function GuestsTable({ guests }: { guests: LumaGuest[] }) {
                   <td className="px-6 py-5 font-medium text-text">{guest.name}</td>
                   <td className="px-6 py-5 text-text-secondary">{guest.email}</td>
                   <td className="px-6 py-5">
-                    <span
-                      className={
-                        "inline-flex rounded-full px-2 py-0.5 text-xs font-medium " +
-                        statusClass(guest.approval_status)
-                      }
-                    >
-                      {guest.approval_status.replace(/_/g, " ")}
-                    </span>
+                    <GuestStatusBadge status={guest.approval_status} />
                   </td>
                   <td className="px-6 py-5 text-text-secondary">
                     {guest.event_ticket?.name ?? "-"}
@@ -89,14 +66,7 @@ export function GuestsTable({ guests }: { guests: LumaGuest[] }) {
                   {guest.email}
                 </p>
               </div>
-              <span
-                className={
-                  "inline-flex rounded-full px-2 py-0.5 text-xs font-medium flex-shrink-0 " +
-                  statusClass(guest.approval_status)
-                }
-              >
-                {guest.approval_status.replace(/_/g, " ")}
-              </span>
+              <GuestStatusBadge status={guest.approval_status} />
             </div>
             <div className="mt-2 flex items-center justify-between text-xs text-text-secondary">
               <span>{guest.event_ticket?.name ?? "-"}</span>

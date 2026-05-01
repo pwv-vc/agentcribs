@@ -182,3 +182,4 @@
 - Use pill-style toggle buttons (not select dropdowns) for filter controls in admin UIs. Confidence: 0.70
 - Store pagination page size as a named constant at the top of the component (e.g., `const PAGE_SIZE = 25`) for testability. Confidence: 0.70
 - Structure admin table rows with a leftmost status pill column, then a top line of key info (name, email, dates), and secondary info on a separate line below. Confidence: 0.70
+- serverAction throws an error on non-ok responses (e.g., status 400) rather than returning the Response object — use try/catch to handle validation errors, not `res.ok` checks. Confidence: 0.70

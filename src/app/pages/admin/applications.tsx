@@ -3,6 +3,13 @@ import { CtaButton } from "@/app/shared/cta-button";
 import { ApplicationsTable } from "@/app/shared/applications-table";
 import { Seo } from "@/app/components/seo";
 import type { ApplicationStatus } from "@/app/actions/application";
+import {
+  ListIcon,
+  QuestionIcon,
+  ClockIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+} from "@/app/components/icons";
 
 export const AdminApplications = async ({ request }: { request?: Request }) => {
   const url = request ? new URL(request.url) : new URL("http://localhost");
@@ -21,11 +28,11 @@ export const AdminApplications = async ({ request }: { request?: Request }) => {
   });
 
   const statuses = [
-    { value: "", label: "All" },
-    { value: "unverified", label: "Unverified" },
-    { value: "pending", label: "Pending" },
-    { value: "accepted", label: "Accepted" },
-    { value: "rejected", label: "Rejected" },
+    { value: "", label: "All", icon: ListIcon },
+    { value: "unverified", label: "Unverified", icon: QuestionIcon },
+    { value: "pending", label: "Pending", icon: ClockIcon },
+    { value: "accepted", label: "Accepted", icon: CheckCircleIcon },
+    { value: "rejected", label: "Rejected", icon: XCircleIcon },
   ] as const;
 
   const buildHref = (overrides: Record<string, string>) => {
@@ -54,6 +61,7 @@ export const AdminApplications = async ({ request }: { request?: Request }) => {
         {/* Filter pills */}
         <div className="mt-6 flex flex-wrap items-center gap-2">
           {statuses.map((s) => {
+            const Icon = s.icon;
             const isActive =
               activeStatus === s.value || (!activeStatus && !s.value);
             return (
@@ -64,12 +72,13 @@ export const AdminApplications = async ({ request }: { request?: Request }) => {
                     ? buildHref({ status: "" })
                     : buildHref({ status: s.value, page: "1" })
                 }
-                className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium no-underline transition-colors ${
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium no-underline transition-colors ${
                   isActive
                     ? "bg-accent text-accent-text"
                     : "bg-bg-soft text-text-secondary hover:bg-bg-muted hover:text-text"
                 }`}
               >
+                <Icon />
                 {s.label}
               </a>
             );
