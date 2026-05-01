@@ -59,6 +59,11 @@ html {
   --color-code-bg: #11110d;
   --color-code-text: #04d936;
 
+  --color-all-active-bg: #04d936;
+  --color-all-active-text: #050505;
+
+  --color-status-unverified-bg: #e0e7ff;
+  --color-status-unverified-text: #3730a3;
   --color-status-pending-bg: #fef3c7;
   --color-status-pending-text: #92400e;
   --color-status-accepted-bg: #d1e8d5;
@@ -85,6 +90,11 @@ html {
   --color-code-bg: #151511;
   --color-code-text: #04d936;
 
+  --color-all-active-bg: #1a3a2a;
+  --color-all-active-text: #a7d4b0;
+
+  --color-status-unverified-bg: #1e1b4b;
+  --color-status-unverified-text: #c7d2fe;
   --color-status-pending-bg: #78350f;
   --color-status-pending-text: #fde68a;
   --color-status-accepted-bg: #1a3a2a;

@@ -28,11 +28,11 @@ export const AdminApplications = async ({ request }: { request?: Request }) => {
   });
 
   const statuses = [
-    { value: "", label: "All", icon: ListIcon },
-    { value: "unverified", label: "Unverified", icon: QuestionIcon },
-    { value: "pending", label: "Pending", icon: ClockIcon },
-    { value: "accepted", label: "Accepted", icon: CheckCircleIcon },
-    { value: "rejected", label: "Rejected", icon: XCircleIcon },
+    { value: "", label: "All", icon: ListIcon, activeClass: "bg-all-active-bg text-all-active-text" },
+    { value: "unverified", label: "Unverified", icon: QuestionIcon, activeClass: "bg-status-unverified-bg text-status-unverified-text" },
+    { value: "pending", label: "Pending", icon: ClockIcon, activeClass: "bg-status-pending-bg text-status-pending-text" },
+    { value: "accepted", label: "Accepted", icon: CheckCircleIcon, activeClass: "bg-status-accepted-bg text-status-accepted-text" },
+    { value: "rejected", label: "Rejected", icon: XCircleIcon, activeClass: "bg-status-rejected-bg text-status-rejected-text" },
   ] as const;
 
   const buildHref = (overrides: Record<string, string>) => {
@@ -74,7 +74,7 @@ export const AdminApplications = async ({ request }: { request?: Request }) => {
                 }
                 className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium no-underline transition-colors ${
                   isActive
-                    ? "bg-accent text-accent-text"
+                    ? s.activeClass
                     : "bg-bg-soft text-text-secondary hover:bg-bg-muted hover:text-text"
                 }`}
               >

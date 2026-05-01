@@ -1,7 +1,11 @@
 import { Seo } from "@/app/components/seo";
 import { CtaButton } from "@/app/shared/cta-button";
 
-export function NotFound() {
+export function NotFound({ response }: { response?: { status: number } }) {
+  if (response) {
+    response.status = 404;
+  }
+
   return (
     <>
       <Seo

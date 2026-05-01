@@ -13,7 +13,7 @@ const statusConfig: Record<
   unverified: {
     label: "Unverified",
     icon: QuestionIcon,
-    style: "bg-status-pending-bg text-status-pending-text",
+    style: "bg-status-unverified-bg text-status-unverified-text",
   },
   pending: {
     label: "Pending",
