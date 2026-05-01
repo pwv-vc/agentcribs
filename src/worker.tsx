@@ -2,12 +2,13 @@ import { layout, render, route } from "rwsdk/router";
 import { defineApp } from "rwsdk/worker";
 
 import { Document } from "@/app/document";
+import { requestFirewall } from "@/app/interrupters/request-firewall";
+import { cloudflareSessionMiddleware } from "@/app/middleware/cloudflare-session";
 import { setCommonHeaders } from "@/app/headers";
 import { Layout } from "@/app/layouts/default";
 import { AdminLayout } from "@/app/layouts/admin";
 import { handleGitHubCallback } from "@/app/middleware/github/callback";
 import { handleVerificationCallback } from "@/app/middleware/verify/callback";
-import { requireCloudflareAccess } from "@/app/middleware/auth/cloudflare-access";
 import { AdminApplications } from "@/app/pages/admin/applications";
 import { AdminApplicationDetail } from "@/app/pages/admin/application";
 import { AdminApplicationEditPage } from "@/app/pages/admin/application-edit-page";
@@ -36,6 +37,7 @@ export type AppContext = {
 };
 
 export const app = defineApp([
+  requestFirewall,
   setCommonHeaders(),
   ({ ctx }) => {
     // setup ctx here
@@ -54,29 +56,22 @@ export const app = defineApp([
       route("/apply/verify/error", VerifyError),
     ]),
     // Authentication in production handled by Cloudflare One Access policies
+    // but we will try to populate the session with the authenticated user's email
     layout(AdminLayout, [
-      route("/admin/applications", [
-        requireCloudflareAccess(),
-        AdminApplications,
-      ]),
-      route("/admin/applications/:id", [
-        requireCloudflareAccess(),
-        ({ params }) => <AdminApplicationDetail id={params.id} />,
-      ]),
-      route("/admin/applications/:id/edit", [
-        requireCloudflareAccess(),
-        ({ params }) => <AdminApplicationEditPage id={params.id} />,
-      ]),
-      route("/admin/events", [
-        requireCloudflareAccess(),
-        ({ request }) => <AdminEvents request={request} />,
-      ]),
-      route("/admin/events/:id", [
-        requireCloudflareAccess(),
-        ({ params, request }) => (
-          <AdminEventDetail id={params.id} request={request} />
-        ),
-      ]),
+      cloudflareSessionMiddleware,
+      route("/admin/applications", AdminApplications),
+      route("/admin/applications/:id", ({ params }) => (
+        <AdminApplicationDetail id={params.id} />
+      )),
+      route("/admin/applications/:id/edit", ({ params }) => (
+        <AdminApplicationEditPage id={params.id} />
+      )),
+      route("/admin/events", ({ request }) => (
+        <AdminEvents request={request} />
+      )),
+      route("/admin/events/:id", ({ params, request }) => (
+        <AdminEventDetail id={params.id} request={request} />
+      )),
     ]),
     layout(Layout, [route("/*", NotFound)]),
   ]),

@@ -68,6 +68,7 @@
 - Return a `Response` from middleware to short-circuit the chain (e.g., 401 Unauthorized). Confidence: 1.00
 - Use factory pattern for configurable middleware (e.g., `setCommonHeaders()`). Confidence: 0.90
 - Type middleware with `RouteMiddleware` from `rwsdk/router`. Confidence: 0.95
+- Place request-firewall/interrupter logic in `src/app/interrupters/` (not `src/app/middleware/`) following the interrupter pattern described in rwsdk docs: functions receiving `{ request, ctx }` that can return a `Response` to short-circuit the request chain. Confidence: 0.70
 - Middleware runs for both page requests and server action requests. Confidence: 0.95
 - Populate `ctx` in middleware for downstream handlers and components. Confidence: 1.00
 - Throw `ErrorResponse` from middleware to return typed error status codes. Confidence: 0.85
