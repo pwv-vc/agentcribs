@@ -35,6 +35,17 @@ export const handleVerificationCallback: RouteMiddleware = async (
 
   const now = new Date().toISOString();
   const app: ApplicationData = JSON.parse(appRaw);
+
+  // Guard: only verify if the application is still unverified.
+  // If admin already accepted/rejected, don't revert their decision.
+  if (app.status !== "unverified") {
+    await env.AGENTCRIBS_KV.delete(`verify:${token}`);
+    return new Response(null, {
+      status: 302,
+      headers: { Location: "/apply/verify/success" },
+    });
+  }
+
   app.status = "pending";
   app.updatedAt = now;
 
