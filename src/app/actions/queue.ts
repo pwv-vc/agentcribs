@@ -38,6 +38,9 @@ async function sendSlackNotification(body: string): Promise<void> {
     console.error(
       `[queue/notification] Slack notification failed: ${response.status}`,
     );
+    throw new Error(
+      `Slack notification failed with status ${response.status}`,
+    );
   }
 }
 
@@ -52,7 +55,9 @@ export async function handleProcessApplication(
     console.error(
       `[queue/process] Application not found in KV: ${applicationKvKey}`,
     );
-    return;
+    throw new Error(
+      `Application not found in KV: ${applicationKvKey}`,
+    );
   }
 
   const application: ApplicationData = JSON.parse(raw);
@@ -203,7 +208,9 @@ export async function handleSendSlack(payload: {
     console.error(
       `[queue/slack] Application not found in KV: ${applicationId}`,
     );
-    return;
+    throw new Error(
+      `Application not found in KV for Slack notification: ${applicationId}`,
+    );
   }
 
   const app: ApplicationData = JSON.parse(appRaw);
@@ -268,4 +275,84 @@ export async function handleSendSlack(payload: {
   console.log(
     `[queue/slack] Done: Slack notification sent for ${applicationId}`,
   );
+}
+
+async function sendSlackBody(body: string): Promise<void> {
+  if (!env.SLACK_WEBHOOK_URL) return;
+  const resp = await fetch(env.SLACK_WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body,
+  });
+  if (!resp.ok) {
+    console.error(`[queue/dead-letter] Slack alert failed: ${resp.status}`);
+  }
+}
+
+export async function handleDeadLetter(payload: {
+  queue: string;
+  error: string;
+  body: unknown;
+}): Promise<void> {
+  const { queue: sourceQueue, error, body } = payload;
+
+  console.error(
+    `[queue/dead-letter] Message from ${sourceQueue} failed: ${error}`,
+  );
+
+  const slackBody = JSON.stringify({
+    blocks: [
+      {
+        type: "header",
+        text: {
+          type: "plain_text",
+          text: "⚠️ Queue Message Failed",
+        },
+      },
+      {
+        type: "section",
+        fields: [
+          { type: "mrkdwn", text: `*Queue:*\n${sourceQueue}` },
+          { type: "mrkdwn", text: `*Error:*\n\`${error}\`` },
+        ],
+      },
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `*Body:*\n\`\`\`${JSON.stringify(body, null, 2).slice(0, 500)}\`\`\``,
+        },
+      },
+    ],
+    text: `⚠️ Queue message failed: ${sourceQueue} — ${error}`,
+  });
+
+  await sendSlackBody(slackBody);
+}
+
+export async function processRetries(
+  queueName: string,
+  messages: readonly Message[],
+  handler: (message: Message) => Promise<void>,
+) {
+  for (const message of messages) {
+    if (message.attempts > 1) {
+      console.warn(
+        `[queue/${queueName}] Retry attempt ${message.attempts}`,
+      );
+    }
+    try {
+      await handler(message);
+    } catch (err) {
+      console.error(
+        `[queue/${queueName}] Failed: ${err instanceof Error ? err.message : String(err)}`,
+      );
+      await env.DEAD_LETTER_QUEUE.send({
+        queue: queueName,
+        error: err instanceof Error ? err.message : String(err),
+        body: message.body,
+      });
+    }
+    message.ack();
+  }
 }
