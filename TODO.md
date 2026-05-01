@@ -41,6 +41,7 @@
 - [x] improve application email validation
 - [x] admin edit application to fix issues in case of incorrect data like email
 - [x] resend emails
-- [ ] improve error reporting if application fails to process or email fails
+- [x] improve error reporting if application fails to process or email fails
 - [x] customize cloudflare one login page
 - [ ] rethink application email uniqueness key
+- [ ] admin view for deal letter q (though will slack if happens)
