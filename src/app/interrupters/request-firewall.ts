@@ -1,8 +1,10 @@
+import type { RouteMiddleware } from "rwsdk/router";
+
 /**
  * Blocks probing requests from bots, scanners, and legacy CMS exploit tools.
  * Returns a fast 404 with a long cache header so the CDN remembers.
  */
-export const requestFirewall = ({ request }: { request: Request }) => {
+export const requestFirewall: RouteMiddleware = ({ request }) => {
   const url = new URL(request.url);
   const path = url.pathname.toLowerCase();
 
