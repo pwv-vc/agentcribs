@@ -2,7 +2,7 @@ import { env } from "cloudflare:workers";
 
 const BASE_URL = "https://public-api.luma.com/v1";
 const PER_PAGE = 30;
-const CACHE_TTL_SECONDS = 300; // 5 minutes
+const CACHE_TTL_SECONDS = 900; // 15 minutes
 const MAX_RETRIES = 3;
 const INITIAL_BACKOFF_MS = 1000;
 

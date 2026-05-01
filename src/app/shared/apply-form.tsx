@@ -75,6 +75,11 @@ export const ApplyForm = ({
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
+  // Clear error when user modifies any form field
+  useEffect(() => {
+    if (error) setError(null);
+  }, [email, firstName, lastName, organization, location, howHeard, story, acceptedTerms]);
+
   // Check URL params on mount for OAuth callback
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -179,9 +184,19 @@ export const ApplyForm = ({
       formData.set("github_state", githubStateNonce);
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailRegex.test(email)) {
+      setError("Please provide a valid email address.");
+      return;
+    }
+
     startTransition(async () => {
-      await submitApplication(formData);
-      window.location.href = "/apply/thank-you";
+      try {
+        await submitApplication(formData);
+        window.location.href = "/apply/thank-you";
+      } catch (err) {
+        setError("Something went wrong. Please try again.");
+      }
     });
   };
 
@@ -416,7 +431,13 @@ export const ApplyForm = ({
           </div>
         ) : (
           <div>
-            <button
+            {error && (
+        <p className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700">
+          {error}
+        </p>
+      )}
+
+      <button
               type="button"
               onClick={handleGitHubConnect}
               disabled={!email || isVerifying}
@@ -437,7 +458,6 @@ export const ApplyForm = ({
                 </>
               )}
             </button>
-            {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
             {!email && (
               <p className="mt-2 text-sm text-text-secondary">
                 Enter your email first to verify with GitHub.
@@ -468,6 +488,12 @@ export const ApplyForm = ({
           </a>
         </span>
       </label>
+
+      {error && (
+        <div className="rounded-lg border border-red-300 bg-red-50 p-4">
+          <p className="text-sm font-medium text-red-800">{error}</p>
+        </div>
+      )}
 
       <button
         type="submit"

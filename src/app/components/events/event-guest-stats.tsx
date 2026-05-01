@@ -1,18 +1,27 @@
 import type { LumaGuest, GuestApprovalStatus } from "@/app/lib/luma";
 import { getGuestStatusCounts } from "@/app/lib/events";
+import {
+  CheckCircleIcon,
+  CalendarIcon,
+  ClockIcon,
+  UserPlusIcon,
+  XCircleIcon,
+  ListIcon,
+} from "@/app/components/icons";
 
 const GUEST_STATUS_CONFIG: {
   status: GuestApprovalStatus;
   label: string;
+  icon: typeof CheckCircleIcon;
   bg: string;
   text: string;
 }[] = [
-  { status: "approved", label: "Approved", bg: "bg-green-50 dark:bg-green-950", text: "text-green-700 dark:text-green-300" },
-  { status: "session", label: "Session", bg: "bg-blue-50 dark:bg-blue-950", text: "text-blue-700 dark:text-blue-300" },
-  { status: "pending_approval", label: "Pending", bg: "bg-yellow-50 dark:bg-yellow-950", text: "text-yellow-700 dark:text-yellow-300" },
-  { status: "invited", label: "Invited", bg: "bg-yellow-50 dark:bg-yellow-950", text: "text-yellow-700 dark:text-yellow-300" },
-  { status: "declined", label: "Declined", bg: "bg-red-50 dark:bg-red-950", text: "text-red-700 dark:text-red-300" },
-  { status: "waitlist", label: "Waitlist", bg: "bg-purple-50 dark:bg-purple-950", text: "text-purple-700 dark:text-purple-300" },
+  { status: "approved", label: "Approved", icon: CheckCircleIcon, bg: "bg-green-50 dark:bg-green-950", text: "text-green-700 dark:text-green-300" },
+  { status: "session", label: "Session", icon: CalendarIcon, bg: "bg-blue-50 dark:bg-blue-950", text: "text-blue-700 dark:text-blue-300" },
+  { status: "pending_approval", label: "Pending", icon: ClockIcon, bg: "bg-yellow-50 dark:bg-yellow-950", text: "text-yellow-700 dark:text-yellow-300" },
+  { status: "invited", label: "Invited", icon: UserPlusIcon, bg: "bg-yellow-50 dark:bg-yellow-950", text: "text-yellow-700 dark:text-yellow-300" },
+  { status: "declined", label: "Declined", icon: XCircleIcon, bg: "bg-red-50 dark:bg-red-950", text: "text-red-700 dark:text-red-300" },
+  { status: "waitlist", label: "Waitlist", icon: ListIcon, bg: "bg-purple-50 dark:bg-purple-950", text: "text-purple-700 dark:text-purple-300" },
 ];
 
 export function EventGuestStats({
@@ -29,14 +38,15 @@ export function EventGuestStats({
   return (
     <div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        {GUEST_STATUS_CONFIG.map(({ status, label, bg, text }) => {
+        {GUEST_STATUS_CONFIG.map(({ status, label, icon: Icon, bg, text }) => {
           const count = counts[status];
           return (
             <div
               key={status}
               className={`rounded-lg border border-border p-3 ${bg}`}
             >
-              <p className={`text-xs font-semibold uppercase tracking-wider ${text}`}>
+              <p className={`flex items-center gap-1 text-xs font-semibold uppercase tracking-wider ${text}`}>
+                <Icon />
                 {label}
               </p>
               <p className={`mt-1 text-2xl font-bold tabular-nums ${text}`}>
