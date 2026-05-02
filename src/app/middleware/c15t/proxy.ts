@@ -21,9 +21,15 @@ export const c15tProxy: RouteMiddleware = async ({ request }) => {
   target.pathname = url.pathname.replace("/api/c15t", "");
   target.search = url.search;
 
+  const proxyHeaders = new Headers(request.headers);
+  const cfIp = request.headers.get("CF-Connecting-IP");
+  if (cfIp) {
+    proxyHeaders.set("X-Forwarded-For", cfIp);
+  }
+
   const proxyRequest = new Request(target.toString(), {
     method: request.method,
-    headers: request.headers,
+    headers: proxyHeaders,
     body: request.method !== "GET" && request.method !== "HEAD" ? request.body : undefined,
   });
 

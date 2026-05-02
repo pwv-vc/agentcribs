@@ -14,9 +14,6 @@ importers:
       '@c15t/react':
         specifier: ^2.0.3
         version: 2.0.3(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(typescript@6.0.3)
-      '@c15t/scripts':
-        specifier: ^2.0.1
-        version: 2.0.1
       '@fontsource-variable/dm-sans':
         specifier: ^5.2.8
         version: 5.2.8
@@ -402,9 +399,6 @@ packages:
 
   '@c15t/schema@2.0.0':
     resolution: {integrity: sha512-NmNH+pkK/yq7Sknrpdi4zGAjDkwd/bu4q3rtzjlJdl0zdxUfNhJnlOOwQ6gHSwchYI4jiphL0IsEBEYVwqjLxw==}
-
-  '@c15t/scripts@2.0.1':
-    resolution: {integrity: sha512-iB3IWPRIPr94CkJNpMlTti1hNbUXXD13BSmlvWY7ZV41LzuIUGCz+SbJWThjjs0g0y0JFbLhvu/IUcK0ptTfqQ==}
 
   '@c15t/translations@2.0.0':
     resolution: {integrity: sha512-FLMx8QEvZdkBGdFk+yiPuLUry4NVZjarNbBjISnNQsPzfmtjWOmtY/k5+J1jxGCyWPP8GN7KtqxJw+lU5vcOjw==}
@@ -4931,8 +4925,6 @@ snapshots:
       valibot: 1.3.1(typescript@6.0.3)
     transitivePeerDependencies:
       - typescript
-
-  '@c15t/scripts@2.0.1': {}
 
   '@c15t/translations@2.0.0': {}
 

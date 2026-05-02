@@ -29,7 +29,6 @@ export function ConsentManagerProviderClient({
         backendURL: '/api/c15t',
         consentCategories: ['necessary', 'measurement', 'marketing'],
         colorScheme: 'system',
-        overrides: { country: 'DE' },
         legalLinks: {
           privacyPolicy: { href: 'https://agentcribs.com/privacy' },
           termsOfService: { href: 'https://agentcribs.com/terms' },
