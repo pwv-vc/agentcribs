@@ -26,6 +26,7 @@ declare namespace Cloudflare {
     CLOUDFLARE_ACCOUNT_ID: string;
     AI_GATEWAY_NAME: string;
     CF_AIG_TOKEN: string;
+    C15T_BACKEND_URL: string;
     LUMA_API_SECRET: string;
   }
   interface ProductionEnv extends Env {}

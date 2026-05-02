@@ -4,6 +4,7 @@ import { defineApp } from "rwsdk/worker";
 import { Document } from "@/app/document";
 import { requestFirewall } from "@/app/interrupters/request-firewall";
 import { cloudflareSessionMiddleware } from "@/app/middleware/cloudflare-session";
+import { c15tProxy } from "@/app/middleware/c15t/proxy";
 import { setCommonHeaders } from "@/app/headers";
 import { Layout } from "@/app/layouts/default";
 import { AdminLayout } from "@/app/layouts/admin";
@@ -38,6 +39,7 @@ export type AppContext = {
 
 export const app = defineApp([
   requestFirewall,
+  c15tProxy,
   setCommonHeaders(),
   ({ ctx }) => {
     // setup ctx here
