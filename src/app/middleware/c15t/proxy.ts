@@ -33,11 +33,19 @@ export const c15tProxy: RouteMiddleware = async ({ request }) => {
     body: request.method !== "GET" && request.method !== "HEAD" ? request.body : undefined,
   });
 
-  const response = await fetch(proxyRequest);
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10_000);
+    const response = await fetch(proxyRequest, { signal: controller.signal });
+    clearTimeout(timeout);
 
-  return new Response(response.body, {
-    status: response.status,
-    statusText: response.statusText,
-    headers: response.headers,
-  });
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: response.headers,
+    });
+  } catch (err) {
+    console.error("c15t proxy error:", err instanceof Error ? err.message : err);
+    return new Response("c15t backend unavailable", { status: 502 });
+  }
 };
