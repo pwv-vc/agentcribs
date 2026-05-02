@@ -46,6 +46,8 @@ export async function sendPendingReviewEmail({
   topics,
   story,
   summary,
+  howHeard,
+  location,
 }: {
   sendEmail: SendEmail;
   from: string | EmailAddress;
@@ -54,18 +56,22 @@ export async function sendPendingReviewEmail({
   topics?: string[];
   story?: string;
   summary?: string;
+  howHeard?: string;
+  location?: string;
 }): Promise<void> {
   await sendEmail.send({
     from,
     to: email,
     subject: "Your AgentCribs application is under review",
-    text: pendingReviewText({ name, topics, story, summary }),
+    text: pendingReviewText({ name, topics, story, summary, howHeard, location }),
     html: await render(
       <PendingReviewEmail
         name={name}
         topics={topics}
         story={story}
         summary={summary}
+        howHeard={howHeard}
+        location={location}
       />,
     ),
   });
@@ -80,6 +86,8 @@ export async function sendAdminNotificationEmail({
   story,
   summary,
   topics,
+  howHeard,
+  location,
 }: {
   sendEmail: SendEmail;
   from: string | EmailAddress;
@@ -89,6 +97,8 @@ export async function sendAdminNotificationEmail({
   story?: string;
   summary?: string;
   topics?: string[];
+  howHeard?: string;
+  location?: string;
 }): Promise<void> {
   await sendEmail.send({
     from,
@@ -101,6 +111,8 @@ export async function sendAdminNotificationEmail({
       story,
       summary,
       topics,
+      howHeard,
+      location,
     }),
     html: await render(
       <AdminNotificationEmail
@@ -110,6 +122,8 @@ export async function sendAdminNotificationEmail({
         story={story}
         summary={summary}
         topics={topics}
+        howHeard={howHeard}
+        location={location}
       />,
     ),
   });

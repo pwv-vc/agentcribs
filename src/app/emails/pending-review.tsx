@@ -3,11 +3,15 @@ import * as React from "react";
 
 export default function PendingReviewEmail({
   name,
+  location,
+  howHeard,
   topics,
   story,
   summary,
 }: {
   name: string;
+  location?: string;
+  howHeard?: string;
   topics?: string[];
   story?: string;
   summary?: string;
@@ -24,6 +28,18 @@ export default function PendingReviewEmail({
             verified and is now pending review. Here's a summary of what
             you shared with us:
           </Text>
+
+          {location && (
+            <Text style={paragraph}>
+              <strong>Location:</strong> {location}
+            </Text>
+          )}
+
+          {howHeard && (
+            <Text style={paragraph}>
+              <strong>How Heard:</strong> {howHeard}
+            </Text>
+          )}
 
           {topics && topics.length > 0 && (
             <Text style={paragraph}>
@@ -55,11 +71,15 @@ export default function PendingReviewEmail({
 
 export function pendingReviewText({
   name,
+  location,
+  howHeard,
   topics,
   story,
   summary,
 }: {
   name: string;
+  location?: string;
+  howHeard?: string;
   topics?: string[];
   story?: string;
   summary?: string;
@@ -68,6 +88,14 @@ export function pendingReviewText({
     `Hi ${name},`,
     `Thank you for applying to AgentCribs! Your application has been verified and is now pending review. Here's a summary of what you shared:`,
   ];
+
+  if (location) {
+    parts.push(`Location: ${location}`);
+  }
+
+  if (howHeard) {
+    parts.push(`How Heard: ${howHeard}`);
+  }
 
   if (topics && topics.length > 0) {
     parts.push(`Topics: ${topics.join(", ")}`);
