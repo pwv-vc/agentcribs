@@ -6,6 +6,20 @@ AgentCribs began as a private gathering of PWV founders and close friends sharin
 
 Apply at [agentcribs.com](https://agentcribs.com/).
 
+## PWV (Preston-Werner Ventures)
+
+[PWV](https://www.pwv.com/about) is:
+
+- Tom Preston-Werner
+- David Price
+- David Thyresson
+
+PWV is the fund we wanted as early-stage founders.
+
+We believe in founder-first values, and have a track record of backing category-defining companies from zero to breakout.
+
+More info: [Portfolio](https://pwv.com/portfolio/) and [News](https://pwv.com/news/)
+
 ## Setup
 
 ### Prerequisites
@@ -22,37 +36,45 @@ Learn more: [rwsdk.com](https://rwsdk.com) · [docs.rwsdk.com](https://docs.rwsd
 
 The worker requires these bindings (configured in `wrangler.jsonc`):
 
-| Binding | Type | Purpose |
-|---------|------|---------|
-| `AGENTCRIBS_KV` | KV Namespace | Application storage, email dedup, OAuth state, verification tokens |
-| `AGENTCRIBS_R2` | R2 Bucket | Durable application backup storage |
-| `SEND_EMAIL` | Send Email | Transactional email for magic link verification |
-| `ASSETS` | Fetcher | Static asset serving |
-| `AGENTCRIBS_QUEUES` | Queue (x4) | Background processing: process applications, send email, notifications, Slack |
+| Binding                     | Type         | Purpose                                                                   |
+| --------------------------- | ------------ | ------------------------------------------------------------------------- |
+| `AGENTCRIBS_KV`             | KV Namespace | Application storage, email dedup, OAuth state, verification tokens        |
+| `AGENTCRIBS_R2`             | R2 Bucket    | Durable application backup storage                                        |
+| `SEND_EMAIL`                | Send Email   | Transactional email for magic link verification, notifications            |
+| `ASSETS`                    | Fetcher      | Static asset serving                                                      |
+| `AI`                        | Workers AI   | AI Gateway binding (remote-only)                                          |
+| `PROCESS_APPLICATION_QUEUE` | Queue        | Application processing: backup to R2, set email index, enqueue magic link |
+| `SEND_EMAIL_QUEUE`          | Queue        | Send magic link verification email                                        |
+| `NOTIFICATION_QUEUE`        | Queue        | Send pending-review/accepted/rejected emails + enqueue Slack              |
+| `SLACK_QUEUE`               | Queue        | Post notifications to Slack webhook                                       |
+| `DEAD_LETTER_QUEUE`         | Queue        | Capture failed queue messages for debugging                               |
 
-The worker defines 4 queues:
+The worker defines 5 queues:
+
 - **`agentcribs-process-application`** — backup to R2, set email index, enqueue magic link
 - **`agentcribs-send-email`** — send magic link verification email
 - **`agentcribs-notifications`** — send pending-review/accepted/rejected emails + enqueue Slack
 - **`agentcribs-slack`** — post notifications to Slack webhook
+- **`agentcribs-dead-letter`** — capture failed messages from other queues (no retries)
 
 ### Required Secrets
 
 Set these via `wrangler secret put <NAME>`:
 
-| Secret | Description |
-|--------|-------------|
-| `ADMIN_PASSWORD` | Password for the admin panel at `/admin` |
-| `ADMIN_COOKIE_NAME` | Cookie name for the admin session (defaults to `agentcribs-dev-admin_session`) |
-| `GITHUB_CLIENT_ID` | GitHub OAuth App client ID |
-| `GITHUB_CLIENT_SECRET` | GitHub OAuth App client secret |
-| `GITHUB_CALLBACK_URL` | GitHub OAuth callback URL (e.g. `https://agentcribs.com/api/auth/github/callback`) |
-| `SEND_EMAIL_FROM` | From address for verification emails (defaults to `agentcribs@agentcribs.com`) |
-| `APP_URL` | Public base URL of the app (e.g. `https://agentcribs.com` or `http://localhost:5173`) |
-| `SLACK_WEBHOOK_URL` | Slack webhook URL for application notifications (optional) |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID — used by AI Gateway |
-| `AI_GATEWAY_NAME` | Name of your Workers AI Gateway (e.g. `agentcribs`) |
-| `CF_AIG_TOKEN` | AI Gateway API token — generate via Cloudflare dashboard under AI Gateway → API Keys |
+| Secret                  | Description                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------------- |
+| `ADMIN_PASSWORD`        | Password for the admin panel at `/admin` (used by dev/password auth fallback)         |
+| `ADMIN_COOKIE_NAME`     | Cookie name for the admin session (defaults to `agentcribs_dev_admin_session`)        |
+| `GITHUB_CLIENT_ID`      | GitHub OAuth App client ID                                                            |
+| `GITHUB_CLIENT_SECRET`  | GitHub OAuth App client secret                                                        |
+| `GITHUB_CALLBACK_URL`   | GitHub OAuth callback URL (e.g. `https://agentcribs.com/apply/github/callback`)       |
+| `SEND_EMAIL_FROM`       | From address for transactional emails (defaults to `agentcribs@agentcribs.com`)       |
+| `APP_URL`               | Public base URL of the app (e.g. `https://agentcribs.com` or `http://localhost:5173`) |
+| `SLACK_WEBHOOK_URL`     | Slack webhook URL for application notifications (optional)                            |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID — used by AI Gateway                                            |
+| `AI_GATEWAY_NAME`       | Name of your Workers AI Gateway (e.g. `agentcribs-ai-gateway`)                        |
+| `CF_AIG_TOKEN`          | AI Gateway API token — generate via Cloudflare dashboard under AI Gateway → API Keys  |
+| `LUMA_API_SECRET`       | Luma API secret for event integration                                                 |
 
 ### Local Development
 
@@ -67,20 +89,36 @@ pnpm generate
 pnpm dev
 ```
 
-The dev server runs on `http://localhost:5173` by default. For local testing of email and GitHub OAuth, set the corresponding secrets via wrangler or `.dev.vars`.
+The dev server runs on `http://localhost:5173` by default. For local testing of email and GitHub OAuth, copy `example.env` to `.dev.vars` and fill in the required secrets.
+
+### Content
+
+Application topics and playlists are managed via [Content Collections](https://www.content-collections.dev/). Markdown topic definitions live in `content/topics/` and JSON playlists in `content/playlist/`. The `@content-collections/vite` plugin generates typed data at build time, consumed by server queries in `src/app/queries/`.
 
 ### One-time Setup
 
 1. Create the KV namespace: `wrangler kv namespace create AGENTCRIBS_KV` (update `id` in `wrangler.jsonc`)
 2. Create the R2 bucket: `wrangler r2 bucket create agentcribs-applications`
-3. Create the 4 queues (names must match `wrangler.jsonc`):
+3. Create the 5 queues (names must match `wrangler.jsonc`):
    `wrangler queues create agentcribs-process-application`
    `wrangler queues create agentcribs-send-email`
    `wrangler queues create agentcribs-notifications`
    `wrangler queues create agentcribs-slack`
+   `wrangler queues create agentcribs-dead-letter`
 4. Create a [Workers AI Gateway](https://developers.cloudflare.com/ai-gateway/) — note the gateway name and generate an API key
 5. [Create a GitHub OAuth App](https://github.com/settings/developers) with the callback URL set to your `GITHUB_CALLBACK_URL`
 6. (Optional) Set up Slack notifications: Create a [Slack webhook](https://api.slack.com/messaging/webhooks) and set it as `SLACK_WEBHOOK_URL` secret
+
+### Authentication
+
+The admin panel at `/admin/*` is protected by **Cloudflare One Access** in production. Cloudflare's Zero Trust proxy authenticates users and injects `cf-access-authenticated-user-email` and `cf-access-authenticated-user-id` headers, which the `cloudflareSessionMiddleware` reads to populate `ctx.session`.
+
+In local development (when `VITE_IS_DEV_SERVER` is set), the admin panel is unauthenticated and displays `"User"` as the session identity. A basic password-auth middleware (`requireAdminPassword`) is available in `src/app/middleware/auth/basic.ts` as a fallback but is not wired by default.
+
+Applicant verification uses two flows:
+
+- **GitHub OAuth** — verifies applicant identity via GitHub profile. Starts in `actions/github.ts`, handled by middleware at `/apply/github/callback`.
+- **Magic link email** — verifies applicant email ownership. A verification link is sent via the `agentcribs-send-email` queue, and the callback at `/apply/verify` validates the token.
 
 ### Deploy
 

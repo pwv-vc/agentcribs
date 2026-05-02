@@ -5,15 +5,17 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 ## Commands
 
 - Use pnpm
-- Build - pnpm build
-- Typecheck and wrangler checks - pnpm check
-- Generate Cloudflare types - pnpm generate
+- Build - `pnpm build`
+- Typecheck and wrangler checks - `pnpm check`
+- Generate Cloudflare types - `pnpm generate`
+- Deploy staging - `pnpm deploy:staging`
+- Deploy production - `pnpm deploy:production`
 
 ## Project Structure
 
 ```
 ├── src/
-│   ├── worker.tsx             # Entry point — route definitions, middleware wiring
+│   ├── worker.tsx             # Entry point — route definitions, middleware wiring, queue consumers
 │   ├── client.tsx             # RSC client-side hydration & navigation
 │   ├── app/
 │   │   ├── pages/             # Route/page components
@@ -22,35 +24,56 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   │   │   ├── thank-you.tsx
 │   │   │   ├── verify-success.tsx
 │   │   │   ├── verify-error.tsx
-│   │   │   └── admin/         # Admin area authenticated using Cloudflare Access in production
+│   │   │   ├── terms.tsx
+│   │   │   ├── privacy.tsx
+│   │   │   ├── not-found.tsx
+│   │   │   └── admin/         # Admin area authenticated using Cloudflare One Access in production
 │   │   │       ├── applications.tsx
 │   │   │       ├── application.tsx
+│   │   │       ├── application-edit-page.tsx
+│   │   │       ├── application-edit.tsx
 │   │   │       ├── events.tsx
-│   │   │       ├── events.tsx
-│   │   │       └── ... other application, event and admin pages
-│   │   ├── components/        # Reusable UI components (hero, faq, seo, etc.), icons
+│   │   │       └── event.tsx
+│   │   ├── components/        # Reusable UI components
+│   │   │   ├── admin/         # Admin-specific components
+│   │   │   ├── events/        # Event-related components
+│   │   │   ├── icons/         # Icon components (barrel export index.ts)
+│   │   │   ├── application-detail.tsx
+│   │   │   ├── community-section.tsx
+│   │   │   ├── event-section.tsx
+│   │   │   ├── faq-section.tsx
+│   │   │   ├── hero-section.tsx
+│   │   │   ├── how-it-works-section.tsx
+│   │   │   ├── json-ld.tsx
+│   │   │   ├── pwv-section.tsx
+│   │   │   └── seo.tsx
 │   │   ├── layouts/           # default.tsx, admin.tsx
 │   │   ├── actions/           # Server actions
 │   │   │   ├── application.ts # Submit/get/update applications, types, KV/R2 helpers
 │   │   │   ├── email.tsx      # Email sending (magic link, notifications, accept/reject)
 │   │   │   ├── github.ts      # GitHub OAuth flow
-│   │   │   └── queue.ts       # Queue handlers: process-application, send-email, notifications, slack
+│   │   │   └── queue.ts       # Queue handlers: process-application, send-email, notifications, slack, dead-letter
 │   │   ├── emails/            # Email templates (admin-notification, pending-review, accepted, rejected, magic-link)
-│   │   ├── lib/               # ai.ts (streamText via AI Gateway), seo.ts
-│   │   ├── queries/           # Data fetching: application.ts
+│   │   ├── lib/               # ai.ts (AI Gateway), events.ts, formatters.ts, luma.ts, registration-code.ts, seo.ts
+│   │   ├── queries/           # Data fetching: application.ts, topics.ts
 │   │   ├── middleware/        # Route middleware
-│   │   │   ├── github/callback.ts
-│   │   │   └── verify/callback.ts
-│   │   ├── shared/            # Shared UI bits: apply-form, cta-button, links, status-badge
-│   │   ├── lib/               # ai.ts (streamText via AI Gateway), seo.ts
+│   │   │   ├── auth/basic.ts          # Dev password auth fallback (not wired by default)
+│   │   │   ├── cloudflare-session.ts  # Cloudflare One Access session hydration
+│   │   │   ├── github/callback.ts     # GitHub OAuth callback handler
+│   │   │   └── verify/callback.ts     # Email magic link verification handler
+│   │   ├── interrupters/      # Request-level interrupters
+│   │   │   └── request-firewall.ts  # Blocks bot/CMS scanner requests
+│   │   ├── shared/            # Shared UI bits: apply-form, cta-button, links, status-badge, footer, header, etc.
 │   │   ├── document.tsx       # HTML document shell
-│   │   ├── headers.ts         # Common header middleware
+│   │   ├── headers.ts         # CSP + security headers middleware
 │   │   └── styles.css
-├── data/
-│   └── topics.ts              # Application topic definitions
+├── content/                   # Content Collections source
+│   ├── topics/                # *.md — application topic definitions (id, label, content)
 ├── public/                    # Static assets (favicons, robots.txt, sitemap, manifest)
 ├── types/                     # Shim type declarations (css.d.ts, rw.d.ts, vite.d.ts)
-├── wrangler.jsonc             # Cloudflare Workers config — KV, R2, email, secrets
+├── content-collections.ts     # Content Collections config (topics + playlist schemas)
+├── worker-configuration.d.ts  # Manual Env type declarations (bindings + secrets)
+├── wrangler.jsonc             # Cloudflare Workers config — KV, R2, email, queues, secrets
 ├── vite.config.mts            # Vite build config
 └── tsconfig.json
 ```
@@ -60,7 +83,9 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 - **Framework**: RedwoodSDK (`rwsdk`) — RSC-based, React 19, Cloudflare Workers runtime
 - **Routing**: Declared in `worker.tsx` — `route()`, `layout()`, middleware chaining via arrays
 - **Data flow**: `actions/` for mutations, `queries/` for reads, `middleware/` for auth/oauth/verify
-- **Auth**: Basic auth for admin panel, GitHub OAuth for identity, magic link verify for email
+- **Auth**: Cloudflare One Access for admin panel (session middleware hydrated from headers), GitHub OAuth for identity, magic link verify for email
+- **AI**: Workers AI Gateway (`createAiGateway` + `createUnified`) — used for story summarization via Llama models
+- **Queues**: 5 Cloudflare Queues for background jobs — process-application, send-email, notifications, slack, dead-letter
 - **Storage**: KV for fast lookups, R2 for durable backup, Send Email binding for mail
 - **Styling**: Tailwind CSS v4 via `@tailwindcss/vite`, `@tailwindcss/typography`
 - **Types**: No `npm run generate` needed for worker types — but `pnpm check` runs it

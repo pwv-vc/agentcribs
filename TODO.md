@@ -44,4 +44,4 @@
 - [x] improve error reporting if application fails to process or email fails
 - [x] customize cloudflare one login page
 - [x] rethink application email uniqueness key
-- [ ] admin view for deal letter q (though will slack if happens)
+- [ ] admin view for dead letter q (though will slack if happens)
