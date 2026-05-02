@@ -129,6 +129,8 @@ export async function handleSendNotification(payload: {
     const topics = app?.topics;
     const story = app?.story;
     const summary = app?.summary;
+    const howHeard = app?.howHeard;
+    const location = app?.location;
 
     console.log(
       `[queue/notification] Sending pending-review email to ${email}`,
@@ -141,6 +143,8 @@ export async function handleSendNotification(payload: {
       topics,
       story,
       summary,
+      howHeard,
+      location,
     });
     // Also notify admin
     const baseUrl = env.APP_URL || "https://agentcribs.com";
@@ -153,6 +157,8 @@ export async function handleSendNotification(payload: {
       story,
       summary,
       topics,
+      howHeard,
+      location,
     });
   } else if (type === "accepted") {
     console.log(`[queue/notification] Sending accepted email to ${email}`);
@@ -231,10 +237,18 @@ export async function handleSendSlack(payload: {
         { type: "mrkdwn", text: `*Name:*\n${name}` },
         { type: "mrkdwn", text: `*Email:*\n<mailto:${email}|${email}>` },
         { type: "mrkdwn", text: `*Organization:*\n${org}` },
+        { type: "mrkdwn", text: `*Location:*\n${app.location || "—"}` },
         { type: "mrkdwn", text: `*Status:*\n${app.status}` },
       ],
     },
   ];
+
+  if (app.howHeard) {
+    blocks.push({
+      type: "section",
+      text: { type: "mrkdwn", text: `*How Heard:*\n${app.howHeard}` },
+    });
+  }
 
   if (topics) {
     blocks.push({

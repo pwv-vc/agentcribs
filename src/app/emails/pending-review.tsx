@@ -6,11 +6,15 @@ export default function PendingReviewEmail({
   topics,
   story,
   summary,
+  howHeard,
+  location,
 }: {
   name: string;
   topics?: string[];
   story?: string;
   summary?: string;
+  howHeard?: string;
+  location?: string;
 }) {
   return (
     <Html>
@@ -28,6 +32,18 @@ export default function PendingReviewEmail({
           {topics && topics.length > 0 && (
             <Text style={paragraph}>
               <strong>Topics:</strong> {topics.join(", ")}
+            </Text>
+          )}
+
+          {howHeard && (
+            <Text style={paragraph}>
+              <strong>How you heard about us:</strong> {howHeard}
+            </Text>
+          )}
+
+          {location && (
+            <Text style={paragraph}>
+              <strong>Location:</strong> {location}
             </Text>
           )}
 
@@ -58,11 +74,15 @@ export function pendingReviewText({
   topics,
   story,
   summary,
+  howHeard,
+  location,
 }: {
   name: string;
   topics?: string[];
   story?: string;
   summary?: string;
+  howHeard?: string;
+  location?: string;
 }) {
   const parts = [
     `Hi ${name},`,
@@ -71,6 +91,14 @@ export function pendingReviewText({
 
   if (topics && topics.length > 0) {
     parts.push(`Topics: ${topics.join(", ")}`);
+  }
+
+  if (howHeard) {
+    parts.push(`How you heard about us: ${howHeard}`);
+  }
+
+  if (location) {
+    parts.push(`Location: ${location}`);
   }
 
   if (story) {

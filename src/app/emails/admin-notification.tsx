@@ -16,6 +16,8 @@ export default function AdminNotificationEmail({
   story,
   summary,
   topics,
+  howHeard,
+  location,
 }: {
   name: string;
   email: string;
@@ -23,6 +25,8 @@ export default function AdminNotificationEmail({
   story?: string;
   summary?: string;
   topics?: string[];
+  howHeard?: string;
+  location?: string;
 }) {
   return (
     <Html>
@@ -35,11 +39,18 @@ export default function AdminNotificationEmail({
             <Link href={`mailto:${email}`} style={linkStyle}>
               {email}
             </Link>
+            {location && <>&nbsp;&mdash; {location}</>}
           </Text>
 
           {topics && topics.length > 0 && (
             <Text style={paragraph}>
               <strong>Topics:</strong> {topics.join(", ")}
+            </Text>
+          )}
+
+          {howHeard && (
+            <Text style={paragraph}>
+              <strong>How heard:</strong> {howHeard}
             </Text>
           )}
 
@@ -79,6 +90,8 @@ export function adminNotificationText({
   story,
   summary,
   topics,
+  howHeard,
+  location,
 }: {
   name: string;
   email: string;
@@ -86,11 +99,21 @@ export function adminNotificationText({
   story?: string;
   summary?: string;
   topics?: string[];
+  howHeard?: string;
+  location?: string;
 }) {
   const parts = [`New application from ${name} (${email})`];
 
+  if (location) {
+    parts.push(`Location: ${location}`);
+  }
+
   if (topics && topics.length > 0) {
     parts.push(`Topics: ${topics.join(", ")}`);
+  }
+
+  if (howHeard) {
+    parts.push(`How heard: ${howHeard}`);
   }
 
   if (story) {
