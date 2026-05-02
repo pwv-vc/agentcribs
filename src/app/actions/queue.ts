@@ -245,13 +245,6 @@ export async function handleSendSlack(payload: {
     },
   ];
 
-  if (location) {
-    blocks.push({
-      type: "section",
-      text: { type: "mrkdwn", text: `*Location:*\n${location}` },
-    });
-  }
-
   if (howHeard) {
     blocks.push({
       type: "section",
