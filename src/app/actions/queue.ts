@@ -222,6 +222,8 @@ export async function handleSendSlack(payload: {
   const app: ApplicationData = JSON.parse(appRaw);
   const org = app.organization || "no org";
   const topics = app.topics?.length ? app.topics.join(", ") : null;
+  const howHeard = app.howHeard;
+  const location = app.location;
 
   const blocks: Record<string, unknown>[] = [
     {
@@ -237,16 +239,23 @@ export async function handleSendSlack(payload: {
         { type: "mrkdwn", text: `*Name:*\n${name}` },
         { type: "mrkdwn", text: `*Email:*\n<mailto:${email}|${email}>` },
         { type: "mrkdwn", text: `*Organization:*\n${org}` },
-        { type: "mrkdwn", text: `*Location:*\n${app.location || "—"}` },
+        { type: "mrkdwn", text: `*Location:*\n${location || "—"}` },
         { type: "mrkdwn", text: `*Status:*\n${app.status}` },
       ],
     },
   ];
 
-  if (app.howHeard) {
+  if (location) {
     blocks.push({
       type: "section",
-      text: { type: "mrkdwn", text: `*How Heard:*\n${app.howHeard}` },
+      text: { type: "mrkdwn", text: `*Location:*\n${location}` },
+    });
+  }
+
+  if (howHeard) {
+    blocks.push({
+      type: "section",
+      text: { type: "mrkdwn", text: `*How Heard:*\n${howHeard}` },
     });
   }
 

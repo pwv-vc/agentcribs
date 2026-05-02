@@ -3,18 +3,18 @@ import * as React from "react";
 
 export default function PendingReviewEmail({
   name,
+  location,
+  howHeard,
   topics,
   story,
   summary,
-  howHeard,
-  location,
 }: {
   name: string;
+  location?: string;
+  howHeard?: string;
   topics?: string[];
   story?: string;
   summary?: string;
-  howHeard?: string;
-  location?: string;
 }) {
   return (
     <Html>
@@ -29,21 +29,21 @@ export default function PendingReviewEmail({
             you shared with us:
           </Text>
 
-          {topics && topics.length > 0 && (
+          {location && (
             <Text style={paragraph}>
-              <strong>Topics:</strong> {topics.join(", ")}
+              <strong>Location:</strong> {location}
             </Text>
           )}
 
           {howHeard && (
             <Text style={paragraph}>
-              <strong>How you heard about us:</strong> {howHeard}
+              <strong>How Heard:</strong> {howHeard}
             </Text>
           )}
 
-          {location && (
+          {topics && topics.length > 0 && (
             <Text style={paragraph}>
-              <strong>Location:</strong> {location}
+              <strong>Topics:</strong> {topics.join(", ")}
             </Text>
           )}
 
@@ -71,34 +71,34 @@ export default function PendingReviewEmail({
 
 export function pendingReviewText({
   name,
+  location,
+  howHeard,
   topics,
   story,
   summary,
-  howHeard,
-  location,
 }: {
   name: string;
+  location?: string;
+  howHeard?: string;
   topics?: string[];
   story?: string;
   summary?: string;
-  howHeard?: string;
-  location?: string;
 }) {
   const parts = [
     `Hi ${name},`,
     `Thank you for applying to AgentCribs! Your application has been verified and is now pending review. Here's a summary of what you shared:`,
   ];
 
-  if (topics && topics.length > 0) {
-    parts.push(`Topics: ${topics.join(", ")}`);
+  if (location) {
+    parts.push(`Location: ${location}`);
   }
 
   if (howHeard) {
-    parts.push(`How you heard about us: ${howHeard}`);
+    parts.push(`How Heard: ${howHeard}`);
   }
 
-  if (location) {
-    parts.push(`Location: ${location}`);
+  if (topics && topics.length > 0) {
+    parts.push(`Topics: ${topics.join(", ")}`);
   }
 
   if (story) {

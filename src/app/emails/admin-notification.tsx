@@ -13,20 +13,20 @@ export default function AdminNotificationEmail({
   name,
   email,
   applicationUrl,
+  location,
+  howHeard,
+  topics,
   story,
   summary,
-  topics,
-  howHeard,
-  location,
 }: {
   name: string;
   email: string;
   applicationUrl: string;
+  location?: string;
+  howHeard?: string;
+  topics?: string[];
   story?: string;
   summary?: string;
-  topics?: string[];
-  howHeard?: string;
-  location?: string;
 }) {
   return (
     <Html>
@@ -42,15 +42,15 @@ export default function AdminNotificationEmail({
             {location && <>&nbsp;&mdash; {location}</>}
           </Text>
 
-          {topics && topics.length > 0 && (
+          {howHeard && (
             <Text style={paragraph}>
-              <strong>Topics:</strong> {topics.join(", ")}
+              <strong>How Heard:</strong> {howHeard}
             </Text>
           )}
 
-          {howHeard && (
+          {topics && topics.length > 0 && (
             <Text style={paragraph}>
-              <strong>How heard:</strong> {howHeard}
+              <strong>Topics:</strong> {topics.join(", ")}
             </Text>
           )}
 
@@ -87,20 +87,20 @@ export function adminNotificationText({
   name,
   email,
   applicationUrl,
+  location,
+  howHeard,
+  topics,
   story,
   summary,
-  topics,
-  howHeard,
-  location,
 }: {
   name: string;
   email: string;
   applicationUrl: string;
+  location?: string;
+  howHeard?: string;
+  topics?: string[];
   story?: string;
   summary?: string;
-  topics?: string[];
-  howHeard?: string;
-  location?: string;
 }) {
   const parts = [`New application from ${name} (${email})`];
 
@@ -108,12 +108,12 @@ export function adminNotificationText({
     parts.push(`Location: ${location}`);
   }
 
-  if (topics && topics.length > 0) {
-    parts.push(`Topics: ${topics.join(", ")}`);
+  if (howHeard) {
+    parts.push(`How Heard: ${howHeard}`);
   }
 
-  if (howHeard) {
-    parts.push(`How heard: ${howHeard}`);
+  if (topics && topics.length > 0) {
+    parts.push(`Topics: ${topics.join(", ")}`);
   }
 
   if (story) {
