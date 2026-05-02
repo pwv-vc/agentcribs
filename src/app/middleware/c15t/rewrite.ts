@@ -42,36 +42,23 @@ export const handleC15tRewrite: RouteMiddleware = async ({ request }) => {
     );
   }
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10_000);
+  const rewrittenRequest = new Request(targetURL.toString(), {
+    method: request.method,
+    headers,
+    body:
+      request.method === "GET" || request.method === "HEAD"
+        ? undefined
+        : request.body,
+    signal: AbortSignal.timeout(10_000),
+  });
 
-  try {
-    const rewrittenRequest = new Request(targetURL.toString(), {
-      method: request.method,
-      headers,
-      body:
-        request.method === "GET" || request.method === "HEAD"
-          ? undefined
-          : request.body,
-      signal: controller.signal,
-    });
-
-    const response = await fetch(rewrittenRequest);
-
-    return new Response(response.body, {
-      status: response.status,
-      statusText: response.statusText,
-      headers: response.headers,
-    });
-  } catch (err) {
+  return fetch(rewrittenRequest).catch((err) => {
     console.error(
       "c15t rewrite error:",
       err instanceof Error ? err.message : err,
     );
     return new Response("c15t backend unavailable", { status: 502 });
-  } finally {
-    clearTimeout(timeout);
-  }
+  });
 };
 
 function joinPaths(basePath: string, routePath: string) {
