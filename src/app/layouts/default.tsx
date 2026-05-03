@@ -4,14 +4,14 @@ import { ConsentManagerProviderClient } from "@/app/components/consent-manager/p
 
 export function Layout({ children }: { children?: React.ReactNode }) {
   return (
-    <ConsentManagerProviderClient>
-      <div className="flex min-h-screen flex-col">
-        <Header />
+    <div className="flex min-h-screen flex-col">
+      <Header />
 
-        <main className="flex-1">{children}</main>
+      <main className="flex-1">
+        <ConsentManagerProviderClient>{children}</ConsentManagerProviderClient>
+      </main>
 
-        <Footer />
-      </div>
-    </ConsentManagerProviderClient>
+      <Footer />
+    </div>
   );
 }
