@@ -1,10 +1,11 @@
-import { layout, render, route } from "rwsdk/router";
+import { layout, prefix, render, route } from "rwsdk/router";
 import { defineApp } from "rwsdk/worker";
 
 import { Document } from "@/app/document";
 import { requestFirewall } from "@/app/interrupters/request-firewall";
 import { cloudflareSessionMiddleware } from "@/app/middleware/cloudflare-session";
-import { handleC15tRewrite } from "@/app/middleware/c15t/rewrite";
+import { C15T_ROUTE_PREFIX } from "@/app/shared/c15t";
+import { c15tRoutes } from "@/app/components/consent-manager/routes";
 import { setCommonHeaders } from "@/app/headers";
 import { Layout } from "@/app/layouts/default";
 import { AdminLayout } from "@/app/layouts/admin";
@@ -40,8 +41,7 @@ export type AppContext = {
 export const app = defineApp([
   requestFirewall,
   setCommonHeaders(),
-  route("/api/c15t", handleC15tRewrite),
-  route("/api/c15t/*", handleC15tRewrite),
+  prefix(C15T_ROUTE_PREFIX, c15tRoutes),
   ({ ctx }) => {
     // setup ctx here
     ctx;

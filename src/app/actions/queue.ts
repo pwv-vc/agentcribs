@@ -16,6 +16,7 @@ import type {
   ApplicationData,
   ApplicationPayload,
 } from "@/app/actions/application";
+import { getAppUrl } from "@/app/lib/url";
 
 function sendEmailFrom(): EmailAddress {
   if (env.SEND_EMAIL_FROM) {
@@ -95,7 +96,7 @@ export async function handleSendEmail(payload: {
 
   console.log(`[queue/email] Sending magic link to ${email}`);
 
-  const baseUrl = env.APP_URL || "http://localhost:5173";
+  const baseUrl = getAppUrl(env.APP_URL);
 
   // Properly await email delivery — no fire-and-forget
   await sendMagicLink({
@@ -147,7 +148,7 @@ export async function handleSendNotification(payload: {
       location,
     });
     // Also notify admin
-    const baseUrl = env.APP_URL || "https://agentcribs.com";
+    const baseUrl = getAppUrl(env.APP_URL);
     await sendAdminNotificationEmail({
       sendEmail: env.SEND_EMAIL,
       from: sendEmailFrom(),
@@ -162,7 +163,7 @@ export async function handleSendNotification(payload: {
     });
   } else if (type === "accepted") {
     console.log(`[queue/notification] Sending accepted email to ${email}`);
-    const baseUrl = env.APP_URL || "https://agentcribs.com";
+    const baseUrl = getAppUrl(env.APP_URL);
     await sendAcceptedEmail({
       sendEmail: env.SEND_EMAIL,
       from: sendEmailFrom(),
@@ -206,7 +207,7 @@ export async function handleSendSlack(payload: {
     `[queue/slack] Starting: type=${type} name=${name} appId=${applicationId}`,
   );
 
-  const baseUrl = env.APP_URL || "https://agentcribs.com";
+  const baseUrl = getAppUrl(env.APP_URL);
   const appUrl = `${baseUrl}/admin/applications/${applicationId}`;
 
   const appRaw = await env.AGENTCRIBS_KV.get(kvKey(applicationId));

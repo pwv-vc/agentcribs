@@ -1,26 +1,18 @@
 import type { RouteMiddleware } from "rwsdk/router";
 import { env } from "cloudflare:workers";
+import { extractRelevantHeaders } from "@c15t/react/server";
+import { C15T_ROUTE_PREFIX } from "@/app/shared/c15t";
 
-const C15T_ROUTE_PREFIX = "/api/c15t";
-const HOP_BY_HOP_HEADERS = [
-  "connection",
-  "content-length",
-  "host",
-  "keep-alive",
-  "proxy-authenticate",
-  "proxy-authorization",
-  "te",
-  "trailer",
-  "transfer-encoding",
-  "upgrade",
-];
-
+// Proxies c15t consent API calls to the configured backend.
+// Strips all headers except geo/locale/forwarding signals needed by c15t,
+// injecting Cloudflare's real client IP as X-Forwarded-For.
 export const handleC15tRewrite: RouteMiddleware = async ({ request }) => {
   const backendURL = env.C15T_BACKEND_URL?.trim();
   if (!backendURL) {
     return new Response("C15T_BACKEND_URL not configured", { status: 500 });
   }
 
+  // Build the target URL by replacing the route prefix with the backend path
   const requestURL = new URL(request.url);
   const targetURL = new URL(backendURL);
   const routePath = requestURL.pathname.slice(C15T_ROUTE_PREFIX.length);
@@ -28,19 +20,17 @@ export const handleC15tRewrite: RouteMiddleware = async ({ request }) => {
   targetURL.pathname = joinPaths(targetURL.pathname, routePath);
   targetURL.search = requestURL.search;
 
-  const headers = new Headers(request.headers);
-  for (const header of HOP_BY_HOP_HEADERS) {
-    headers.delete(header);
-  }
-
+  // Inject Cloudflare's real client IP onto a mutable header copy
+  const reqHeaders = new Headers(request.headers);
   const cfIp = request.headers.get("CF-Connecting-IP");
   if (cfIp) {
-    const forwardedFor = headers.get("X-Forwarded-For");
-    headers.set(
-      "X-Forwarded-For",
-      forwardedFor ? `${forwardedFor}, ${cfIp}` : cfIp,
-    );
+    reqHeaders.set("X-Forwarded-For", cfIp);
   }
+
+  // Keep only the headers c15t needs for geo/locale consent decisions
+  const relevant = extractRelevantHeaders(reqHeaders);
+  const headers = new Headers(relevant);
+  headers.set("Accept", "application/json");
 
   const rewrittenRequest = new Request(targetURL.toString(), {
     method: request.method,
