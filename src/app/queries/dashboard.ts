@@ -138,10 +138,14 @@ function normalizeLocation(raw: string): string {
 
 export const getDashboardStats = serverQuery(
   async (): Promise<DashboardStats> => {
-    // Check cache first
-    const cached = await env.AGENTCRIBS_KV.get(CACHE_KEY, "json");
-    if (cached) {
-      return cached as unknown as DashboardStats;
+    // Check cache first — fall through to recompute on error
+    try {
+      const cached = await env.AGENTCRIBS_KV.get(CACHE_KEY, "json");
+      if (cached) {
+        return cached as DashboardStats;
+      }
+    } catch {
+      // cache miss or KV error — recompute below
     }
 
     const allKeys: string[] = [];
