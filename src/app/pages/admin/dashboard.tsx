@@ -99,93 +99,103 @@ export const AdminDashboard = async () => {
         {/* Leaderboards row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
           {/* Topics Leaderboard */}
-          <div className="rounded-xl border border-border bg-bg p-6">
+          <div className="rounded-xl border border-border bg-bg p-6 flex flex-col">
             <div className="flex items-center gap-2 mb-5">
               <FlagIcon />
               <h2 className="font-serif text-xl font-bold tracking-tight">
                 Top Topics
               </h2>
             </div>
-            {stats.topicCounts.length === 0 ? (
-              <p className="text-sm text-text-secondary">No topics yet.</p>
-            ) : (
-              <div className="space-y-1">
-                {stats.topicCounts.slice(0, TOP_N).map((t, i) => (
-                  <div
-                    key={t.topic}
-                    className="flex items-center justify-between gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-bg-muted"
-                  >
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-xs font-mono text-text-secondary w-5 shrink-0">
-                        {i + 1}.
-                      </span>
-                      <span className="text-sm text-text truncate">
-                        {t.topic}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <div className="h-2 w-24 rounded-full bg-bg-muted overflow-hidden">
-                        <div
-                          className="h-full rounded-full bg-accent/70 dark:bg-accent"
-                          style={{
-                            width: `${Math.round((t.count / stats.topicCounts[0].count) * 100)}%`,
-                          }}
-                        />
+            <div className="flex-1">
+              {stats.topicCounts.length === 0 ? (
+                <p className="text-sm text-text-secondary">No topics yet.</p>
+              ) : (
+                <div className="space-y-1">
+                  {stats.topicCounts.slice(0, TOP_N).map((t, i) => (
+                    <div
+                      key={t.topic}
+                      className="flex items-center justify-between gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-bg-muted"
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-xs font-mono text-text-secondary w-5 shrink-0">
+                          {i + 1}.
+                        </span>
+                        <span className="text-sm text-text truncate">
+                          {t.topic}
+                        </span>
                       </div>
-                      <span className="text-xs font-semibold text-text-secondary w-8 text-right tabular-nums">
-                        {t.count}
-                      </span>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <div className="h-2 w-24 rounded-full bg-bg-muted overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-accent/70 dark:bg-accent"
+                            style={{
+                              width: `${Math.round((t.count / stats.topicCounts[0].count) * 100)}%`,
+                            }}
+                          />
+                        </div>
+                        <span className="text-xs font-semibold text-text-secondary w-8 text-right tabular-nums">
+                          {t.count}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
+            <span className="text-xs text-text-secondary/60 text-right mt-4">
+              as of {new Date(stats.asOf).toLocaleString()}
+            </span>
           </div>
 
           {/* Locations Leaderboard */}
-          <div className="rounded-xl border border-border bg-bg p-6">
+          <div className="rounded-xl border border-border bg-bg p-6 flex flex-col">
             <div className="flex items-center gap-2 mb-5">
               <FileTextIcon />
               <h2 className="font-serif text-xl font-bold tracking-tight">
                 Top Locations
               </h2>
             </div>
-            {stats.locationCounts.length === 0 ? (
-              <p className="text-sm text-text-secondary">
-                No location data yet.
-              </p>
-            ) : (
-              <div className="space-y-1">
-                {stats.locationCounts.slice(0, TOP_N).map((l, i) => (
-                  <div
-                    key={l.location}
-                    className="flex items-center justify-between gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-bg-muted"
-                  >
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-xs font-mono text-text-secondary w-5 shrink-0">
-                        {i + 1}.
-                      </span>
-                      <span className="text-sm text-text truncate">
-                        {l.location}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <div className="h-2 w-24 rounded-full bg-bg-muted overflow-hidden">
-                        <div
-                          className="h-full rounded-full bg-accent/70 dark:bg-accent"
-                          style={{
-                            width: `${Math.round((l.count / stats.locationCounts[0].count) * 100)}%`,
-                          }}
-                        />
+            <div className="flex-1">
+              {stats.locationCounts.length === 0 ? (
+                <p className="text-sm text-text-secondary">
+                  No location data yet.
+                </p>
+              ) : (
+                <div className="space-y-1">
+                  {stats.locationCounts.slice(0, TOP_N).map((l, i) => (
+                    <div
+                      key={l.location}
+                      className="flex items-center justify-between gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-bg-muted"
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-xs font-mono text-text-secondary w-5 shrink-0">
+                          {i + 1}.
+                        </span>
+                        <span className="text-sm text-text truncate">
+                          {l.location}
+                        </span>
                       </div>
-                      <span className="text-xs font-semibold text-text-secondary w-8 text-right tabular-nums">
-                        {l.count}
-                      </span>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <div className="h-2 w-24 rounded-full bg-bg-muted overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-accent/70 dark:bg-accent"
+                            style={{
+                              width: `${Math.round((l.count / stats.locationCounts[0].count) * 100)}%`,
+                            }}
+                          />
+                        </div>
+                        <span className="text-xs font-semibold text-text-secondary w-8 text-right tabular-nums">
+                          {l.count}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
+            <span className="text-xs text-text-secondary/60 text-right mt-4">
+              as of {new Date(stats.asOf).toLocaleString()}
+            </span>
           </div>
         </div>
 

@@ -8,6 +8,8 @@ import type {
 } from "@/app/actions/application";
 
 const KV_PREFIX = "app:";
+const CACHE_KEY = "dashboard:stats";
+const CACHE_TTL = 3_600; // 1 hour
 
 export interface DashboardStats {
   statusCounts: Record<ApplicationStatus, number>;
@@ -16,6 +18,7 @@ export interface DashboardStats {
   locationCounts: { location: string; count: number }[];
   rawHowHeard: string[];
   rawStories: { id: string; story: string }[];
+  asOf: string; // ISO timestamp when the stats were computed
 }
 
 function normalizeLocation(raw: string): string {
@@ -135,6 +138,16 @@ function normalizeLocation(raw: string): string {
 
 export const getDashboardStats = serverQuery(
   async (): Promise<DashboardStats> => {
+    // Check cache first — fall through to recompute on error
+    try {
+      const cached = await env.AGENTCRIBS_KV.get(CACHE_KEY, "json");
+      if (cached) {
+        return cached as DashboardStats;
+      }
+    } catch {
+      // cache miss or KV error — recompute below
+    }
+
     const allKeys: string[] = [];
     let cursor: string | undefined;
 
@@ -150,14 +163,19 @@ export const getDashboardStats = serverQuery(
     } while (cursor);
 
     if (allKeys.length === 0) {
-      return {
+      const empty: DashboardStats = {
         statusCounts: { unverified: 0, pending: 0, accepted: 0, rejected: 0 },
         total: 0,
         topicCounts: [],
         locationCounts: [],
         rawHowHeard: [],
         rawStories: [],
+        asOf: new Date().toISOString(),
       };
+      await env.AGENTCRIBS_KV.put(CACHE_KEY, JSON.stringify(empty), {
+        expirationTtl: CACHE_TTL,
+      });
+      return empty;
     }
 
     const results = await Promise.all(
@@ -190,9 +208,12 @@ export const getDashboardStats = serverQuery(
 
     const locationMap = new Map<string, number>();
     for (const app of apps) {
-      if (app.location) {
-        const normalized = normalizeLocation(app.location);
+      const location = app.location?.trim();
+      if (location) {
+        const normalized = normalizeLocation(location);
         locationMap.set(normalized, (locationMap.get(normalized) || 0) + 1);
+      } else {
+        locationMap.set("None", (locationMap.get("None") || 0) + 1);
       }
     }
     const locationCounts = Array.from(locationMap.entries())
@@ -207,13 +228,20 @@ export const getDashboardStats = serverQuery(
       .filter((a) => a.story && a.story.length > 20)
       .map((a) => ({ id: a.id, story: a.story! }));
 
-    return {
+    const result: DashboardStats = {
       statusCounts,
       total: apps.length,
       topicCounts,
       locationCounts,
       rawHowHeard,
       rawStories,
+      asOf: new Date().toISOString(),
     };
+
+    await env.AGENTCRIBS_KV.put(CACHE_KEY, JSON.stringify(result), {
+      expirationTtl: CACHE_TTL,
+    });
+
+    return result;
   },
 );
