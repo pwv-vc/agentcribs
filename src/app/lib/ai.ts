@@ -1,7 +1,7 @@
 import { env } from "cloudflare:workers";
 import { createAiGateway } from "ai-gateway-provider";
 import { createUnified } from "ai-gateway-provider/providers/unified";
-import { streamText } from "ai";
+import { streamText, generateText } from "ai";
 
 const defaultModel = "workers-ai/@cf/meta/llama-4-scout-17b-16e-instruct";
 const analysisModel = "workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast";
@@ -36,14 +36,6 @@ export function summarizeStory(story: string) {
     prompt: story,
   });
   return result.textStream;
-}
-
-async function collectStream(stream: AsyncIterable<string>): Promise<string> {
-  let text = "";
-  for await (const chunk of stream) {
-    text += chunk;
-  }
-  return text;
 }
 
 function extractJson(text: string): string {
@@ -113,21 +105,16 @@ const howHeardSchema = `{
 }`;
 
 export async function analyzeHowHeard(entries: string[]) {
-  console.log(`[analyzeHowHeard] model=${analysisModel}, entries=${entries.length}`);
-
   if (entries.length === 0) {
-    console.log("[analyzeHowHeard] no entries to analyze, returning []");
     return [];
   }
 
   try {
     const { model } = createClient(analysisModel);
     const sample = entries.slice(0, 200);
-    console.log(`[analyzeHowHeard] sending ${sample.length} samples to AI`);
 
-    const result = streamText({
+    const { text } = await generateText({
       model,
-      response_format: { type: "json_object" },
       system: `You are a data analyst. Below are free-text responses to "How did you hear about AgentCribs?".
 
 Group them into common categories/sources. Merge trivial variations (Twitter/X/x.com = "Twitter").
@@ -139,29 +126,18 @@ ${howHeardSchema}
 Sort by count descending. Example:
 {"results":[{"category":"Twitter","count":12,"examples":["via X","saw on Twitter"]}]}`,
       prompt: sample.join("\n"),
+      // @ts-expect-error - response_format is supported by AI Gateway but not in ai v6 prompt overload types
+      response_format: { type: "json_object" },
     });
 
-    const text = await collectStream(result.textStream);
-    console.log(`[analyzeHowHeard] raw AI response (${text.length} chars): ${text.slice(0, 500)}`);
-
     const json = repairJson(extractJson(text));
-    console.log(`[analyzeHowHeard] repaired JSON: ${json.slice(0, 500)}`);
 
-    try {
-      const parsed = JSON.parse(json);
-      const results = parsed.results ?? parsed;
-      const sorted = Array.isArray(results)
-        ? [...results].sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
-        : [];
-      console.log(`[analyzeHowHeard] parsed ${sorted.length} categories`);
-      return sorted;
-    } catch (parseError) {
-      console.error("[analyzeHowHeard] JSON parse failed:", parseError);
-      console.error("[analyzeHowHeard] attempted to parse:", json);
-      return [];
-    }
-  } catch (err) {
-    console.error("[analyzeHowHeard] AI call failed:", err);
+    const parsed = JSON.parse(json);
+    const results = parsed.results ?? parsed;
+    return Array.isArray(results)
+      ? [...results].sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
+      : [];
+  } catch {
     return [];
   }
 }
@@ -188,21 +164,16 @@ const storyThemesSchema = `{
 export async function analyzeStoryThemes(
   stories: { story: string }[],
 ) {
-  console.log(`[analyzeStoryThemes] model=${analysisModel}, stories=${stories.length}`);
-
   if (stories.length === 0) {
-    console.log("[analyzeStoryThemes] no stories to analyze, returning []");
     return [];
   }
 
   try {
     const { model } = createClient(analysisModel);
     const sample = stories.slice(0, 50);
-    console.log(`[analyzeStoryThemes] sending ${sample.length} samples to AI`);
 
-    const result = streamText({
+    const { text } = await generateText({
       model,
-      response_format: { type: "json_object" },
       system: `You are a data analyst. Below are startup founder applications describing what they're building with AI agents.
 
 Identify 5-10 broad themes/categories.
@@ -214,29 +185,18 @@ ${storyThemesSchema}
 Sort by count descending. Example:
 {"results":[{"theme":"Developer Tools","description":"AI-powered coding assistants and dev tooling","count":8}]}`,
       prompt: sample.map((s) => s.story).join("\n---\n"),
+      // @ts-expect-error - response_format is supported by AI Gateway but not in ai v6 prompt overload types
+      response_format: { type: "json_object" },
     });
 
-    const text = await collectStream(result.textStream);
-    console.log(`[analyzeStoryThemes] raw AI response (${text.length} chars): ${text.slice(0, 500)}`);
-
     const json = repairJson(extractJson(text));
-    console.log(`[analyzeStoryThemes] repaired JSON: ${json.slice(0, 500)}`);
 
-    try {
-      const parsed = JSON.parse(json);
-      const results = parsed.results ?? parsed;
-      const sorted = Array.isArray(results)
-        ? [...results].sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
-        : [];
-      console.log(`[analyzeStoryThemes] parsed ${sorted.length} themes`);
-      return sorted;
-    } catch (parseError) {
-      console.error("[analyzeStoryThemes] JSON parse failed:", parseError);
-      console.error("[analyzeStoryThemes] attempted to parse:", json);
-      return [];
-    }
-  } catch (err) {
-    console.error("[analyzeStoryThemes] AI call failed:", err);
+    const parsed = JSON.parse(json);
+    const results = parsed.results ?? parsed;
+    return Array.isArray(results)
+      ? [...results].sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
+      : [];
+  } catch {
     return [];
   }
 }

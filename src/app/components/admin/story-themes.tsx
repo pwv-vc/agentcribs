@@ -38,7 +38,7 @@ export function StoryThemes({ stories }: { stories: { story: string }[] }) {
             AI-powered categorization of what applicants are building
           </p>
         </div>
-        {stories.length > 0 && (!results || results.length === 0) && (
+        {stories.length > 0 && !results && (
           <button
             onClick={handleAnalyze}
             disabled={isPending}
@@ -46,6 +46,16 @@ export function StoryThemes({ stories }: { stories: { story: string }[] }) {
           >
             <SparkleIcon className="size-3.5" />
             {isPending ? "Analyzing..." : "Analyze with AI"}
+          </button>
+        )}
+        {(results?.length === 0 || error) && stories.length > 0 && (
+          <button
+            onClick={handleAnalyze}
+            disabled={isPending}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-accent/40 bg-accent/5 px-4 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent/10 dark:border-accent/60 dark:hover:bg-accent/15 disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <SparkleIcon className="size-3.5" />
+            {isPending ? "Analyzing..." : "Retry"}
           </button>
         )}
       </div>

@@ -135,8 +135,21 @@ function normalizeLocation(raw: string): string {
 
 export const getDashboardStats = serverQuery(
   async (): Promise<DashboardStats> => {
-    const list = await env.AGENTCRIBS_KV.list({ prefix: KV_PREFIX });
-    if (list.keys.length === 0) {
+    const allKeys: string[] = [];
+    let cursor: string | undefined;
+
+    do {
+      const list = await env.AGENTCRIBS_KV.list({
+        prefix: KV_PREFIX,
+        cursor,
+      });
+      for (const key of list.keys) {
+        allKeys.push(key.name);
+      }
+      cursor = list.list_complete ? undefined : list.cursor;
+    } while (cursor);
+
+    if (allKeys.length === 0) {
       return {
         statusCounts: { unverified: 0, pending: 0, accepted: 0, rejected: 0 },
         total: 0,
@@ -148,7 +161,7 @@ export const getDashboardStats = serverQuery(
     }
 
     const results = await Promise.all(
-      list.keys.map((key) => env.AGENTCRIBS_KV.get(key.name)),
+      allKeys.map((key) => env.AGENTCRIBS_KV.get(key)),
     );
 
     const apps = results
