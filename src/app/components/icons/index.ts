@@ -16,3 +16,4 @@ export { FileTextIcon } from "./file-text";
 export { TimerIcon } from "./timer";
 export { FlagIcon } from "./flag";
 export { WarningIcon } from "./warning";
+export { SparkleIcon } from "./sparkle";

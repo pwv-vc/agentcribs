@@ -45,3 +45,5 @@
 - [x] customize cloudflare one login page
 - [x] rethink application email uniqueness key
 - [ ] admin view for dead letter q (though will slack if happens)
+- [ ] dashboard metrics
+- [ ] content collection for events with marketing language and images etc so can set current.

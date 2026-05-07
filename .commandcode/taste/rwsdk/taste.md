@@ -1,4 +1,5 @@
 # Rwsdk
+- Use `ctx` (context object) for flash messages instead of cookies — populate `ctx.flash` in middleware and read it in page components. Confidence: 0.85
 - RedwoodSDK and rwsdk refer to the same framework; use them interchangeably. Confidence: 1.00
 - The npm package is published as `rwsdk`. Confidence: 1.00
 - The official documentation lives at docs.rwsdk.com. Confidence: 1.00

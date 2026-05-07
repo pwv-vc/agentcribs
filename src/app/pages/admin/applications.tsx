@@ -1,7 +1,8 @@
 import { queryApplications } from "@/app/queries/application";
-import { CtaButton } from "@/app/shared/cta-button";
 import { ApplicationsTable } from "@/app/shared/applications-table";
 import { Seo } from "@/app/components/seo";
+import { DownloadDropdown } from "@/app/components/admin/download-dropdown";
+import { link } from "@/app/shared/links";
 import type { ApplicationStatus } from "@/app/actions/application";
 import {
   ListIcon,
@@ -11,7 +12,13 @@ import {
   XCircleIcon,
 } from "@/app/components/icons";
 
-export const AdminApplications = async ({ request }: { request?: Request }) => {
+export const AdminApplications = async ({
+  request,
+  ctx,
+}: {
+  request?: Request;
+  ctx?: { flash?: { message: string } };
+}) => {
   const url = request ? new URL(request.url) : new URL("http://localhost");
 
   const activeStatus = url.searchParams.get("status") ?? undefined;
@@ -41,7 +48,8 @@ export const AdminApplications = async ({ request }: { request?: Request }) => {
       if (v) p.set(k, v);
       else p.delete(k);
     }
-    return `?${p.toString()}`;
+    const qs = p.toString();
+    return qs ? `${link("/admin/applications")}?${qs}` : link("/admin/applications");
   };
 
   return (
@@ -52,10 +60,16 @@ export const AdminApplications = async ({ request }: { request?: Request }) => {
         noIndex
       />
       <main className="mx-auto max-w-[1200px] px-6 py-16 sm:px-8 sm:py-20">
+        {ctx?.flash?.message && (
+          <div className="mb-6 rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/50 px-4 py-3 text-sm text-amber-800 dark:text-amber-200">
+            {ctx.flash.message}
+          </div>
+        )}
         <div className="flex items-center justify-between">
           <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl leading-snug">
             Applications
           </h1>
+          <DownloadDropdown />
         </div>
 
         {/* Filter pills */}
