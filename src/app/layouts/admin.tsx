@@ -39,6 +39,12 @@ export function AdminLayout({
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-6">
             <a
+              href={link("/admin/dashboard")}
+              className="text-sm font-medium text-text-secondary no-underline transition-colors hover:text-text"
+            >
+              Dashboard
+            </a>
+            <a
               href={link("/admin/applications")}
               className="text-sm font-medium text-text-secondary no-underline transition-colors hover:text-text"
             >

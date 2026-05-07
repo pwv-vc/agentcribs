@@ -9,9 +9,11 @@ import { c15tRoutes } from "@/app/components/consent-manager/routes";
 import { setCommonHeaders } from "@/app/headers";
 import { Layout } from "@/app/layouts/default";
 import { AdminLayout } from "@/app/layouts/admin";
+import { handleDownloadR2 } from "@/app/middleware/download/r2";
 import { handleGitHubCallback } from "@/app/middleware/github/callback";
 import { handleVerificationCallback } from "@/app/middleware/verify/callback";
 import { AdminApplications } from "@/app/pages/admin/applications";
+import { AdminDashboard } from "@/app/pages/admin/dashboard";
 import { AdminApplicationDetail } from "@/app/pages/admin/application";
 import { AdminApplicationEditPage } from "@/app/pages/admin/application-edit-page";
 import { AdminEvents } from "@/app/pages/admin/events";
@@ -36,6 +38,7 @@ import type { ApplicationPayload } from "@/app/actions/application";
 
 export type AppContext = {
   session?: { email: string; sub: string };
+  flash?: { message: string };
 };
 
 export const app = defineApp([
@@ -62,6 +65,8 @@ export const app = defineApp([
     // but we will try to populate the session with the authenticated user's email
     layout(AdminLayout, [
       cloudflareSessionMiddleware,
+      route("/admin/applications/download", handleDownloadR2),
+      route("/admin/dashboard", AdminDashboard),
       route("/admin/applications", AdminApplications),
       route("/admin/applications/:id", ({ params }) => (
         <AdminApplicationDetail id={params.id} />

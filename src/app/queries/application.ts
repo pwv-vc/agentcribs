@@ -11,7 +11,7 @@ import type {
 type Topic = (typeof allTopics)[number];
 
 const KV_PREFIX = "app:";
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 20;
 
 function kvKey(id: string) {
   return `${KV_PREFIX}${id}`;
