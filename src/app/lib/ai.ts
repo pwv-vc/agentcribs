@@ -126,8 +126,6 @@ ${howHeardSchema}
 Sort by count descending. Example:
 {"results":[{"category":"Twitter","count":12,"examples":["via X","saw on Twitter"]}]}`,
       prompt: sample.join("\n"),
-      // @ts-expect-error - response_format is supported by AI Gateway but not in ai v6 prompt overload types
-      response_format: { type: "json_object" },
     });
 
     const json = repairJson(extractJson(text));
@@ -185,8 +183,6 @@ ${storyThemesSchema}
 Sort by count descending. Example:
 {"results":[{"theme":"Developer Tools","description":"AI-powered coding assistants and dev tooling","count":8}]}`,
       prompt: sample.map((s) => s.story).join("\n---\n"),
-      // @ts-expect-error - response_format is supported by AI Gateway but not in ai v6 prompt overload types
-      response_format: { type: "json_object" },
     });
 
     const json = repairJson(extractJson(text));
