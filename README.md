@@ -6,6 +6,16 @@ AgentCribs began as a private gathering of PWV founders and close friends sharin
 
 Apply at [agentcribs.com](https://agentcribs.com/).
 
+## Features
+
+- **Application submission** — multi-topic application form with AI-powered story summarization, GitHub OAuth identity verification, and magic-link email verification
+- **Applicant accounts** — accounts auto-created on email verification, Cloudflare Access-protected profile and documents pages (JWT-verified)
+- **Document uploads** — applicants can upload dossiers and other documents, stored in R2 with D1 metadata
+- **Admin dashboard** — metrics, topic/location leaderboards, AI analysis of how-heard and story themes
+- **Admin application review** — filterable applications table, accept/reject workflow, email notifications
+- **Account management** — admin `/admin/accounts` page to list accounts, backfill from existing applications, bulk backfill with confirmation
+- **Event integration** — Luma event listing and guest management
+
 ## PWV (Preston-Werner Ventures)
 
 [PWV](https://www.pwv.com/about) is:
@@ -48,6 +58,8 @@ The worker requires these bindings (configured in `wrangler.jsonc`):
 | `NOTIFICATION_QUEUE`        | Queue        | Send pending-review/accepted/rejected emails + enqueue Slack              |
 | `SLACK_QUEUE`               | Queue        | Post notifications to Slack webhook                                       |
 | `DEAD_LETTER_QUEUE`         | Queue        | Capture failed queue messages for debugging                               |
+| `DB`                        | D1 Database  | Relational data: accounts, profiles, documents (Drizzle ORM)              |
+| `USER_SESSION_DO`           | Durable Obj  | RedwoodSDK session management (signed cookies via Durable Object)         |
 
 The worker defines 5 queues:
 
@@ -75,6 +87,8 @@ Set these via `wrangler secret put <NAME>`:
 | `AI_GATEWAY_NAME`       | Name of your Workers AI Gateway (e.g. `agentcribs-ai-gateway`)                        |
 | `CF_AIG_TOKEN`          | AI Gateway API token — generate via Cloudflare dashboard under AI Gateway → API Keys  |
 | `LUMA_API_SECRET`       | Luma API secret for event integration                                                 |
+| `CF_ACCESS_TEAM_DOMAIN` | Cloudflare Access team domain (e.g. `https://your-team.cloudflareaccess.com`)         |
+| `CF_ACCESS_AUD`         | Cloudflare Access application audience tag                                           |
 
 ### Local Development
 
@@ -85,11 +99,33 @@ pnpm install
 # Generate worker type bindings
 pnpm generate
 
+# Generate and apply D1 migrations locally
+pnpm migrate:new
+pnpm migrate:dev
+
 # Start dev server
 pnpm dev
 ```
 
 The dev server runs on `http://localhost:5173` by default. For local testing of email and GitHub OAuth, copy `example.env` to `.dev.vars` and fill in the required secrets.
+
+### Resetting the local database
+
+To start with a clean D1 database (empty accounts, profiles, documents):
+
+```bash
+# Remove local D1 state
+rm -rf .wrangler/state/v3/d1
+
+# Remove drizzle metadata so it regenerates fresh
+rm -rf drizzle/meta drizzle/*.sql
+
+# Regenerate and apply
+pnpm migrate:new
+pnpm migrate:dev
+```
+
+This drops all local D1 data and recreates the tables from the current schema.
 
 ### Content
 

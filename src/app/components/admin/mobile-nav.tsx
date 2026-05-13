@@ -65,6 +65,12 @@ export function MobileNav({ displayEmailAddress, isDev }: MobileNavProps) {
                 Events
               </a>
               <a
+                href={link("/admin/accounts")}
+                className="rounded-md px-3 py-2 text-sm font-medium text-text-secondary no-underline transition-colors hover:bg-bg-muted hover:text-text"
+              >
+                Accounts
+              </a>
+              <a
                 href="/"
                 className="rounded-md px-3 py-2 text-sm font-medium text-text-secondary no-underline transition-colors hover:bg-bg-muted hover:text-text"
               >

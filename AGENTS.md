@@ -1,6 +1,6 @@
 # AGENTS.md
 
-AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-based React 19 framework running on Cloudflare Workers. It uses Cloudflare for all infrastructure: KV for fast lookups, R2 for durable backups, and `wrangler deploy` for deployment. No separate database — state lives in KV/R2 and Cloudflare's Send Email binding handles transactional mail.
+AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-based React 19 framework running on Cloudflare Workers. It uses Cloudflare for all infrastructure: KV for fast lookups, R2 for durable backups, D1 with Drizzle ORM for relational data (accounts, profiles, documents), and Durable Objects for session management. Cloudflare's Send Email binding handles transactional mail.
 
 ## Commands
 
@@ -8,6 +8,7 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 - Build - `pnpm build`
 - Typecheck and wrangler checks - `pnpm check`
 - Generate Cloudflare types - `pnpm generate`
+- D1 migrations - `pnpm migrate:new` (generate), `pnpm migrate:dev` (apply local), `pnpm migrate:prod` (apply remote)
 - Deploy staging - `pnpm deploy:staging`
 - Deploy production - `pnpm deploy:production`
 
@@ -27,6 +28,8 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   │   │   ├── terms.tsx
 │   │   │   ├── privacy.tsx
 │   │   │   ├── not-found.tsx
+│   │   │   ├── profile.tsx        # Applicant profile page (Cloudflare Access protected)
+│   │   │   ├── documents.tsx      # Applicant document uploads (Cloudflare Access protected)
 │   │   │   └── admin/         # Admin area authenticated using Cloudflare One Access in production
 │   │   │       ├── applications.tsx
 │   │   │       ├── application.tsx
@@ -52,28 +55,37 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   │   │   ├── application.ts # Submit/get/update applications, types, KV/R2 helpers
 │   │   │   ├── email.tsx      # Email sending (magic link, notifications, accept/reject)
 │   │   │   ├── github.ts      # GitHub OAuth flow
+│   │   │   ├── account.ts     # Account/profile actions, document upload
 │   │   │   └── queue.ts       # Queue handlers: process-application, send-email, notifications, slack, dead-letter
 │   │   ├── emails/            # Email templates (admin-notification, pending-review, accepted, rejected, magic-link)
 │   │   ├── lib/               # ai.ts (AI Gateway), events.ts, formatters.ts, luma.ts, registration-code.ts, seo.ts
 │   │   ├── queries/           # Data fetching: application.ts, topics.ts
 │   │   ├── middleware/        # Route middleware
 │   │   │   ├── auth/basic.ts          # Dev password auth fallback (not wired by default)
-│   │   │   ├── cloudflare-session.ts  # Cloudflare One Access session hydration
+│   │   │   ├── cloudflare-session.ts  # Cloudflare One Access session hydration (admin)
+│   │   │   ├── account-session.ts     # Cloudflare Access + D1 account lookup (applicants)
 │   │   │   ├── github/callback.ts     # GitHub OAuth callback handler
-│   │   │   └── verify/callback.ts     # Email magic link verification handler
+│   │   │   └── verify/callback.ts     # Email magic link verification + account creation
 │   │   ├── interrupters/      # Request-level interrupters
 │   │   │   └── request-firewall.ts  # Blocks bot/CMS scanner requests
 │   │   ├── shared/            # Shared UI bits: apply-form, cta-button, links, status-badge, footer, header, etc.
 │   │   ├── document.tsx       # HTML document shell
 │   │   ├── headers.ts         # CSP + security headers middleware
 │   │   └── styles.css
+│   ├── db/                    # Drizzle ORM
+│   │   ├── schema.ts          # accounts, profiles, documents tables
+│   │   └── db.ts              # Drizzle client (env.DB)
+│   ├── sessions/              # Durable Objects
+│   │   └── UserSession.ts     # RedwoodSDK session DO (getSession, saveSession, revokeSession)
 ├── content/                   # Content Collections source
 │   ├── topics/                # *.md — application topic definitions (id, label, content)
+├── drizzle/                   # D1 migration files
 ├── public/                    # Static assets (favicons, robots.txt, sitemap, manifest)
 ├── types/                     # Shim type declarations (css.d.ts, rw.d.ts, vite.d.ts)
 ├── content-collections.ts     # Content Collections config (topics + playlist schemas)
 ├── worker-configuration.d.ts  # Manual Env type declarations (bindings + secrets)
-├── wrangler.jsonc             # Cloudflare Workers config — KV, R2, email, queues, secrets
+├── drizzle.config.ts          # Drizzle Kit config
+├── wrangler.jsonc             # Cloudflare Workers config — D1, KV, R2, DO, email, queues, secrets
 ├── vite.config.mts            # Vite build config
 └── tsconfig.json
 ```
@@ -84,8 +96,10 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 - **Routing**: Declared in `worker.tsx` — `route()`, `layout()`, middleware chaining via arrays
 - **Data flow**: `actions/` for mutations, `queries/` for reads, `middleware/` for auth/oauth/verify
 - **Auth**: Cloudflare One Access for admin panel (session middleware hydrated from headers), GitHub OAuth for identity, magic link verify for email
+- **Accounts**: Accounts created automatically on email verification — applicants access /profile and /documents via Cloudflare Access + D1 account lookup
 - **AI**: Workers AI Gateway (`createAiGateway` + `createUnified`) — used for story summarization via Llama models
 - **Queues**: 5 Cloudflare Queues for background jobs — process-application, send-email, notifications, slack, dead-letter
-- **Storage**: KV for fast lookups, R2 for durable backup, Send Email binding for mail
+- **Storage**: KV for fast lookups, R2 for durable backup, D1 (Drizzle ORM) for accounts/profiles/documents, Send Email binding for mail
+- **Sessions**: RedwoodSDK `defineDurableSession` backed by UserSession Durable Object — signed, HttpOnly session cookies
 - **Styling**: Tailwind CSS v4 via `@tailwindcss/vite`, `@tailwindcss/typography`
 - **Types**: No `npm run generate` needed for worker types — but `pnpm check` runs it

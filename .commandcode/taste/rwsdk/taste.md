@@ -1,4 +1,5 @@
 # Rwsdk
+- When using `defineDurableSession`, Durable Object classes need explicit `readonly __DURABLE_OBJECT_BRAND!: never` to satisfy the `DurableObjectMethods` generic constraint, because `@cloudflare/workers-types` (4.20260426.1) does not auto-extend `DurableObject` with `Rpc.DurableObjectBranded`. Confidence: 0.65
 - Use `ctx` (context object) for flash messages instead of cookies — populate `ctx.flash` in middleware and read it in page components. Confidence: 0.85
 - RedwoodSDK and rwsdk refer to the same framework; use them interchangeably. Confidence: 1.00
 - The npm package is published as `rwsdk`. Confidence: 1.00

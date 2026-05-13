@@ -56,6 +56,7 @@ export interface ApplicationData {
   verifiedAt?: string;
   location?: string;
   howHeard?: string;
+  accountId?: string;
 }
 
 export interface ApplicationPayload {
