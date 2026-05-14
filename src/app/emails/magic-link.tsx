@@ -26,7 +26,7 @@ export default function MagicLinkEmail({ verifyUrl }: { verifyUrl: string }) {
             Verify email and complete application
           </Button>
           <Text style={footnote}>
-            This link expires in 1 hour. If you need support, reply to this
+            This link expires in 15 minutes. If you need support, reply to this
             email or email{" "}
             <Link href="mailto:support@agentcribs.com" style={linkStyle}>
               support@agentcribs.com
@@ -54,7 +54,7 @@ There is one more step. Verify your email address to complete your AgentCribs ap
 
 Click this link to verify and complete your application: ${verifyUrl}
 
-This link expires in 1 hour. If you need support, reply to this email or email support@agentcribs.com.
+This link expires in 15 minutes. If you need support, reply to this email or email support@agentcribs.com.
 
 If you didn't apply to AgentCribs, you can safely ignore this email.`;
 }

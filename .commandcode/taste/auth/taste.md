@@ -1,4 +1,5 @@
 # auth
+- User account verification (magic link) tokens should expire in 15 minutes, not 1 hour. Confidence: 0.85
 - Use Cloudflare Access JWT (Zero Trust) for admin route authentication only — do NOT use it for user account access on `/my/*` routes. Confidence: 0.75
 - Use magic link OTP authentication for user account access (login sends OTP magic link email, user clicks link to verify, redirects to `/my/profile`) — not CF Access JWT. Confidence: 0.75
 - Use a dedicated Cloudflare Queue to generate magic link verification tokens and send OTP emails, and store short-lived magic link tokens in KV. Confidence: 0.70

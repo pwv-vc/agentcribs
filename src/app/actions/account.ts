@@ -45,12 +45,12 @@ export const initiateAccountLogin = serverAction(async (formData: FormData) => {
     });
   }
 
-  // Generate token and store in KV with 1-hour TTL
+  // Generate token and store in KV with 15-minute TTL
   const token = crypto.randomUUID();
   await env.AGENTCRIBS_KV.put(
     `login:${token}`,
     JSON.stringify({ email, createdAt: new Date().toISOString() }),
-    { expirationTtl: 3_600 },
+    { expirationTtl: 900 },
   );
 
   // Enqueue email delivery via the account-login queue

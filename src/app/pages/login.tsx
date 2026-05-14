@@ -24,7 +24,7 @@ export function LoginPage({
               Link expired
             </h2>
             <p className="text-sm text-amber-700 dark:text-amber-400 leading-relaxed">
-              Your sign-in link has expired. Magic links are valid for 1 hour.
+              Your sign-in link has expired. Magic links are valid for 15 minutes.
               Enter your email below to receive a new one.
             </p>
           </div>

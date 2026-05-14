@@ -29,7 +29,7 @@ export default function AccountLoginEmail({
             Sign in to your account
           </Button>
           <Text style={footnote}>
-            This link expires in 1 hour. If you need support, reply to this
+            This link expires in 15 minutes. If you need support, reply to this
             email or email{" "}
             <Link href="mailto:support@agentcribs.com" style={linkStyle}>
               support@agentcribs.com
@@ -55,7 +55,7 @@ export function accountLoginText({ verifyUrl }: { verifyUrl: string }) {
 
 Click this link to sign in to your account: ${verifyUrl}
 
-This link expires in 1 hour. If you need support, reply to this email or email support@agentcribs.com.
+This link expires in 15 minutes. If you need support, reply to this email or email support@agentcribs.com.
 
 If you didn't request this sign-in link, you can safely ignore this email.`;
 }
