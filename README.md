@@ -118,9 +118,9 @@ In local dev, you can impersonate any account by appending `?as=email` to the UR
 
 ```
 # Impersonate an account to view profile and documents
-http://localhost:5173/profile?as=test@example.com
-http://localhost:5173/documents?as=test@example.com
-http://localhost:5173/documents/doc_abc123?as=test@example.com
+http://localhost:5173/my/profile?as=test@example.com
+http://localhost:5173/my/documents?as=test@example.com
+http://localhost:5173/my/documents/doc_abc123?as=test@example.com
 ```
 
 The `?as=` param is automatically preserved on navigation links within profile and document pages so you stay authenticated throughout the session. This feature is gated behind `import.meta.env.DEV` — it's stripped in production builds.

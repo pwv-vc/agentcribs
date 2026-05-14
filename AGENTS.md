@@ -97,7 +97,7 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 - **Routing**: Declared in `worker.tsx` — `route()`, `layout()`, middleware chaining via arrays
 - **Data flow**: `actions/` for mutations, `queries/` for reads, `middleware/` for auth/oauth/verify
 - **Auth**: Cloudflare One Access for admin panel (session middleware hydrated from headers), GitHub OAuth for identity, magic link verify for email
-- **Accounts**: Accounts created automatically on email verification — applicants access /profile and /documents via Cloudflare Access + D1 account lookup
+- **Accounts**: Accounts created automatically on email verification — applicants access /my/profile and /my/documents via Cloudflare Access + D1 account lookup
 - **AI**: Workers AI Gateway (`createAiGateway` + `createUnified`) — used for story summarization via Llama models
 - **Queues**: 6 Cloudflare Queues for background jobs — process-application, send-email, notifications, slack, dead-letter, backfill-accounts
 - **Storage**: KV for fast lookups, R2 for durable backup, D1 (Drizzle ORM) for accounts/profiles/documents, Send Email binding for mail

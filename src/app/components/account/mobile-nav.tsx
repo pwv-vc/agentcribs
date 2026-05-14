@@ -51,7 +51,7 @@ export function AccountMobileNav({ email, avatarUrl, isDev }: AccountMobileNavPr
                 </span>
               )}
               <a
-                href={link("/profile")}
+                href={link("/my/profile")}
                 className="rounded-md px-3 py-2 text-sm font-medium text-text-secondary no-underline hover:bg-bg-muted hover:text-text"
               >
                 Profile

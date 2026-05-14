@@ -41,7 +41,7 @@ export function AccountLayout({
           <div className="flex items-center gap-4">
             <nav className="hidden md:flex items-center gap-5">
               <a
-                href={link("/profile")}
+                href={link("/my/profile")}
                 className="text-sm font-medium text-text-secondary no-underline transition-colors hover:text-text"
               >
                 Profile

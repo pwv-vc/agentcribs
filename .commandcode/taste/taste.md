@@ -10,6 +10,7 @@
 
 - Accounts are created upon application verification — no separate registration flow or magic link login is needed when all users authenticate via Cloudflare Access. Confidence: 0.70
 - In dev mode, support `?as=email` query param or `x-dev-email` header to simulate Cloudflare Access authentication, gated behind `import.meta.env.DEV` so it's stripped in production. Confidence: 0.70
+- Group all user-facing authenticated routes under a `/my/*` base path (e.g., `/my/profile`, `/my/documents`) to simplify Cloudflare Access configuration, and redirect `/me` to `/my/profile`. Confidence: 0.70
 
 # brand
 

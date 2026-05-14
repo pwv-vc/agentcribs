@@ -7,6 +7,8 @@ import { FileStackIcon } from "@/app/components/icons";
 import { HandshakeIcon } from "@/app/components/icons";
 import { CardsIcon } from "@/app/components/icons";
 import { getDocument } from "@/app/queries/document";
+import { CardsView } from "@/app/components/cards-view";
+import { ApplicationView } from "@/app/components/application-view";
 
 // Document type → label + icon for the detail page badge
 const typeMeta: Record<string, { label: string; Icon: typeof FileTextIcon }> = {
@@ -79,7 +81,7 @@ export const DocumentDetailPage = async ({
       />
       <main className="mx-auto max-w-[720px] px-6 py-16 sm:px-8 sm:py-24">
         <a
-          href={link("/documents")}
+          href={link("/my/documents")}
           className="inline-flex items-center gap-1.5 text-sm text-text-secondary no-underline hover:text-text mb-8"
         >
           <svg
@@ -98,40 +100,6 @@ export const DocumentDetailPage = async ({
           Back to Documents
         </a>
 
-        <div className="flex items-start justify-between gap-4 mb-8">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-secondary px-2 py-0.5 text-xs font-medium text-text-secondary">
-                <meta.Icon className="size-3" />
-                {meta.label}
-              </span>
-            </div>
-            <h1 className="font-serif text-2xl font-bold tracking-tight sm:text-3xl break-all">
-              {doc.filename}
-            </h1>
-            <p className="mt-2 text-sm text-text-secondary">
-              {doc.size_bytes
-                ? `${(doc.size_bytes / 1_024).toFixed(1)} KB`
-                : "Unknown size"}
-              {" · "}
-              {doc.created_at
-                ? new Date(doc.created_at).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })
-                : "Unknown date"}
-            </p>
-          </div>
-          <a
-            href={downloadHref}
-            className="shrink-0 rounded-md border border-border bg-bg px-4 py-2 text-sm font-medium text-text no-underline transition-colors hover:bg-bg-muted"
-            download
-          >
-            Download
-          </a>
-        </div>
-
         <div className="rounded-xl border border-border bg-bg p-6">
           {renderError ? (
             <p className="text-sm text-text-secondary">{renderError}</p>
@@ -144,6 +112,12 @@ export const DocumentDetailPage = async ({
                 __html: marked.parse(content, { async: false }),
               }}
             />
+          ) : doc.content_type === "application/json" &&
+            doc.document_type === "application" ? (
+            <ApplicationView content={content} />
+          ) : doc.content_type === "application/json" &&
+            doc.document_type === "cards" ? (
+            <CardsView content={content} />
           ) : doc.content_type === "application/json" ? (
             <pre className="text-sm font-mono text-text overflow-auto whitespace-pre-wrap">
               {(() => {
@@ -161,13 +135,25 @@ export const DocumentDetailPage = async ({
               </p>
               <a
                 href={downloadHref}
-                className="rounded-md border border-border bg-bg px-4 py-2 text-sm font-medium text-text no-underline transition-colors hover:bg-bg-muted"
+                className="inline-flex items-center gap-2 rounded-md border border-border bg-bg px-4 py-2 text-sm font-medium text-text no-underline transition-colors hover:bg-bg-muted"
                 download
               >
-                Download to view
+                <meta.Icon className="size-4" />
+                Download {meta.label}
               </a>
             </div>
           )}
+        </div>
+
+        <div className="mt-8 flex justify-end">
+          <a
+            href={downloadHref}
+            className="inline-flex items-center gap-2 rounded-md border border-border bg-bg px-4 py-2 text-sm font-medium text-text no-underline transition-colors hover:bg-bg-muted"
+            download
+          >
+            <meta.Icon className="size-4" />
+            Download {meta.label}
+          </a>
         </div>
       </main>
     </>

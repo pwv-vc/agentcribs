@@ -30,7 +30,7 @@ export async function DocumentList({
   // Preserve dev impersonation param on view links
   const viewHref = (docId: string) =>
     linkWithQuery(
-      "/documents/:id",
+      "/my/documents/:id",
       { id: docId },
       import.meta.env.DEV && devEmail ? { as: devEmail } : undefined,
     );

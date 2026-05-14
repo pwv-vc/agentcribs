@@ -31,7 +31,7 @@ export const DocumentsPage = async ({ ctx }: { ctx: { session?: { email?: string
   // Preserve dev impersonation param on view links
   const viewHref = (docId: string) =>
     linkWithQuery(
-      "/documents/:id",
+      "/my/documents/:id",
       { id: docId },
       import.meta.env.DEV && ctx.session?.email ? { as: ctx.session.email } : undefined,
     );

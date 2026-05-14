@@ -80,6 +80,10 @@ export const app = defineApp([
       route("/apply/verify", handleVerificationCallback),
       route("/apply/verify/success", VerifySuccess),
       route("/apply/verify/error", VerifyError),
+      route("/me", () => new Response(null, {
+        status: 302,
+        headers: { Location: "/my/profile" },
+      })),
     ]),
     // Authentication in production handled by Cloudflare One Access policies
     // but we will try to populate the session with the authenticated user's email
@@ -102,19 +106,19 @@ export const app = defineApp([
       )),
       route("/admin/accounts", AdminAccounts),
     ]),
-    // Applicant account routes — protected by Cloudflare One Access + D1 account lookup
+    // Applicant account routes — under /my/* for Cloudflare Access protection
     layout(AccountLayout, [
       accountSessionMiddleware,
-      route("/profile", ProfilePage),
-      route("/documents", DocumentsPage),
-      route("/documents/:id", ({ params, ctx }) => (
+      route("/my/profile", ProfilePage),
+      route("/my/documents", DocumentsPage),
+      route("/my/documents/:id", ({ params, ctx }) => (
         <DocumentDetailPage id={params.id} ctx={ctx} />
       )),
     ]),
     // Document download — handles auth inline to return bodyless 401
     layout(AccountLayout, [
       cloudflareSessionMiddleware,
-      route("/documents/:id/download", handleDocumentDownload),
+      route("/my/documents/:id/download", handleDocumentDownload),
     ]),
     layout(Layout, [route("/*", NotFound)]),
   ]),

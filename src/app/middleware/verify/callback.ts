@@ -52,7 +52,7 @@ export const handleVerificationCallback: RouteMiddleware = async (
   app.status = "pending";
   app.updatedAt = now;
 
-  // Create or link account on verification so applicant can access /profile.
+  // Create or link account on verification so applicant can access /my/profile.
   const [existingAccount] = await db
     .select({ id: accounts.id })
     .from(accounts)
