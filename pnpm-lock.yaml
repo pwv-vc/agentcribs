@@ -44,6 +44,9 @@ importers:
       jose:
         specifier: ^6.2.3
         version: 6.2.3
+      marked:
+        specifier: ^18.0.3
+        version: 18.0.3
       nanoid:
         specifier: ^5.1.11
         version: 5.1.11
@@ -3618,6 +3621,11 @@ packages:
   marked@15.0.12:
     resolution: {integrity: sha512-8dD6FusOQSrpv9Z1rdNMdlSgQOIP880DHqnohobOmYLElGEqAL/JvxvuxZO16r4HtjTlfPRDC1hbvxC9dPN2nA==}
     engines: {node: '>= 18'}
+    hasBin: true
+
+  marked@18.0.3:
+    resolution: {integrity: sha512-7VT90JOkDeaRWpfjOReRGPEKn0ecdARBkDGL+tT1wZY0efPPqkUxLUSmzy/C7TIylQYJC9STISEsCHrqb/7VIA==}
+    engines: {node: '>= 20'}
     hasBin: true
 
   math-intrinsics@1.1.0:
@@ -8040,6 +8048,8 @@ snapshots:
   markdown-extensions@2.0.0: {}
 
   marked@15.0.12: {}
+
+  marked@18.0.3: {}
 
   math-intrinsics@1.1.0: {}
 

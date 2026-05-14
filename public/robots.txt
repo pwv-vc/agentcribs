@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
 Disallow: /admin
+Disallow: /profile
+Disallow: /documents
 
 # Allow AI search and user-directed retrieval
 User-agent: OAI-SearchBot

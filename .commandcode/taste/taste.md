@@ -47,6 +47,7 @@ See [cloudflare/taste.md](cloudflare/taste.md)
 
 # code-style
 
+- Add concise code comments for important logic, design decisions, flow clarification, and non-obvious behavior — skip comments for self-explanatory code. Confidence: 0.85
 - Use numeric separator underscores (e.g., `1_000` instead of `1000`) for readable large number literals. Confidence: 0.70
 - Extract page inline markup into reusable UI components to DRY up large page files. Confidence: 0.60
 - Place domain-specific shared components in subdirectories under `src/app/components/` (e.g., `src/app/components/events/`) rather than directly in `src/app/shared/`. Confidence: 0.70
@@ -57,6 +58,7 @@ See [cloudflare/taste.md](cloudflare/taste.md)
 - Include `i.ytimg.com` in the `img-src` Content-Security-Policy directive when the project embeds YouTube videos. Confidence: 0.70
 - Include `images.lumacdn.com` and `cdn.lu.ma` in the `img-src` Content-Security-Policy directive when displaying Luma event cover images and host avatars. Confidence: 0.70
 - Auth-gate document downloads by verifying the requesting user's `accountId` from the session matches the document's `account_id` — return a clean 401 Response (no body, no text file download) if unauthenticated and 403 if accessing another user's documents. Confidence: 0.75
+- Enforce ownership checks in server actions and queries (the data/action layer), not just in server components at render time — reject unauthorized access early before it reaches rendering. Confidence: 0.80
 
 # icons
 - Store all icon components in `src/app/components/icons/` with individual component files and a barrel export `index.ts`. Confidence: 0.70

@@ -2,12 +2,13 @@ import { db } from "@/db/db";
 import { documents } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { Seo } from "@/app/components/seo";
-import { link } from "@/app/shared/links";
+import { linkWithQuery } from "@/app/shared/links";
 
 const typeLabels: Record<string, string> = {
   application: "Application",
   dossier: "Dossier",
   matches: "Matches",
+  cards: "Cards",
 };
 
 export const DocumentsPage = async ({ ctx }: { ctx: { session?: { email?: string; accountId?: string } } }) => {
@@ -26,6 +27,14 @@ export const DocumentsPage = async ({ ctx }: { ctx: { session?: { email?: string
     .from(documents)
     .where(eq(documents.account_id, accountId))
     .orderBy(desc(documents.created_at));
+
+  // Preserve dev impersonation param on view links
+  const viewHref = (docId: string) =>
+    linkWithQuery(
+      "/documents/:id",
+      { id: docId },
+      import.meta.env.DEV && ctx.session?.email ? { as: ctx.session.email } : undefined,
+    );
 
   return (
     <>
@@ -70,11 +79,10 @@ export const DocumentsPage = async ({ ctx }: { ctx: { session?: { email?: string
                       </td>
                       <td className="px-4 py-3 text-right">
                         <a
-                          href={link("/documents/:id/download", { id: doc.id })}
+                          href={viewHref(doc.id)}
                           className="text-xs font-medium text-accent no-underline hover:text-accent-hover"
-                          download
                         >
-                          Download
+                          View
                         </a>
                       </td>
                     </tr>

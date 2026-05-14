@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
 import { customAlphabet } from "nanoid";
 
@@ -72,3 +72,7 @@ export const documents = sqliteTable("documents", {
 
 export type Document = typeof documents.$inferSelect;
 export type DocumentInsert = typeof documents.$inferInsert;
+
+export const documentsAccountTypeFilenameUnique = uniqueIndex(
+  "documents_account_type_filename_unique",
+).on(documents.account_id, documents.document_type, documents.filename);

@@ -20,6 +20,7 @@ import { getAppUrl } from "@/app/lib/url";
 import { db } from "@/db/db";
 import { accounts, profiles, documents } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { scanAndImportDirectoryDocs } from "@/app/lib/document-import";
 
 function sendEmailFrom(): EmailAddress {
   if (env.SEND_EMAIL_FROM) {
@@ -487,6 +488,8 @@ export async function handleBackfillAccount(message: Message): Promise<void> {
       r2_key: docR2Key,
     }),
   ]);
+
+  await scanAndImportDirectoryDocs(applicationId, accountId);
 
   console.log(
     `[queue/backfill] Done: ${applicationId} → account ${accountId}`,

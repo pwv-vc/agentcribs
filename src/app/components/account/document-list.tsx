@@ -1,15 +1,17 @@
 import { db } from "@/db/db";
 import { documents } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
-import { link } from "@/app/shared/links";
+import { linkWithQuery } from "@/app/shared/links";
 import { FileTextIcon } from "@/app/components/icons";
-import { CheckCircleIcon } from "@/app/components/icons";
-import { ListIcon } from "@/app/components/icons";
+import { FileStackIcon } from "@/app/components/icons";
+import { HandshakeIcon } from "@/app/components/icons";
+import { CardsIcon } from "@/app/components/icons";
 
 const typeMeta: Record<string, { label: string; Icon: typeof FileTextIcon }> = {
   application: { label: "Application", Icon: FileTextIcon },
-  dossier: { label: "Dossier", Icon: CheckCircleIcon },
-  matches: { label: "Matches", Icon: ListIcon },
+  dossier: { label: "Dossier", Icon: FileStackIcon },
+  matches: { label: "Matches", Icon: HandshakeIcon },
+  cards: { label: "Cards", Icon: CardsIcon },
 };
 
 export async function DocumentList({
@@ -25,13 +27,13 @@ export async function DocumentList({
     .where(eq(documents.account_id, accountId))
     .orderBy(desc(documents.created_at));
 
-  const downloadHref = (docId: string) => {
-    const base = link("/documents/:id/download", { id: docId });
-    if (import.meta.env.DEV && devEmail) {
-      return `${base}?as=${encodeURIComponent(devEmail)}`;
-    }
-    return base;
-  };
+  // Preserve dev impersonation param on view links
+  const viewHref = (docId: string) =>
+    linkWithQuery(
+      "/documents/:id",
+      { id: docId },
+      import.meta.env.DEV && devEmail ? { as: devEmail } : undefined,
+    );
 
   if (docs.length === 0) {
     return (
@@ -45,9 +47,6 @@ export async function DocumentList({
         <thead className="bg-surface-secondary">
           <tr>
             <th className="px-4 py-3 text-left text-text-secondary font-medium">Type</th>
-            <th className="px-4 py-3 text-left text-text-secondary font-medium">Filename</th>
-            <th className="px-4 py-3 text-left text-text-secondary font-medium">Size</th>
-            <th className="px-4 py-3 text-left text-text-secondary font-medium">Uploaded</th>
             <th className="px-4 py-3"></th>
           </tr>
         </thead>
@@ -65,24 +64,12 @@ export async function DocumentList({
                     {meta.label}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-text">{doc.filename}</td>
-                <td className="px-4 py-3 text-text-secondary">
-                  {doc.size_bytes
-                    ? `${(doc.size_bytes / 1_024).toFixed(1)} KB`
-                    : "—"}
-                </td>
-                <td className="px-4 py-3 text-text-secondary">
-                  {doc.created_at
-                    ? new Date(doc.created_at).toLocaleDateString()
-                    : "—"}
-                </td>
                 <td className="px-4 py-3 text-right">
                   <a
-                    href={downloadHref(doc.id)}
+                    href={viewHref(doc.id)}
                     className="text-xs font-medium text-accent no-underline hover:text-accent-hover"
-                    download
                   >
-                    Download
+                    View
                   </a>
                 </td>
               </tr>

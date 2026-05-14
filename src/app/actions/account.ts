@@ -7,6 +7,7 @@ import { accounts, profiles, documents } from "@/db/schema";
 import { kvKey, r2Meta } from "@/app/actions/application";
 import { eq } from "drizzle-orm";
 import { enqueueBackfillJobs } from "@/app/actions/queue";
+import { scanAndImportDirectoryDocs } from "@/app/lib/document-import";
 
 function requireAccountId(): string {
   const accountId = requestInfo.ctx.session?.accountId;
@@ -202,6 +203,8 @@ export const backfillAccount = serverAction(
         r2_key: docR2Key,
       }),
     ]);
+
+    await scanAndImportDirectoryDocs(applicationId, accountId);
 
     return { accountId, email, name };
   },

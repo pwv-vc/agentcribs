@@ -29,7 +29,8 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   │   │   ├── privacy.tsx
 │   │   │   ├── not-found.tsx
 │   │   │   ├── profile.tsx        # Applicant profile page (Cloudflare Access protected)
-│   │   │   ├── documents.tsx      # Applicant document uploads (Cloudflare Access protected)
+│   │   │   ├── documents.tsx         # Applicant documents list (Cloudflare Access protected)
+│   │   │   ├── document-detail.tsx    # Document viewer — renders .md/.json inline, download button
 │   │   │   └── admin/         # Admin area authenticated using Cloudflare One Access in production
 │   │   │       ├── applications.tsx
 │   │   │       ├── application.tsx
@@ -98,7 +99,7 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 - **Auth**: Cloudflare One Access for admin panel (session middleware hydrated from headers), GitHub OAuth for identity, magic link verify for email
 - **Accounts**: Accounts created automatically on email verification — applicants access /profile and /documents via Cloudflare Access + D1 account lookup
 - **AI**: Workers AI Gateway (`createAiGateway` + `createUnified`) — used for story summarization via Llama models
-- **Queues**: 5 Cloudflare Queues for background jobs — process-application, send-email, notifications, slack, dead-letter
+- **Queues**: 6 Cloudflare Queues for background jobs — process-application, send-email, notifications, slack, dead-letter, backfill-accounts
 - **Storage**: KV for fast lookups, R2 for durable backup, D1 (Drizzle ORM) for accounts/profiles/documents, Send Email binding for mail
 - **Sessions**: RedwoodSDK `defineDurableSession` backed by UserSession Durable Object — signed, HttpOnly session cookies
 - **Styling**: Tailwind CSS v4 via `@tailwindcss/vite`, `@tailwindcss/typography`

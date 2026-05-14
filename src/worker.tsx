@@ -32,6 +32,8 @@ import { Privacy } from "@/app/pages/privacy";
 import { Home } from "@/app/pages/home";
 import { NotFound } from "@/app/pages/not-found";
 import { ProfilePage } from "@/app/pages/profile";
+import { DocumentsPage } from "@/app/pages/documents";
+import { DocumentDetailPage } from "@/app/pages/document-detail";
 import { UserSession } from "@/sessions/UserSession";
 import {
   handleProcessApplication,
@@ -104,6 +106,10 @@ export const app = defineApp([
     layout(AccountLayout, [
       accountSessionMiddleware,
       route("/profile", ProfilePage),
+      route("/documents", DocumentsPage),
+      route("/documents/:id", ({ params, ctx }) => (
+        <DocumentDetailPage id={params.id} ctx={ctx} />
+      )),
     ]),
     // Document download — handles auth inline to return bodyless 401
     layout(AccountLayout, [

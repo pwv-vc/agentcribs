@@ -186,3 +186,5 @@
 - Store pagination page size as a named constant at the top of the component (e.g., `const PAGE_SIZE = 25`) for testability. Confidence: 0.70
 - Structure admin table rows with a leftmost status pill column, then a top line of key info (name, email, dates), and secondary info on a separate line below. Confidence: 0.70
 - serverAction throws an error on non-ok responses (e.g., status 400) rather than returning the Response object — use try/catch to handle validation errors, not `res.ok` checks. Confidence: 0.70
+- The rwsdk `link()` function only accepts `(path, params?)` for route parameter interpolation — query string params must be appended separately (manually or via a `linkWithQuery` helper using URLSearchParams), not passed as a third argument. Confidence: 0.85
+- Use a `linkWithQuery(path, params?, query?)` helper in `src/app/shared/links.ts` that wraps `link()` and appends query params via `URLSearchParams` for proper URI encoding, rather than manual string concatenation with `encodeURIComponent`. Confidence: 0.75
