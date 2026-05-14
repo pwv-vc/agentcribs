@@ -8,6 +8,7 @@ import { kvKey, r2Meta } from "@/app/actions/application";
 import { eq } from "drizzle-orm";
 import { enqueueBackfillJobs } from "@/app/actions/queue";
 import { scanAndImportDirectoryDocs } from "@/app/lib/document-import";
+import { getAppUrl } from "@/app/lib/url";
 
 function requireAccountId(): string {
   const accountId = requestInfo.ctx.session?.accountId;
@@ -16,6 +17,50 @@ function requireAccountId(): string {
   }
   return accountId;
 }
+
+/**
+ * Initiates account login: generates a one-time magic link token, stores it
+ * in KV, and enqueues email delivery. If no account exists for the given
+ * email, silently succeeds without sending — never reveals account existence.
+ */
+export const initiateAccountLogin = serverAction(async (formData: FormData) => {
+  const email = ((formData.get("email") as string) ?? "").trim().toLowerCase();
+
+  if (!email) {
+    return new Response("Email is required.", { status: 400 });
+  }
+
+  // Check if account exists — if not, silently redirect without sending email
+  const [account] = await db
+    .select({ id: accounts.id })
+    .from(accounts)
+    .where(eq(accounts.email, email))
+    .limit(1);
+
+  if (!account) {
+    // No account — don't reveal this, just show the generic "check email" page
+    return new Response(null, {
+      status: 302,
+      headers: { Location: "/login?sent=true" },
+    });
+  }
+
+  // Generate token and store in KV with 1-hour TTL
+  const token = crypto.randomUUID();
+  await env.AGENTCRIBS_KV.put(
+    `login:${token}`,
+    JSON.stringify({ email, createdAt: new Date().toISOString() }),
+    { expirationTtl: 3_600 },
+  );
+
+  // Enqueue email delivery via the account-login queue
+  await env.ACCOUNT_LOGIN_QUEUE.send({ email, token });
+
+  return new Response(null, {
+    status: 302,
+    headers: { Location: "/login?sent=true" },
+  });
+});
 
 export const getAccount = serverAction(async () => {
   const accountId = requireAccountId();

@@ -23,7 +23,7 @@ export const DocumentDetailPage = async ({
   ctx,
 }: {
   id: string;
-  ctx: { session?: { email?: string; accountId?: string } };
+  ctx: { session?: { email?: string; accountId?: string }; devEmail?: string };
 }) => {
   const accountId = ctx.session?.accountId;
 
@@ -64,8 +64,8 @@ export const DocumentDetailPage = async ({
   };
   // Preserve dev impersonation param on download links so the download
   // middleware (which uses cloudflareSessionMiddleware) can authenticate.
-  const devQuery = import.meta.env.DEV && ctx.session?.email
-    ? { as: ctx.session.email }
+  const devQuery = ctx.devEmail
+    ? { as: ctx.devEmail }
     : undefined;
   const downloadHref = linkWithQuery(
     "/documents/:id/download",
@@ -81,7 +81,7 @@ export const DocumentDetailPage = async ({
       />
       <main className="mx-auto max-w-[720px] px-6 py-16 sm:px-8 sm:py-24">
         <a
-          href={link("/my/documents")}
+          href={link("/my/profile")}
           className="inline-flex items-center gap-1.5 text-sm text-text-secondary no-underline hover:text-text mb-8"
         >
           <svg
@@ -97,7 +97,7 @@ export const DocumentDetailPage = async ({
           >
             <path d="m15 18-6-6 6-6" />
           </svg>
-          Back to Documents
+          Back to Profile
         </a>
 
         <div className="rounded-xl border border-border bg-bg p-6">

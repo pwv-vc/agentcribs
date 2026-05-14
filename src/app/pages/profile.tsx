@@ -5,7 +5,7 @@ import { Seo } from "@/app/components/seo";
 import { DocumentList } from "@/app/components/account/document-list";
 import { gravatarUrl } from "@/app/lib/gravatar";
 
-export const ProfilePage = async ({ ctx }: { ctx: { session?: { email?: string; accountId?: string; avatarUrl?: string } } }) => {
+export const ProfilePage = async ({ ctx }: { ctx: { session?: { email?: string; accountId?: string; avatarUrl?: string }; devEmail?: string } }) => {
   const accountId = ctx.session?.accountId;
 
   if (!accountId) {
@@ -113,7 +113,7 @@ export const ProfilePage = async ({ ctx }: { ctx: { session?: { email?: string; 
 
           <section>
             <h2 className="text-lg font-semibold text-text mb-4">Documents</h2>
-            <DocumentList accountId={accountId} devEmail={ctx.session?.email} />
+            <DocumentList accountId={accountId} devEmail={ctx.devEmail} />
           </section>
         </div>
       </main>

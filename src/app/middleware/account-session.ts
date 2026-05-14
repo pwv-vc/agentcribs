@@ -1,76 +1,90 @@
 import type { RouteMiddleware } from "rwsdk/router";
-import { ErrorResponse } from "rwsdk/worker";
-import { env } from "cloudflare:workers";
 import { db } from "@/db/db";
 import { accounts } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { verifyAccessToken } from "@/app/lib/access-jwt";
 import { gravatarUrl } from "@/app/lib/gravatar";
-
-function getDevEmail(request: Request): string | null {
-  if (!import.meta.env.DEV) return null;
-  const url = new URL(request.url);
-  const raw = url.searchParams.get("as") ?? request.headers.get("x-dev-email");
-  if (!raw) return null;
-  // URLSearchParams decodes + as space, but emails can have + in them.
-  // Since valid emails never contain spaces, restore + from any decoded spaces.
-  return raw.replace(/ /g, "+");
-}
-
-async function resolveDevAccount(email: string) {
-  const [existing] = await db
-    .select({ id: accounts.id, email: accounts.email })
-    .from(accounts)
-    .where(eq(accounts.email, email))
-    .limit(1);
-
-  if (existing) return existing;
-
-  const [created] = await db
-    .insert(accounts)
-    .values({ email })
-    .returning({ id: accounts.id, email: accounts.email });
-
-  return created;
-}
+import { getSessionStore } from "@/app/lib/session";
 
 /**
- * Hydrates ctx.session from Cloudflare Access JWT + D1 account lookup.
- * In dev, supports ?as=email query param or x-dev-email header to simulate auth.
+ * Loads the account session from the signed cookie, hydrates ctx.session
+ * with account data from D1, or redirects to /login if no valid session.
+ *
+ * Dev mode: supports ?as=email to bypass the login flow.
  */
 export const accountSessionMiddleware: RouteMiddleware = async ({
   request,
   ctx,
 }) => {
+  let accountId: string | undefined;
   let email: string | undefined;
-  let sub: string | undefined;
 
+  // Dev mode: ?as=email@test.com simulates authenticated account
   const devEmail = getDevEmail(request);
   if (devEmail) {
     email = devEmail;
-    sub = "dev-user";
-  } else {
-    const identity = await verifyAccessToken(
-      request,
-      env.CF_ACCESS_TEAM_DOMAIN,
-      env.CF_ACCESS_AUD,
-    );
-    if (!identity) {
-      throw new ErrorResponse(401, "Authentication required");
-    }
-    email = identity.email;
-    sub = identity.sub;
-  }
+    const [existing] = await db
+      .select({ id: accounts.id })
+      .from(accounts)
+      .where(eq(accounts.email, devEmail))
+      .limit(1);
 
-  const account = await resolveDevAccount(email);
+    if (existing) {
+      accountId = existing.id;
+    } else {
+      const [created] = await db
+        .insert(accounts)
+        .values({ email: devEmail })
+        .returning({ id: accounts.id });
+      accountId = created.id;
+    }
+  } else {
+    // Load session from signed cookie
+    const sessionStore = getSessionStore();
+    const sessionData = await sessionStore.load(request);
+    if (!sessionData?.accountId) {
+      return new Response(null, {
+        status: 302,
+        headers: { Location: "/login" },
+      });
+    }
+    accountId = sessionData.accountId as string;
+
+    // Verify account still exists in D1 and get email
+    const [account] = await db
+      .select({ email: accounts.email })
+      .from(accounts)
+      .where(eq(accounts.id, accountId))
+      .limit(1);
+
+    if (!account) {
+      return new Response(null, {
+        status: 302,
+        headers: { Location: "/login" },
+      });
+    }
+    email = account.email;
+  }
 
   const avatar = await gravatarUrl(email);
 
   ctx.session = {
     ...ctx.session,
     email,
-    sub,
-    accountId: account.id,
+    accountId,
     avatarUrl: avatar,
   };
+
+  // Only set devEmail when impersonating; pages use this to conditionally
+  // add ?as= to links — should not leak the real email into query params.
+  ctx.devEmail = devEmail ?? undefined;
 };
+
+function getDevEmail(request: Request): string | null {
+  if (!import.meta.env.DEV) return null;
+  const url = new URL(request.url);
+  const raw =
+    url.searchParams.get("as") ?? request.headers.get("x-dev-email");
+  if (!raw) return null;
+  // URLSearchParams decodes + as space, but emails can have + in them.
+  return raw.replace(/ /g, "+");
+}

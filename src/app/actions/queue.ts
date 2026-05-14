@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 import {
   sendMagicLink,
+  sendAccountLoginMagicLink,
   sendPendingReviewEmail,
   sendAdminNotificationEmail,
   sendAcceptedEmail,
@@ -112,6 +113,30 @@ export async function handleSendEmail(payload: {
   });
 
   console.log(`[queue/email] Magic link sent to ${email}`);
+}
+
+/**
+ * Queue consumer: sends account login magic link email.
+ * Enqueued from initiateAccountLogin server action.
+ */
+export async function handleAccountLoginMagicLink(payload: {
+  email: string;
+  token: string;
+}): Promise<void> {
+  const { email, token } = payload;
+
+  console.log(`[queue/account-login] Sending magic link to ${email}`);
+
+  const baseUrl = getAppUrl(env.APP_URL);
+  await sendAccountLoginMagicLink({
+    sendEmail: env.SEND_EMAIL,
+    from: sendEmailFrom(),
+    baseUrl,
+    email,
+    token,
+  });
+
+  console.log(`[queue/account-login] Magic link sent to ${email}`);
 }
 
 export async function handleSendNotification(payload: {

@@ -18,6 +18,7 @@ declare namespace Cloudflare {
     SLACK_QUEUE: Queue;
     DEAD_LETTER_QUEUE: Queue;
     BACKFILL_ACCOUNTS_QUEUE: Queue;
+    ACCOUNT_LOGIN_QUEUE: Queue;
     ADMIN_PASSWORD: string;
     ADMIN_COOKIE_NAME: string;
     GITHUB_CLIENT_ID: string;

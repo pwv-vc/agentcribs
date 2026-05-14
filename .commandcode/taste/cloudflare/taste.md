@@ -1,4 +1,5 @@
 # cloudflare
+- When using `__Host-` prefixed cookies via `defineDurableSession`, conditionally use a non-prefixed cookie name in dev mode (e.g., `import.meta.env.DEV ? "agentcribs-session" : "__Host-agentcribs-session"`) because `__Host-` requires the `Secure` flag, which the framework strips in dev since localhost isn't HTTPS — browsers will silently reject the cookie otherwise. Confidence: 0.75
 - Verify Cloudflare Access JWT tokens using `jose` (`jwtVerify` + `createRemoteJWKSet`) with the `Cf-Access-Jwt-Assertion` header and your team domain's JWKS endpoint (`/cdn-cgi/access/certs`), rather than trusting unverified headers like `cf-access-authenticated-user-email`. Configure `issuer` to your team domain and `audience` to your Access application audience tag. Confidence: 0.85
 - Use Cloudflare Email (Send Email binding) for transactional email sending instead of third-party services like Resend or MailChannels. Confidence: 0.50
 - Use `env.EMAIL.send({ to, from, subject, html, text })` with the Cloudflare SendEmail binding, typed as `SendEmail` in the `ExportedHandler` generics. Confidence: 0.60

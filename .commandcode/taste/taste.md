@@ -7,11 +7,7 @@
 - When checking whether a related record exists before skipping an operation, always verify against the actual D1 table (e.g., `db.select().from(accounts).where(...)`) rather than trusting a cached foreign key field stored in KV — KV can hold stale references to deleted D1 rows. Confidence: 0.70
 
 # auth
-
-- Accounts are created upon application verification — no separate registration flow or magic link login is needed when all users authenticate via Cloudflare Access. Confidence: 0.70
-- In dev mode, support `?as=email` query param or `x-dev-email` header to simulate Cloudflare Access authentication, gated behind `import.meta.env.DEV` so it's stripped in production. Confidence: 0.70
-- Group all user-facing authenticated routes under a `/my/*` base path (e.g., `/my/profile`, `/my/documents`) to simplify Cloudflare Access configuration, and redirect `/me` to `/my/profile`. Confidence: 0.70
-
+See [auth/taste.md](auth/taste.md)
 # brand
 
 See [brand/taste.md](brand/taste.md)
@@ -56,6 +52,7 @@ See [cloudflare/taste.md](cloudflare/taste.md)
 
 # security
 
+- Prevent user enumeration in login flows: when an email is submitted that doesn't match an existing account, silently succeed without sending an email — do NOT reveal that the account doesn't exist. The post-submit message should only say to check spam and verify the user has applied (with a link to /apply), never "account not found." Confidence: 0.75
 - Include `i.ytimg.com` in the `img-src` Content-Security-Policy directive when the project embeds YouTube videos. Confidence: 0.70
 - Include `images.lumacdn.com` and `cdn.lu.ma` in the `img-src` Content-Security-Policy directive when displaying Luma event cover images and host avatars. Confidence: 0.70
 - Auth-gate document downloads by verifying the requesting user's `accountId` from the session matches the document's `account_id` — return a clean 401 Response (no body, no text file download) if unauthenticated and 403 if accessing another user's documents. Confidence: 0.75

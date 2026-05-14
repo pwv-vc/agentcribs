@@ -32,7 +32,7 @@ export async function DocumentList({
     linkWithQuery(
       "/my/documents/:id",
       { id: docId },
-      import.meta.env.DEV && devEmail ? { as: devEmail } : undefined,
+      devEmail ? { as: devEmail } : undefined,
     );
 
   if (docs.length === 0) {

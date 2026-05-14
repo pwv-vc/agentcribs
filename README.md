@@ -114,7 +114,7 @@ The dev server runs on `http://localhost:5173` by default. For local testing of 
 
 ### Dev impersonation
 
-In local dev, you can impersonate any account by appending `?as=email` to the URL or setting the `x-dev-email` request header. This simulates Cloudflare Access authentication and resolves or creates the account in the local D1 database.
+In local dev, you can impersonate any account by appending `?as=email` to the URL or setting the `x-dev-email` request header. This bypasses the magic link login flow and directly hydrates the session from D1 (creating the account if needed).
 
 ```
 # Impersonate an account to view profile and documents
@@ -123,7 +123,7 @@ http://localhost:5173/my/documents?as=test@example.com
 http://localhost:5173/my/documents/doc_abc123?as=test@example.com
 ```
 
-The `?as=` param is automatically preserved on navigation links within profile and document pages so you stay authenticated throughout the session. This feature is gated behind `import.meta.env.DEV` — it's stripped in production builds.
+The `?as=` param is automatically preserved on navigation links within profile and document pages. This feature is gated behind `import.meta.env.DEV` — it's stripped in production builds.
 
 ### Resetting the local database
 
@@ -192,24 +192,25 @@ Application topics and playlists are managed via [Content Collections](https://w
 
 1. Create the KV namespace: `wrangler kv namespace create AGENTCRIBS_KV` (update `id` in `wrangler.jsonc`)
 2. Create the R2 bucket: `wrangler r2 bucket create agentcribs-applications`
-3. Create the 6 queues (names must match `wrangler.jsonc`):
+3. Create the 7 queues (names must match `wrangler.jsonc`):
    `wrangler queues create agentcribs-process-application`
    `wrangler queues create agentcribs-send-email`
    `wrangler queues create agentcribs-notifications`
    `wrangler queues create agentcribs-slack`
    `wrangler queues create agentcribs-dead-letter`
    `wrangler queues create agentcribs-backfill-accounts`
+   `wrangler queues create agentcribs-account-login`
 4. Create a [Workers AI Gateway](https://developers.cloudflare.com/ai-gateway/) — note the gateway name and generate an API key
 5. [Create a GitHub OAuth App](https://github.com/settings/developers) with the callback URL set to your `GITHUB_CALLBACK_URL`
 6. (Optional) Set up Slack notifications: Create a [Slack webhook](https://api.slack.com/messaging/webhooks) and set it as `SLACK_WEBHOOK_URL` secret
 
 ### Authentication
 
-The admin panel at `/admin/*` is protected by **Cloudflare One Access** in production. Cloudflare's Zero Trust proxy authenticates users and injects `cf-access-authenticated-user-email` and `cf-access-authenticated-user-id` headers, which the `cloudflareSessionMiddleware` reads to populate `ctx.session`.
+**Admin** (`/admin/*`) is protected by **Cloudflare One Access** in production. Cloudflare's Zero Trust proxy authenticates users and injects `cf-access-authenticated-user-email` headers, which the `cloudflareSessionMiddleware` reads to populate `ctx.session`. In dev mode, admin is unauthenticated.
 
-In local development (when `VITE_IS_DEV_SERVER` is set), the admin panel is unauthenticated and displays `"User"` as the session identity. A basic password-auth middleware (`requireAdminPassword`) is available in `src/app/middleware/auth/basic.ts` as a fallback but is not wired by default.
+**Applicant accounts** (`/my/*`) use **magic link login**. Users enter their email at `/login`, a one-time token is stored in KV (1hr TTL) and enqueued via `agentcribs-account-login` queue to send a sign-in email. Clicking the link sets a signed session cookie (via `defineDurableSession`) and redirects to `/my/profile`. Session middleware reads the cookie to hydrate account data from D1. Logout at `/logout` clears the session. If no account exists for the email, no email is sent — the same "check your email" page is shown to prevent account enumeration.
 
-Applicant verification uses two flows:
+Application verification uses two flows:
 
 - **GitHub OAuth** — verifies applicant identity via GitHub profile. Starts in `actions/github.ts`, handled by middleware at `/apply/github/callback`.
 - **Magic link email** — verifies applicant email ownership. A verification link is sent via the `agentcribs-send-email` queue, and the callback at `/apply/verify` validates the token.
@@ -217,5 +218,8 @@ Applicant verification uses two flows:
 ### Deploy
 
 ```bash
+pnpm release
+```
+sh
 pnpm release
 ```

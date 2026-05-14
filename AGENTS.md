@@ -28,8 +28,9 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   │   │   ├── terms.tsx
 │   │   │   ├── privacy.tsx
 │   │   │   ├── not-found.tsx
-│   │   │   ├── profile.tsx        # Applicant profile page (Cloudflare Access protected)
-│   │   │   ├── documents.tsx         # Applicant documents list (Cloudflare Access protected)
+│   │   │   ├── login.tsx             # Account magic-link login page
+│   │   │   ├── profile.tsx        # Applicant profile page (session cookie protected)
+│   │   │   ├── documents.tsx         # Applicant documents list (session cookie protected)
 │   │   │   ├── document-detail.tsx    # Document viewer — renders .md/.json inline, download button
 │   │   │   └── admin/         # Admin area authenticated using Cloudflare One Access in production
 │   │   │       ├── applications.tsx
@@ -58,7 +59,7 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   │   │   ├── github.ts      # GitHub OAuth flow
 │   │   │   ├── account.ts     # Account/profile actions, document upload
 │   │   │   └── queue.ts       # Queue handlers: process-application, send-email, notifications, slack, dead-letter
-│   │   ├── emails/            # Email templates (admin-notification, pending-review, accepted, rejected, magic-link)
+│   │   ├── emails/            # Email templates (admin-notification, pending-review, accepted, rejected, magic-link, account-login)
 │   │   ├── lib/               # ai.ts (AI Gateway), events.ts, formatters.ts, luma.ts, registration-code.ts, seo.ts
 │   │   ├── queries/           # Data fetching: application.ts, topics.ts
 │   │   ├── middleware/        # Route middleware

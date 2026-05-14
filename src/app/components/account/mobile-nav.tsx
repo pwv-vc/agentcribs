@@ -64,7 +64,7 @@ export function AccountMobileNav({ email, avatarUrl, isDev }: AccountMobileNavPr
               </a>
               {!isDev && (
                 <a
-                  href="/cdn-cgi/access/logout"
+                  href="/logout"
                   className="rounded-md px-3 py-2 text-sm font-medium text-text-secondary no-underline hover:bg-bg-muted hover:text-text"
                 >
                   Logout

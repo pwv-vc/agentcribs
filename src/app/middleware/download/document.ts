@@ -1,17 +1,22 @@
 import type { RouteMiddleware } from "rwsdk/router";
 import { env } from "cloudflare:workers";
 import { db } from "@/db/db";
-import { accounts, documents } from "@/db/schema";
+import { documents } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
+/**
+ * Handles document download at /my/documents/:id/download.
+ * Reads accountId from session (set by accountSessionMiddleware)
+ * and enforces ownership — only the owning account can download.
+ */
 export const handleDocumentDownload: RouteMiddleware = async ({
   ctx,
   params,
 }) => {
   const documentId = params.id;
-  const email = ctx.session?.email;
+  const accountId = ctx.session?.accountId;
 
-  if (!email) {
+  if (!accountId) {
     return new Response(null, { status: 401 });
   }
 
@@ -31,13 +36,8 @@ export const handleDocumentDownload: RouteMiddleware = async ({
     return new Response(null, { status: 404 });
   }
 
-  const [account] = await db
-    .select({ id: accounts.id })
-    .from(accounts)
-    .where(eq(accounts.email, email))
-    .limit(1);
-
-  if (!account || doc.account_id !== account.id) {
+  // Enforce ownership: only the document's owning account can download
+  if (doc.account_id !== accountId) {
     return new Response(null, { status: 403 });
   }
 

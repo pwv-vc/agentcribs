@@ -1,16 +1,16 @@
+import { DurableObject } from "cloudflare:workers";
+
 interface SessionData {
   accountId: string | null;
   applicationId: string | null;
 }
 
-export class UserSession implements DurableObject {
-  // Required by defineDurableSession which expects DurableObjectMethods (extends Rpc.DurableObjectBranded)
-  readonly __DURABLE_OBJECT_BRAND!: never;
-
+export class UserSession extends DurableObject<Env> {
   private storage: DurableObjectStorage;
   private session: SessionData | undefined;
 
-  constructor(state: DurableObjectState) {
+  constructor(state: DurableObjectState, env: Env) {
+    super(state, env);
     this.storage = state.storage;
   }
 

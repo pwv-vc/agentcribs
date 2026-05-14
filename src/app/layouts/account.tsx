@@ -57,7 +57,7 @@ export function AccountLayout({
             <div className="hidden md:flex items-center gap-2 pl-4 border-l border-border">
               {email ? (
                 <a
-                  href="/cdn-cgi/access/logout"
+                  href="/logout"
                   className="group flex items-center gap-2.5 no-underline"
                   title="Logout"
                 >
@@ -83,7 +83,7 @@ export function AccountLayout({
                 </a>
               ) : (
                 <a
-                  href="/cdn-cgi/access/login"
+                  href="/login"
                   className="flex items-center gap-2 text-xs text-text-secondary no-underline hover:text-text"
                 >
                   <span className="flex size-7 items-center justify-center rounded-full border border-border bg-bg-muted">

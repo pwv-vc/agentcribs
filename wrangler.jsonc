@@ -77,6 +77,10 @@
         "binding": "BACKFILL_ACCOUNTS_QUEUE",
         "queue": "agentcribs-backfill-accounts",
       },
+      {
+        "binding": "ACCOUNT_LOGIN_QUEUE",
+        "queue": "agentcribs-account-login",
+      },
     ],
     "consumers": [
       {
@@ -107,6 +111,11 @@
       },
       {
         "queue": "agentcribs-backfill-accounts",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5,
+      },
+      {
+        "queue": "agentcribs-account-login",
         "max_batch_size": 10,
         "max_batch_timeout": 5,
       },
