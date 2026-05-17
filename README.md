@@ -189,6 +189,20 @@ After uploading, trigger backfill from the admin accounts page or re-run backfil
 
 Application topics and playlists are managed via [Content Collections](https://www.content-collections.dev/). Markdown topic definitions live in `content/topics/` and JSON playlists in `content/playlist/`. The `@content-collections/vite` plugin generates typed data at build time, consumed by server queries in `src/app/queries/`.
 
+### Testing
+
+```bash
+# Run tests once
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+```
+
+Tests use [Vitest](https://vitest.dev/) with the `@cloudflare/vitest-pool-workers` pool for Cloudflare Workers environment simulation. Test files are located alongside source code using the pattern `src/**/*.test.{ts,tsx}`.
+
+The project includes tests for server actions and middleware that mock Cloudflare Workers bindings (KV, Queues, D1) to verify business logic in isolation.
+
 ### One-time Setup
 
 1. Create the KV namespace: `wrangler kv namespace create AGENTCRIBS_KV` (update `id` in `wrangler.jsonc`)

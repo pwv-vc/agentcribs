@@ -8,9 +8,20 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 - Build - `pnpm build`
 - Typecheck and wrangler checks - `pnpm check`
 - Generate Cloudflare types - `pnpm generate`
+- **Tests - `pnpm test`** (watch mode: `pnpm test:watch`)
 - D1 migrations - `pnpm migrate:new` (generate), `pnpm migrate:dev` (apply local), `pnpm migrate:prod` (apply remote)
 - Deploy staging - `pnpm deploy:staging`
 - Deploy production - `pnpm deploy:production`
+
+## Testing
+
+The project uses **Vitest** with `@cloudflare/vitest-pool-workers` to test code in a Cloudflare Workers-like environment. Tests are co-located with source files using the pattern `src/**/*.test.{ts,tsx}`.
+
+Configuration is in `vitest.config.ts`:
+- Path alias `@` → `./src`
+- Test discovery pattern: `src/**/*.test.{ts,tsx}`
+
+Tests typically mock Cloudflare bindings (KV, Queues, D1) to test server actions and middleware logic in isolation.
 
 ## Project Structure
 

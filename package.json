@@ -22,6 +22,8 @@
     "generate": "rw-scripts ensure-env",
     "check": "npm run generate && npm run types",
     "types": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "migrate:new": "drizzle-kit generate",
     "migrate:dev": "wrangler d1 migrations apply DB --local",
     "migrate:prod": "wrangler d1 migrations apply DB --remote"
