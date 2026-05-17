@@ -521,6 +521,11 @@ export async function handleBackfillAccount(message: Message): Promise<void> {
   );
 }
 
+/** Enqueue a single application for backfill processing. */
+export async function enqueueBackfillJob(applicationId: string): Promise<void> {
+  await env.BACKFILL_ACCOUNTS_QUEUE.send({ applicationId });
+}
+
 /** Enqueue all applications without accounts for backfill processing. */
 export async function enqueueBackfillJobs(): Promise<number> {
   const KV_PREFIX = "app:";

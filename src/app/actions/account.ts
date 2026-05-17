@@ -4,9 +4,9 @@ import { serverAction, requestInfo, ErrorResponse } from "rwsdk/worker";
 import { env } from "cloudflare:workers";
 import { db } from "@/db/db";
 import { accounts, profiles, documents } from "@/db/schema";
-import { kvKey, r2Meta } from "@/app/actions/application";
+import { kvKey, r2Meta, emailIndexKey } from "@/app/actions/application";
 import { eq } from "drizzle-orm";
-import { enqueueBackfillJobs } from "@/app/actions/queue";
+import { enqueueBackfillJob, enqueueBackfillJobs } from "@/app/actions/queue";
 import { scanAndImportDirectoryDocs } from "@/app/lib/document-import";
 import { getAppUrl } from "@/app/lib/url";
 
@@ -30,7 +30,7 @@ export const initiateAccountLogin = serverAction(async (formData: FormData) => {
     return new Response("Email is required.", { status: 400 });
   }
 
-  // Check if account exists — if not, silently redirect without sending email
+  // Check if account exists — if not, check for an application to auto-backfill
   const [account] = await db
     .select({ id: accounts.id })
     .from(accounts)
@@ -38,11 +38,19 @@ export const initiateAccountLogin = serverAction(async (formData: FormData) => {
     .limit(1);
 
   if (!account) {
-    // No account — don't reveal this, just show the generic "check email" page
-    return new Response(null, {
-      status: 302,
-      headers: { Location: "/login?sent=true" },
-    });
+    // No account yet — check if there's a prior application for this email
+    const applicationId = await env.AGENTCRIBS_KV.get(emailIndexKey(email));
+    if (applicationId) {
+      // Auto-backfill: create account and enqueue profile/document import
+      await db.insert(accounts).values({ email });
+      await enqueueBackfillJob(applicationId);
+    } else {
+      // No account and no application — silently succeed without revealing
+      return new Response(null, {
+        status: 302,
+        headers: { Location: "/login?sent=true" },
+      });
+    }
   }
 
   // Generate token and store in KV with 15-minute TTL

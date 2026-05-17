@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.33.2",
+    "@cloudflare/vitest-pool-workers": "^0.16.5",
     "@cloudflare/workers-types": "4.20260426.1",
     "@content-collections/core": "^0.15.0",
     "@content-collections/markdown": "^0.1.4",
@@ -60,8 +61,10 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "drizzle-kit": "^0.31.10",
+    "rwsdk-community": "^0.1.2",
     "typescript": "6.0.3",
     "vite": "~7.3.2",
+    "vitest": "^4.1.6",
     "wrangler": "4.85.0",
     "zod": "^4.3.6"
   },

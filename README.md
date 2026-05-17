@@ -9,7 +9,8 @@ Apply at [agentcribs.com](https://agentcribs.com/).
 ## Features
 
 - **Application submission** — multi-topic application form with AI-powered story summarization, GitHub OAuth identity verification, and magic-link email verification
-- **Applicant accounts** — accounts auto-created on email verification, Cloudflare Access-protected profile and documents pages (JWT-verified)
+- **Applicant accounts** — accounts auto-created on email verification, session-cookie-protected profile and documents pages
+- **Auto-backfill on login** — when a prior applicant logs in with no account yet, the system creates one automatically and enqueues profile/document import
 - **Document uploads** — applicants can upload dossiers and other documents, stored in R2 with D1 metadata. Supports dossier, matches, and cards document types
 - **Document viewer** — view documents inline: markdown rendered with typography, JSON pretty-printed, download available for all types
 - **Admin dashboard** — metrics, topic/location leaderboards, AI analysis of how-heard and story themes
@@ -208,7 +209,11 @@ Application topics and playlists are managed via [Content Collections](https://w
 
 **Admin** (`/admin/*`) is protected by **Cloudflare One Access** in production. Cloudflare's Zero Trust proxy authenticates users and injects `cf-access-authenticated-user-email` headers, which the `cloudflareSessionMiddleware` reads to populate `ctx.session`. In dev mode, admin is unauthenticated.
 
-**Applicant accounts** (`/my/*`) use **magic link login**. Users enter their email at `/login`, a one-time token is stored in KV (1hr TTL) and enqueued via `agentcribs-account-login` queue to send a sign-in email. Clicking the link sets a signed session cookie (via `defineDurableSession`) and redirects to `/my/profile`. Session middleware reads the cookie to hydrate account data from D1. Logout at `/logout` clears the session. If no account exists for the email, no email is sent — the same "check your email" page is shown to prevent account enumeration.
+**Applicant accounts** (`/my/*`) use **magic link login**. Users enter their email at `/login`, the system looks up the account in D1:
+
+- **Account exists** — generates a one-time token (KV, 15-min TTL), enqueues a sign-in email via the `agentcribs-account-login` queue. Clicking the link sets a signed session cookie (via `defineDurableSession`) and redirects to `/my/profile`.
+- **No account, but prior application** — checks KV email index (`email:user@example.com` → `applicationId`). If an application exists, creates the account in D1 immediately, enqueues a backfill job (`agentcribs-backfill-accounts` queue) to import the profile and documents from KV/R2, then sends the magic link. By the time the user clicks the link, their account, profile, and documents are ready.
+- **No account and no application** — silently redirects to the "check your email" page without sending anything. This prevents account enumeration — an attacker can't probe which emails have accounts.
 
 Application verification uses two flows:
 
