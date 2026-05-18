@@ -12,7 +12,7 @@ import {
 } from "@/app/lib/formatters";
 import { Seo } from "@/app/components/seo";
 import { CtaButton } from "@/app/shared/cta-button";
-import { link } from "@/app/shared/links";
+import { link, linkWithQuery } from "@/app/shared/links";
 import { EventDetailSection } from "@/app/components/events/event-detail-section";
 import { LumaMapLink } from "@/app/components/events/luma-map-link";
 import { HostCard } from "@/app/components/events/host-card";
@@ -80,12 +80,12 @@ export async function AdminEventDetail({
   const GUEST_LIMIT = 30;
 
   const buildGuestHref = (overrides: Record<string, string>) => {
-    const p = new URLSearchParams(url.searchParams);
+    const query = Object.fromEntries(url.searchParams) as Record<string, string>;
     for (const [k, v] of Object.entries(overrides)) {
-      if (v) p.set(k, v);
-      else p.delete(k);
+      if (v) query[k] = v;
+      else delete query[k];
     }
-    return link("/admin/events/:id", { id }) + "?" + p.toString();
+    return linkWithQuery("/admin/events/:id", { id }, query);
   };
 
   try {

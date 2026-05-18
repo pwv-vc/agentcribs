@@ -1,4 +1,7 @@
 # Rwsdk
+- Call `defineDurableSession()` directly in the worker entry point (`src/worker.tsx`) alongside the DO class export — do NOT define it in a separate shared module (e.g., `src/app/lib/session.ts`), because the RPC mechanism requires the Durable Object class to be exported from the same module as the `defineDurableSession` call. Confidence: 0.85
+- When using `defineDurableSession`, import `DurableObject` from `\"cloudflare:workers\"` (NOT the global interface) and use `extends DurableObject<Env>` — the class from `\"cloudflare:workers\"` already implements `Rpc.DurableObjectBranded` so the `__DURABLE_OBJECT_BRAND` marker is redundant. The `@cloudflare/workers-types` global `interface DurableObject` cannot be extended. Confidence: 0.85
+- Durable Object classes exported from `worker.tsx` for use with `defineDurableSession` must `extends DurableObject` from `\"cloudflare:workers\"` (not `implements` the global interface) for RPC to work at runtime — the Workers runtime checks the prototype chain and rejects `implements`. Confidence: 0.85
 - Use `ctx` (context object) for flash messages instead of cookies — populate `ctx.flash` in middleware and read it in page components. Confidence: 0.85
 - RedwoodSDK and rwsdk refer to the same framework; use them interchangeably. Confidence: 1.00
 - The npm package is published as `rwsdk`. Confidence: 1.00
@@ -185,3 +188,7 @@
 - Store pagination page size as a named constant at the top of the component (e.g., `const PAGE_SIZE = 25`) for testability. Confidence: 0.70
 - Structure admin table rows with a leftmost status pill column, then a top line of key info (name, email, dates), and secondary info on a separate line below. Confidence: 0.70
 - serverAction throws an error on non-ok responses (e.g., status 400) rather than returning the Response object — use try/catch to handle validation errors, not `res.ok` checks. Confidence: 0.70
+- The rwsdk `link()` function only accepts `(path, params?)` for route parameter interpolation — query string params must be appended separately (manually or via a `linkWithQuery` helper using URLSearchParams), not passed as a third argument. Confidence: 0.85
+- Use a `linkWithQuery(path, params?, query?)` helper in `src/app/shared/links.ts` that wraps `link()` and appends query params via `URLSearchParams` for proper URI encoding, rather than manual string concatenation with `encodeURIComponent`. Confidence: 0.75
+- Keep layout components as server components — extract interactive parts (mobile nav, toggles) into separate `"use client"` component files rather than making the whole layout a client component. Confidence: 0.70
+- Compute async data (like Gravatar URLs) in middleware and store on `ctx.session` rather than making layout components async, since layouts that import client components cannot be async without triggering "async Client Component" errors. Confidence: 0.60

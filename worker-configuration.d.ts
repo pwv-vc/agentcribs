@@ -10,11 +10,15 @@ declare namespace Cloudflare {
     AGENTCRIBS_KV: KVNamespace;
     AGENTCRIBS_R2: R2Bucket;
     SEND_EMAIL: SendEmail;
+    DB: D1Database;
+    USER_SESSION_DO: DurableObjectNamespace<import("./src/sessions/UserSession").UserSession>;
     PROCESS_APPLICATION_QUEUE: Queue;
     SEND_EMAIL_QUEUE: Queue;
     NOTIFICATION_QUEUE: Queue;
     SLACK_QUEUE: Queue;
     DEAD_LETTER_QUEUE: Queue;
+    BACKFILL_ACCOUNTS_QUEUE: Queue;
+    ACCOUNT_LOGIN_QUEUE: Queue;
     ADMIN_PASSWORD: string;
     ADMIN_COOKIE_NAME: string;
     GITHUB_CLIENT_ID: string;
@@ -28,6 +32,8 @@ declare namespace Cloudflare {
     CF_AIG_TOKEN: string;
     C15T_BACKEND_URL: string;
     LUMA_API_SECRET: string;
+    CF_ACCESS_TEAM_DOMAIN: string;
+    CF_ACCESS_AUD: string;
   }
   interface ProductionEnv extends Env {}
   interface StagingEnv extends Env {}

@@ -2,7 +2,7 @@ import { queryApplications } from "@/app/queries/application";
 import { ApplicationsTable } from "@/app/shared/applications-table";
 import { Seo } from "@/app/components/seo";
 import { DownloadDropdown } from "@/app/components/admin/download-dropdown";
-import { link } from "@/app/shared/links";
+import { linkWithQuery } from "@/app/shared/links";
 import type { ApplicationStatus } from "@/app/actions/application";
 import {
   ListIcon,
@@ -43,13 +43,12 @@ export const AdminApplications = async ({
   ] as const;
 
   const buildHref = (overrides: Record<string, string>) => {
-    const p = new URLSearchParams(url.searchParams);
+    const query = Object.fromEntries(url.searchParams) as Record<string, string>;
     for (const [k, v] of Object.entries(overrides)) {
-      if (v) p.set(k, v);
-      else p.delete(k);
+      if (v) query[k] = v;
+      else delete query[k];
     }
-    const qs = p.toString();
-    return qs ? `${link("/admin/applications")}?${qs}` : link("/admin/applications");
+    return linkWithQuery("/admin/applications", undefined, query);
   };
 
   return (

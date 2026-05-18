@@ -17,3 +17,6 @@ export { TimerIcon } from "./timer";
 export { FlagIcon } from "./flag";
 export { WarningIcon } from "./warning";
 export { SparkleIcon } from "./sparkle";
+export { CardsIcon } from "./cards";
+export { HandshakeIcon } from "./handshake";
+export { FileStackIcon } from "./file-stack";

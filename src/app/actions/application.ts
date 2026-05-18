@@ -56,6 +56,7 @@ export interface ApplicationData {
   verifiedAt?: string;
   location?: string;
   howHeard?: string;
+  accountId?: string;
 }
 
 export interface ApplicationPayload {
@@ -217,7 +218,7 @@ export const submitApplication = serverAction(async (formData: FormData) => {
         env.AGENTCRIBS_KV.put(
           `verify:${token}`,
           JSON.stringify({ applicationId: id, email, createdAt: now }),
-          { expirationTtl: 3600 },
+          { expirationTtl: 900 },
         ),
       ]);
     } else {
@@ -245,7 +246,7 @@ export const submitApplication = serverAction(async (formData: FormData) => {
         env.AGENTCRIBS_KV.put(
           `verify:${token}`,
           JSON.stringify({ applicationId: id, email, createdAt: now }),
-          { expirationTtl: 3600 },
+          { expirationTtl: 900 },
         ),
       ]);
     }
@@ -273,7 +274,7 @@ export const submitApplication = serverAction(async (formData: FormData) => {
       env.AGENTCRIBS_KV.put(
         `verify:${token}`,
         JSON.stringify({ applicationId: id, email, createdAt: now }),
-        { expirationTtl: 3600 },
+        { expirationTtl: 900 },
       ),
     ]);
   }
@@ -415,7 +416,7 @@ export const resendVerificationEmail = serverAction(
     await env.AGENTCRIBS_KV.put(
       `verify:${token}`,
       JSON.stringify({ applicationId: id, email: app.email, createdAt: now }),
-      { expirationTtl: 3600 },
+      { expirationTtl: 900 },
     );
 
     await env.SEND_EMAIL_QUEUE.send({

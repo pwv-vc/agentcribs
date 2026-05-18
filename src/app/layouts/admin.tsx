@@ -6,7 +6,7 @@ export function AdminLayout({
   requestInfo,
 }: {
   children?: React.ReactNode;
-  requestInfo?: { ctx: { session?: { email: string; sub: string } } };
+  requestInfo?: { ctx: { session?: { email?: string; sub?: string } } };
 }) {
   const email = requestInfo?.ctx.session?.email;
   const isDev =
@@ -55,6 +55,12 @@ export function AdminLayout({
               className="text-sm font-medium text-text-secondary no-underline transition-colors hover:text-text"
             >
               Events
+            </a>
+            <a
+              href={link("/admin/accounts")}
+              className="text-sm font-medium text-text-secondary no-underline transition-colors hover:text-text"
+            >
+              Accounts
             </a>
             <a
               href="/"

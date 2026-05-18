@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 import {
   sendMagicLink,
+  sendAccountLoginMagicLink,
   sendPendingReviewEmail,
   sendAdminNotificationEmail,
   sendAcceptedEmail,
@@ -17,6 +18,10 @@ import type {
   ApplicationPayload,
 } from "@/app/actions/application";
 import { getAppUrl } from "@/app/lib/url";
+import { db } from "@/db/db";
+import { accounts, profiles, documents } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { scanAndImportDirectoryDocs } from "@/app/lib/document-import";
 
 function sendEmailFrom(): EmailAddress {
   if (env.SEND_EMAIL_FROM) {
@@ -108,6 +113,30 @@ export async function handleSendEmail(payload: {
   });
 
   console.log(`[queue/email] Magic link sent to ${email}`);
+}
+
+/**
+ * Queue consumer: sends account login magic link email.
+ * Enqueued from initiateAccountLogin server action.
+ */
+export async function handleAccountLoginMagicLink(payload: {
+  email: string;
+  token: string;
+}): Promise<void> {
+  const { email, token } = payload;
+
+  console.log(`[queue/account-login] Sending magic link to ${email}`);
+
+  const baseUrl = getAppUrl(env.APP_URL);
+  await sendAccountLoginMagicLink({
+    sendEmail: env.SEND_EMAIL,
+    from: sendEmailFrom(),
+    baseUrl,
+    email,
+    token,
+  });
+
+  console.log(`[queue/account-login] Magic link sent to ${email}`);
 }
 
 export async function handleSendNotification(payload: {
@@ -372,4 +401,185 @@ export async function processRetries(
     }
     message.ack();
   }
+}
+
+/** Queue consumer: backfill a single application into an account. */
+export async function handleBackfillAccount(message: Message): Promise<void> {
+  const payload = message.body as { applicationId: string };
+  const { applicationId } = payload;
+
+  console.log(
+    `[queue/backfill] Starting backfill for application ${applicationId}`,
+  );
+
+  const appRaw = await env.AGENTCRIBS_KV.get(kvKey(applicationId));
+  if (!appRaw) {
+    console.error(
+      `[queue/backfill] Application not found in KV: ${applicationId}`,
+    );
+    throw new Error(`Application not found: ${applicationId}`);
+  }
+
+  const app = JSON.parse(appRaw);
+  if (app.accountId) {
+    const [accountExists] = await db
+      .select({ id: accounts.id })
+      .from(accounts)
+      .where(eq(accounts.id, app.accountId))
+      .limit(1);
+    if (accountExists) {
+      console.log(
+        `[queue/backfill] Skipping ${applicationId} — already has account ${app.accountId}`,
+      );
+      return;
+    }
+    console.log(
+      `[queue/backfill] Stale accountId ${app.accountId} on ${applicationId} — account doesn't exist in D1, proceeding with backfill`,
+    );
+  }
+
+  const email = app.email;
+  const name = `${app.firstName} ${app.lastName}`;
+
+  const [existing] = await db
+    .select({ id: accounts.id })
+    .from(accounts)
+    .where(eq(accounts.email, email))
+    .limit(1);
+
+  let accountId: string;
+  if (existing) {
+    accountId = existing.id;
+    console.log(
+      `[queue/backfill] Found existing account ${accountId} for ${email}`,
+    );
+  } else {
+    const [created] = await db
+      .insert(accounts)
+      .values({ email })
+      .returning({ id: accounts.id });
+    accountId = created.id;
+    console.log(
+      `[queue/backfill] Created account ${accountId} for ${email}`,
+    );
+  }
+
+  const now = new Date().toISOString();
+  await db
+    .insert(profiles)
+    .values({
+      account_id: accountId,
+      first_name: app.firstName ?? null,
+      last_name: app.lastName ?? null,
+      github_handle: app.githubHandle ?? null,
+      github_id: app.githubId ?? null,
+      avatar_url: app.githubAvatarUrl ?? null,
+      updated_at: now,
+    })
+    .onConflictDoUpdate({
+      target: profiles.account_id,
+      set: {
+        first_name: app.firstName ?? null,
+        last_name: app.lastName ?? null,
+        github_handle: app.githubHandle ?? null,
+        github_id: app.githubId ?? null,
+        avatar_url: app.githubAvatarUrl ?? null,
+        updated_at: now,
+      },
+    });
+
+  app.accountId = accountId;
+  app.updatedAt = now;
+  const serialized = JSON.stringify(app);
+  const docR2Key = `accounts/${accountId}/documents/${applicationId}.json`;
+
+  await Promise.all([
+    env.AGENTCRIBS_KV.put(kvKey(applicationId), serialized),
+    env.AGENTCRIBS_R2.put(
+      `applications/${applicationId}.json`,
+      serialized,
+      r2Meta(app),
+    ),
+    env.AGENTCRIBS_R2.put(docR2Key, serialized, {
+      httpMetadata: { contentType: "application/json" },
+    }),
+    db.insert(documents).values({
+      account_id: accountId,
+      application_id: applicationId,
+      document_type: "application",
+      filename: `application-${applicationId}.json`,
+      content_type: "application/json",
+      size_bytes: new TextEncoder().encode(serialized).length,
+      r2_key: docR2Key,
+    }),
+  ]);
+
+  await scanAndImportDirectoryDocs(applicationId, accountId);
+
+  console.log(
+    `[queue/backfill] Done: ${applicationId} → account ${accountId}`,
+  );
+}
+
+/** Enqueue a single application for backfill processing. */
+export async function enqueueBackfillJob(applicationId: string): Promise<void> {
+  await env.BACKFILL_ACCOUNTS_QUEUE.send({ applicationId });
+}
+
+/** Enqueue all applications without accounts for backfill processing. */
+export async function enqueueBackfillJobs(): Promise<number> {
+  const KV_PREFIX = "app:";
+  const list = await env.AGENTCRIBS_KV.list({ prefix: KV_PREFIX });
+
+  console.log(
+    `[queue/backfill] KV list returned ${list.keys.length} keys with prefix "${KV_PREFIX}"`,
+  );
+
+  if (list.keys.length === 0) return 0;
+
+  const results = await Promise.all(
+    list.keys.map((key) => env.AGENTCRIBS_KV.get(key.name)),
+  );
+
+  const allApps = results
+    .filter((r): r is string => r !== null)
+    .map((r) => JSON.parse(r));
+
+  const existingAccountRows = await db
+    .select({ id: accounts.id })
+    .from(accounts)
+    .all();
+  const existingAccountIds = new Set(existingAccountRows.map((a) => a.id));
+
+  const needsBackfill = (app: { accountId?: string }) =>
+    !app.accountId || !existingAccountIds.has(app.accountId);
+
+  const withoutAccounts = allApps.filter(
+    (a: { accountId?: string }) => !a.accountId,
+  ).length;
+  const withStaleRefs = allApps.filter(
+    (a: { accountId?: string }) => a.accountId && !existingAccountIds.has(a.accountId),
+  ).length;
+
+  console.log(
+    `[queue/backfill] Fetched ${allApps.length} applications, ${withoutAccounts} without accounts, ${withStaleRefs} with stale account refs`,
+  );
+
+  const toBackfill = allApps.filter(needsBackfill);
+
+  console.log(
+    `[queue/backfill] Enqueuing ${toBackfill.length} applications for backfill`,
+  );
+
+  for (const app of toBackfill) {
+    await env.BACKFILL_ACCOUNTS_QUEUE.send({
+      applicationId: app.id,
+    });
+  }
+
+  console.log(
+    `[queue/backfill] Enqueued ${toBackfill.length} backfill jobs`,
+  );
+
+  return toBackfill.length;
 }

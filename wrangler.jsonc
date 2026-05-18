@@ -15,10 +15,29 @@
     "remote": true,
   },
   "vars": {},
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "agentcribs-db",
+      "database_id": "b2c919e9-4659-474c-9a3e-c73b3a1a5514",
+      "migrations_dir": "drizzle",
+    },
+  ],
   "r2_buckets": [
     {
       "bucket_name": "agentcribs-applications",
       "binding": "AGENTCRIBS_R2",
+    },
+  ],
+  "durable_objects": {
+    "bindings": [
+      { "name": "USER_SESSION_DO", "class_name": "UserSession" },
+    ],
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["UserSession"],
     },
   ],
   "kv_namespaces": [
@@ -54,6 +73,14 @@
         "binding": "DEAD_LETTER_QUEUE",
         "queue": "agentcribs-dead-letter",
       },
+      {
+        "binding": "BACKFILL_ACCOUNTS_QUEUE",
+        "queue": "agentcribs-backfill-accounts",
+      },
+      {
+        "binding": "ACCOUNT_LOGIN_QUEUE",
+        "queue": "agentcribs-account-login",
+      },
     ],
     "consumers": [
       {
@@ -82,6 +109,16 @@
         "max_batch_timeout": 5,
         "max_retries": 0,
       },
+      {
+        "queue": "agentcribs-backfill-accounts",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5,
+      },
+      {
+        "queue": "agentcribs-account-login",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5,
+      },
     ],
   },
   "secrets": {
@@ -99,6 +136,8 @@
       "CF_AIG_TOKEN",
       "LUMA_API_SECRET",
       "C15T_BACKEND_URL",
+      "CF_ACCESS_TEAM_DOMAIN",
+      "CF_ACCESS_AUD",
     ],
   },
   // ---- Environments ----

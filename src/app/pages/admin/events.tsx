@@ -1,7 +1,7 @@
 import { getLumaClient } from "@/app/lib/luma";
 import { EventsTable } from "@/app/shared/events-table";
 import { Seo } from "@/app/components/seo";
-import { link } from "@/app/shared/links";
+import { linkWithQuery } from "@/app/shared/links";
 
 export const AdminEvents = async ({
   request,
@@ -23,12 +23,12 @@ export const AdminEvents = async ({
     });
 
     const buildHref = (overrides: Record<string, string>) => {
-      const p = new URLSearchParams(url.searchParams);
+      const query = Object.fromEntries(url.searchParams) as Record<string, string>;
       for (const [k, v] of Object.entries(overrides)) {
-        if (v) p.set(k, v);
-        else p.delete(k);
+        if (v) query[k] = v;
+        else delete query[k];
       }
-      return link("/admin/events") + "?" + p.toString();
+      return linkWithQuery("/admin/events", undefined, query);
     };
 
     return (

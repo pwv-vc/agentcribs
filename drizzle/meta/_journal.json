@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1778764402349,
+      "tag": "0000_lethal_george_stacy",
+      "breakpoints": true
+    }
+  ]
+}

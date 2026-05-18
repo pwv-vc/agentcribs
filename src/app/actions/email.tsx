@@ -4,6 +4,9 @@ import "react-email";
 import { render } from "react-email";
 
 import MagicLinkEmail, { magicLinkText } from "@/app/emails/magic-link";
+import AccountLoginEmail, {
+  accountLoginText,
+} from "@/app/emails/account-login";
 import PendingReviewEmail, {
   pendingReviewText,
 } from "@/app/emails/pending-review";
@@ -157,6 +160,30 @@ export async function sendAcceptedEmail({
         eventUrl={eventUrl}
       />,
     ),
+  });
+}
+
+export async function sendAccountLoginMagicLink({
+  sendEmail,
+  from,
+  baseUrl,
+  email,
+  token,
+}: {
+  sendEmail: SendEmail;
+  from: string | EmailAddress;
+  baseUrl: string;
+  email: string;
+  token: string;
+}): Promise<void> {
+  const verifyUrl = `${baseUrl}/login/verify?token=${token}`;
+
+  await sendEmail.send({
+    from,
+    to: email,
+    subject: "Sign in to AgentCribs",
+    text: accountLoginText({ verifyUrl }),
+    html: await render(<AccountLoginEmail verifyUrl={verifyUrl} />),
   });
 }
 

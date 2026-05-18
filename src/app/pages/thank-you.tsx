@@ -20,7 +20,7 @@ export const ThankYou = () => {
       <p className="mt-5 text-base leading-relaxed text-text-secondary">
         Open the email titled "Final step for your AgentCribs application" and
         click the verification link. That confirms your email address and makes
-        your application visible to our review team. The link expires in 1 hour.
+        your application visible to our review team. The link expires in 15 minutes.
       </p>
       <p className="mt-5 text-base leading-relaxed text-text-secondary">
         If you do not see it, check your spam folder. If you still need help,

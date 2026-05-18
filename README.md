@@ -6,6 +6,18 @@ AgentCribs began as a private gathering of PWV founders and close friends sharin
 
 Apply at [agentcribs.com](https://agentcribs.com/).
 
+## Features
+
+- **Application submission** — multi-topic application form with AI-powered story summarization, GitHub OAuth identity verification, and magic-link email verification
+- **Applicant accounts** — accounts auto-created on email verification, session-cookie-protected profile and documents pages
+- **Auto-backfill on login** — when a prior applicant logs in with no account yet, the system creates one automatically and enqueues profile/document import
+- **Document uploads** — applicants can upload dossiers and other documents, stored in R2 with D1 metadata. Supports dossier, matches, and cards document types
+- **Document viewer** — view documents inline: markdown rendered with typography, JSON pretty-printed, download available for all types
+- **Admin dashboard** — metrics, topic/location leaderboards, AI analysis of how-heard and story themes
+- **Admin application review** — filterable applications table, accept/reject workflow, email notifications
+- **Account management** — admin `/admin/accounts` page to list accounts, backfill from existing applications, bulk backfill with confirmation
+- **Event integration** — Luma event listing and guest management
+
 ## PWV (Preston-Werner Ventures)
 
 [PWV](https://www.pwv.com/about) is:
@@ -48,13 +60,17 @@ The worker requires these bindings (configured in `wrangler.jsonc`):
 | `NOTIFICATION_QUEUE`        | Queue        | Send pending-review/accepted/rejected emails + enqueue Slack              |
 | `SLACK_QUEUE`               | Queue        | Post notifications to Slack webhook                                       |
 | `DEAD_LETTER_QUEUE`         | Queue        | Capture failed queue messages for debugging                               |
+| `BACKFILL_ACCOUNTS_QUEUE`   | Queue        | Backfill accounts: create accounts from applications, import documents    |
+| `DB`                        | D1 Database  | Relational data: accounts, profiles, documents (Drizzle ORM)              |
+| `USER_SESSION_DO`           | Durable Obj  | RedwoodSDK session management (signed cookies via Durable Object)         |
 
-The worker defines 5 queues:
+The worker defines 6 queues:
 
 - **`agentcribs-process-application`** — backup to R2, set email index, enqueue magic link
 - **`agentcribs-send-email`** — send magic link verification email
 - **`agentcribs-notifications`** — send pending-review/accepted/rejected emails + enqueue Slack
 - **`agentcribs-slack`** — post notifications to Slack webhook
+- **`agentcribs-backfill-accounts`** — scan R2 directories for dossier/matches/cards files matching application ULIDs and create document records
 - **`agentcribs-dead-letter`** — capture failed messages from other queues (no retries)
 
 ### Required Secrets
@@ -75,6 +91,8 @@ Set these via `wrangler secret put <NAME>`:
 | `AI_GATEWAY_NAME`       | Name of your Workers AI Gateway (e.g. `agentcribs-ai-gateway`)                        |
 | `CF_AIG_TOKEN`          | AI Gateway API token — generate via Cloudflare dashboard under AI Gateway → API Keys  |
 | `LUMA_API_SECRET`       | Luma API secret for event integration                                                 |
+| `CF_ACCESS_TEAM_DOMAIN` | Cloudflare Access team domain (e.g. `https://your-team.cloudflareaccess.com`)         |
+| `CF_ACCESS_AUD`         | Cloudflare Access application audience tag                                           |
 
 ### Local Development
 
@@ -85,37 +103,133 @@ pnpm install
 # Generate worker type bindings
 pnpm generate
 
+# Generate and apply D1 migrations locally
+pnpm migrate:new
+pnpm migrate:dev
+
 # Start dev server
 pnpm dev
 ```
 
 The dev server runs on `http://localhost:5173` by default. For local testing of email and GitHub OAuth, copy `example.env` to `.dev.vars` and fill in the required secrets.
 
+### Dev impersonation
+
+In local dev, you can impersonate any account by appending `?as=email` to the URL or setting the `x-dev-email` request header. This bypasses the magic link login flow and directly hydrates the session from D1 (creating the account if needed).
+
+```
+# Impersonate an account to view profile and documents
+http://localhost:5173/my/profile?as=test@example.com
+http://localhost:5173/my/documents?as=test@example.com
+http://localhost:5173/my/documents/doc_abc123?as=test@example.com
+```
+
+The `?as=` param is automatically preserved on navigation links within profile and document pages. This feature is gated behind `import.meta.env.DEV` — it's stripped in production builds.
+
+### Resetting the local database
+
+To start with a clean D1 database (empty accounts, profiles, documents):
+
+```bash
+# Remove local D1 state
+rm -rf .wrangler/state/v3/d1
+
+# Remove drizzle metadata so it regenerates fresh
+rm -rf drizzle/meta drizzle/*.sql
+
+# Regenerate and apply
+pnpm migrate:new
+pnpm migrate:dev
+```
+
+This drops all local D1 data and recreates the tables from the current schema.
+
+### Bulk Uploading Documents to R2
+
+To bulk-associate dossier, matches, and cards files with applicant accounts, upload files to the R2 bucket in per-type directories. Files must be named with the application ULID prefix:
+
+```
+dossiers/{ULID}__Name.md
+matches/{ULID}__Name.md
+cards/{ULID}__Name.json
+applications/{ULID}__Name.json
+```
+
+The `{ULID}` prefix (first 26 chars before `__`) is used to look up the application and its associated account. When backfill runs (via admin `/admin/accounts` or the backfill queue), the system scans each directory for matching files and creates document records in D1.
+
+**Local dev — upload via wrangler CLI:**
+
+In local dev (`pnpm dev`), the R2 binding talks to the remote Cloudflare R2 bucket by default. Upload with:
+
+```bash
+wrangler r2 object put agentcribs-applications/dossiers/01KQHZRVWCE7P1S4T70Z1Z8XE2__David_Thyresson.md \
+  --file ./local-files/David_Thyresson.md
+```
+
+To use local R2 emulation (files stored on disk, no remote API calls), add
+`"local": true` to the R2 bucket entry in `wrangler.jsonc`, then use the
+`--local` flag with wrangler commands:
+
+```bash
+wrangler r2 object put agentcribs-applications/dossiers/... --file ./local/... --local
+```
+
+**Bulk upload a directory:**
+
+```bash
+for f in ./local-files/dossiers/*.md; do
+  name=$(basename "$f")
+  wrangler r2 object put "agentcribs-applications/dossiers/$name" --file "$f"
+done
+```
+
+After uploading, trigger backfill from the admin accounts page or re-run backfill for existing accounts to pick up the new documents. Duplicate filenames per user per type are silently skipped (enforced by a unique database constraint).
+
 ### Content
 
 Application topics and playlists are managed via [Content Collections](https://www.content-collections.dev/). Markdown topic definitions live in `content/topics/` and JSON playlists in `content/playlist/`. The `@content-collections/vite` plugin generates typed data at build time, consumed by server queries in `src/app/queries/`.
+
+### Testing
+
+```bash
+# Run tests once
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+```
+
+Tests use [Vitest](https://vitest.dev/) with the `@cloudflare/vitest-pool-workers` pool for Cloudflare Workers environment simulation. Test files are located alongside source code using the pattern `src/**/*.test.{ts,tsx}`.
+
+The project includes tests for server actions and middleware that mock Cloudflare Workers bindings (KV, Queues, D1) to verify business logic in isolation.
 
 ### One-time Setup
 
 1. Create the KV namespace: `wrangler kv namespace create AGENTCRIBS_KV` (update `id` in `wrangler.jsonc`)
 2. Create the R2 bucket: `wrangler r2 bucket create agentcribs-applications`
-3. Create the 5 queues (names must match `wrangler.jsonc`):
+3. Create the 7 queues (names must match `wrangler.jsonc`):
    `wrangler queues create agentcribs-process-application`
    `wrangler queues create agentcribs-send-email`
    `wrangler queues create agentcribs-notifications`
    `wrangler queues create agentcribs-slack`
    `wrangler queues create agentcribs-dead-letter`
+   `wrangler queues create agentcribs-backfill-accounts`
+   `wrangler queues create agentcribs-account-login`
 4. Create a [Workers AI Gateway](https://developers.cloudflare.com/ai-gateway/) — note the gateway name and generate an API key
 5. [Create a GitHub OAuth App](https://github.com/settings/developers) with the callback URL set to your `GITHUB_CALLBACK_URL`
 6. (Optional) Set up Slack notifications: Create a [Slack webhook](https://api.slack.com/messaging/webhooks) and set it as `SLACK_WEBHOOK_URL` secret
 
 ### Authentication
 
-The admin panel at `/admin/*` is protected by **Cloudflare One Access** in production. Cloudflare's Zero Trust proxy authenticates users and injects `cf-access-authenticated-user-email` and `cf-access-authenticated-user-id` headers, which the `cloudflareSessionMiddleware` reads to populate `ctx.session`.
+**Admin** (`/admin/*`) is protected by **Cloudflare One Access** in production. Cloudflare's Zero Trust proxy authenticates users and injects `cf-access-authenticated-user-email` headers, which the `cloudflareSessionMiddleware` reads to populate `ctx.session`. In dev mode, admin is unauthenticated.
 
-In local development (when `VITE_IS_DEV_SERVER` is set), the admin panel is unauthenticated and displays `"User"` as the session identity. A basic password-auth middleware (`requireAdminPassword`) is available in `src/app/middleware/auth/basic.ts` as a fallback but is not wired by default.
+**Applicant accounts** (`/my/*`) use **magic link login**. Users enter their email at `/login`, the system looks up the account in D1:
 
-Applicant verification uses two flows:
+- **Account exists** — generates a one-time token (KV, 15-min TTL), enqueues a sign-in email via the `agentcribs-account-login` queue. Clicking the link sets a signed session cookie (via `defineDurableSession`) and redirects to `/my/profile`.
+- **No account, but prior application** — checks KV email index (`email:user@example.com` → `applicationId`). If an application exists, creates the account in D1 immediately, enqueues a backfill job (`agentcribs-backfill-accounts` queue) to import the profile and documents from KV/R2, then sends the magic link. By the time the user clicks the link, their account, profile, and documents are ready.
+- **No account and no application** — silently redirects to the "check your email" page without sending anything. This prevents account enumeration — an attacker can't probe which emails have accounts.
+
+Application verification uses two flows:
 
 - **GitHub OAuth** — verifies applicant identity via GitHub profile. Starts in `actions/github.ts`, handled by middleware at `/apply/github/callback`.
 - **Magic link email** — verifies applicant email ownership. A verification link is sent via the `agentcribs-send-email` queue, and the callback at `/apply/verify` validates the token.
@@ -123,5 +237,8 @@ Applicant verification uses two flows:
 ### Deploy
 
 ```bash
+pnpm release
+```
+sh
 pnpm release
 ```
