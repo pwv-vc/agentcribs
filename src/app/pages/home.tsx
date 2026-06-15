@@ -4,10 +4,10 @@ import { FaqSection } from "@/app/components/faq-section";
 import { HeroSection } from "@/app/components/hero-section";
 import { JsonLd } from "@/app/components/json-ld";
 import { Seo } from "@/app/components/seo";
+import { getFeaturedEvent, type Event } from "@/app/queries/events";
 
-const schema = {
-  "@context": "https://schema.org",
-  "@graph": [
+function buildSchema(featuredEvent: Event | null): Record<string, unknown> {
+  const graph: Array<Record<string, unknown>> = [
     {
       "@type": "Organization",
       "@id": "https://pwv.agentcribs.com/#organization",
@@ -31,9 +31,9 @@ const schema = {
       "@type": "WebPage",
       "@id": "https://pwv.agentcribs.com/#webpage",
       url: "https://pwv.agentcribs.com/",
-      name: "AgentCribs | PWV Community + May 6 Event in San Francisco",
+      name: "AgentCribs | A Curated Community for Agentic Software Builders",
       description:
-        "AgentCribs is a curated PWV community for builders working with AI agents. Apply for May 6 in San Francisco with Peter Levine and Tom Preston-Werner.",
+        "AgentCribs is a curated PWV community for builders working with AI agents. Apply to join the waitlist for upcoming events and community opportunities.",
       inLanguage: "en-US",
       about: { "@id": "https://pwv.agentcribs.com/#organization" },
       primaryImageOfPage: {
@@ -49,49 +49,6 @@ const schema = {
       },
     },
     {
-      "@type": "Event",
-      "@id": "https://pwv.agentcribs.com/#may-6-event",
-      name: "PWV Founders + AgentCribs",
-      description:
-        "An evening gathering in San Francisco for PWV founders, seasoned developers, and selected builders focused on agentic software development, featuring a fireside chat between Peter Levine and Tom Preston-Werner.",
-      startDate: "2026-05-06",
-      url: "https://pwv.agentcribs.com/",
-      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-      eventStatus: "https://schema.org/EventScheduled",
-      location: {
-        "@type": "Place",
-        name: "San Francisco",
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "San Francisco",
-          addressRegion: "CA",
-          addressCountry: "US",
-        },
-      },
-      organizer: {
-        "@type": "Organization",
-        name: "PWV",
-        url: "https://pwv.com/",
-      },
-      potentialAction: {
-        "@type": "RegisterAction",
-        name: "Apply to join AgentCribs",
-        target: "https://pwv.agentcribs.com/apply",
-      },
-      performer: [
-        {
-          "@type": "Person",
-          name: "Peter Levine",
-          affiliation: { "@type": "Organization", name: "a16z" },
-        },
-        {
-          "@type": "Person",
-          name: "Tom Preston-Werner",
-          description: "GitHub co-founder and PWV founder/investor",
-        },
-      ],
-    },
-    {
       "@type": "FAQPage",
       "@id": "https://pwv.agentcribs.com/#faq",
       mainEntity: [
@@ -105,10 +62,10 @@ const schema = {
         },
         {
           "@type": "Question",
-          name: "Is the May 6 AgentCribs event public?",
+          name: "Are AgentCribs events public?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "No. The event is curated and space is limited. Apply to join AgentCribs first. Selected applicants will receive a separate registration invite.",
+            text: "No. AgentCribs events are curated and space is limited. Apply to join AgentCribs first. Selected applicants receive a separate registration invite for events.",
           },
         },
         {
@@ -116,41 +73,85 @@ const schema = {
           name: "How do applications work?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "AgentCribs is prioritizing invitations for the May 6 event right now. Selected applicants will receive a separate registration invite for the event. If you are not invited to the May 6 event, or if you cannot attend, you will remain on the list for future AgentCribs opportunities online and in person.",
+            text: "Applications are reviewed by our team. Selected applicants receive invitations to upcoming events and community opportunities. If you are not selected for a particular event, you remain on our list for future opportunities online and in person.",
           },
         },
         {
           "@type": "Question",
-          name: "What if I cannot attend on May 6?",
+          name: "What if I cannot attend an event?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "You should still apply. AgentCribs will follow up with selected applicants about future opportunities online and in person.",
+            text: "You should still apply. We will follow up with selected applicants about future AgentCribs opportunities online and in person.",
           },
         },
         {
           "@type": "Question",
-          name: "Where is the event?",
+          name: "Where are events held?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "The event is in San Francisco. Venue details will be shared with registered attendees.",
+            text: "Event locations vary. Venue details will be shared with registered attendees for each event.",
           },
         },
       ],
     },
-  ],
-};
+  ];
 
-export const Home = () => {
+  if (featuredEvent) {
+    const speakers = featuredEvent.speakers.map((s) => ({
+      "@type": "Person",
+      name: s.name,
+      ...(s.affiliation
+        ? { affiliation: { "@type": "Organization", name: s.affiliation } }
+        : {}),
+    }));
+
+    graph.push({
+      "@type": "Event",
+      "@id": `https://pwv.agentcribs.com/#${featuredEvent.id}-event`,
+      name: featuredEvent.title,
+      description: featuredEvent.content.slice(0, 300),
+      startDate: featuredEvent.date,
+      url: `https://pwv.agentcribs.com/community/events/${featuredEvent.id}`,
+      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+      eventStatus: "https://schema.org/EventScheduled",
+      location: {
+        "@type": "Place",
+        name: featuredEvent.location,
+      },
+      organizer: {
+        "@type": "Organization",
+        name: "PWV",
+        url: "https://pwv.com/",
+      },
+      potentialAction: {
+        "@type": "RegisterAction",
+        name: "Apply to join AgentCribs",
+        target: "https://pwv.agentcribs.com/apply",
+      },
+      performer: speakers,
+    });
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  };
+}
+
+export const Home = async () => {
+  const featuredEvent = await getFeaturedEvent();
+  const schema = buildSchema(featuredEvent);
+
   return (
     <>
       <Seo
-        title="PWV Community + May 6 Event in San Francisco"
-        description="AgentCribs is a curated PWV community for builders working with AI agents. Apply for May 6 in San Francisco with Peter Levine and Tom Preston-Werner."
+        title="AgentCribs | A Curated Community for Agentic Software Builders"
+        description="AgentCribs is a curated PWV community for builders working with AI agents. Apply to join the waitlist for upcoming events and community opportunities."
       />
       <JsonLd schema={schema} />
       <HeroSection />
-      <EventSection />
       <CommunitySection />
+      <EventSection event={featuredEvent} />
       <FaqSection />
     </>
   );

@@ -1,39 +1,57 @@
-export function EventSection() {
+import type { Event } from "@/app/queries/events";
+import { formatDateShort } from "@/app/lib/formatters";
+import { link } from "@/app/shared/links";
+import { FormatBadge, EventStatusPill } from "@/app/lib/event-badges";
+import { BrandLink } from "@/app/components/links";
+
+export function EventSection({ event }: { event: Event | null }) {
+  if (!event) return null;
+
   return (
     <section className="border-b border-border bg-bg">
       <div className="mx-auto grid max-w-[1040px] gap-10 px-6 py-16 sm:px-8 sm:py-24 lg:grid-cols-[300px_1fr]">
         <div>
-          <h2 className="text-4xl font-black leading-none sm:text-5xl">
-            May 6 in San Francisco
+          <span className="font-sans text-sm font-extrabold uppercase tracking-widest text-pwv-green">
+            Featured event
+          </span>
+          <h2 className="mt-2 text-4xl font-black leading-none sm:text-5xl">
+            {formatDateShort(event.date, event.timezone ?? "America/New_York")} in {event.location}
           </h2>
-          <p className="mt-5 text-xl font-black text-accent">
-            PWV Founders + AgentCribs Community
-          </p>
+          <p className="mt-5 text-xl font-black text-pwv-green">{event.title}</p>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <FormatBadge format={event.format} size="md" />
+            {event.status === "past" && <EventStatusPill status="past" size="md" />}
+          </div>
         </div>
 
         <div className="max-w-[680px] text-lg">
-          <p className="leading-relaxed text-text-secondary">
-            Join PWV founders, seasoned developers, and selected builders for an
-            evening about how people are actually building with agents today.
-          </p>
+          {event.speakers.length > 0 && (
+            <p className="leading-relaxed text-text-secondary">
+              Featuring{" "}
+              {event.speakers.map((s, i) => (
+                <span key={s.name}>
+                  {i > 0 && i === event.speakers.length - 1 && " and "}
+                  <strong className="text-text">{s.name}</strong>
+                  {s.affiliation && <> of {s.affiliation}</>}
+                  {i < event.speakers.length - 2 && ", "}
+                </span>
+              ))}
+            </p>
+          )}
 
-          <p className="mt-5 leading-relaxed">
-            The main draw is a fireside chat between{" "}
-            <strong className="text-text">Peter Levine</strong> of a16z and{" "}
-            <strong className="text-text">Tom Preston-Werner</strong>, GitHub
-            co-founder and PWV founder/investor.
-          </p>
+          <div className="mt-5 prose max-w-none leading-relaxed text-text-secondary">
+            <div dangerouslySetInnerHTML={{ __html: event.content }} />
+          </div>
 
-          <p className="mt-5 leading-relaxed text-text-secondary">
-            The evening will also include an update from the core AgentCribs
-            team, demos and discussion from people building with agents, and an
-            invitation to participate in ongoing collaboration.
+          <p className="mt-6">
+            <BrandLink href={link("/community/events/:id", { id: event.id })}>
+              View event details
+            </BrandLink>
+            <span className="mx-2 text-border">|</span>
+            <BrandLink href={link("/community/events")}>
+              All events
+            </BrandLink>
           </p>
-
-          <p className="mt-5 font-mono text-sm text-text-secondary">
-            Event details will be shared with registered attendees.
-          </p>
-
         </div>
       </div>
     </section>

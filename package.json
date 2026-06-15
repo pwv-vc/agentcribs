@@ -1,6 +1,6 @@
 {
   "name": "@pwv/agentcribs",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "AgentCribs — a curated PWV community for agentic software builders",
   "main": "index.js",
   "type": "module",
@@ -38,6 +38,7 @@
     "react-dom": "19.2.6",
     "react-email": "6.0.5",
     "react-server-dom-webpack": "19.2.6",
+    "react-youtube": "^10.1.0",
     "rwsdk": "1.2.5",
     "tailwindcss": "^4.2.4",
     "ulid": "^3.0.2"

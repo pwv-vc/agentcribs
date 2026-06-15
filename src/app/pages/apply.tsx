@@ -18,9 +18,8 @@ export const Apply = async () => {
           Apply to join AgentCribs
         </h1>
         <p className="mt-4 text-base leading-relaxed text-text-secondary">
-          Apply to join the curated AgentCribs community. Selected applicants
-          will receive consideration for the May 6 event in San Francisco
-          featuring Peter Levine and Tom Preston-Werner.
+          Apply to join the AgentCribs waitlist. When events are announced,
+          you'll receive registration invites and community opportunities.
         </p>
 
         <ApplyForm topics={topics} />

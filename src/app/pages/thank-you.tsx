@@ -1,5 +1,6 @@
 import { Seo } from "@/app/components/seo";
 import { CtaButton } from "@/app/shared/cta-button";
+import { InlineAccentLink } from "@/app/components/links";
 
 export const ThankYou = () => {
   return (
@@ -14,7 +15,7 @@ export const ThankYou = () => {
           There's one more step!
         </h1>
         <p className="mt-6 text-lg leading-relaxed">
-          Thanks for applying to join AgentCribs. We sent you an email with the
+          Thanks for applying to join the AgentCribs waitlist. We sent you an email with the
           final verification step for your application.
         </p>
         <p className="mt-5 text-base leading-relaxed text-text-secondary">
@@ -26,19 +27,20 @@ export const ThankYou = () => {
         <p className="mt-5 text-base leading-relaxed text-text-secondary">
           If you do not see it, check your spam folder. If you still need help,
           email{" "}
-          <a
+          <InlineAccentLink
             href="mailto:support@agentcribs.com"
-            className="font-medium text-accent underline decoration-border underline-offset-2 transition-colors hover:text-accent-hover"
+            variant="underlined"
+            className="font-medium"
           >
             support@agentcribs.com
-          </a>
+          </InlineAccentLink>
           .
         </p>
         <p className="mt-5 text-base leading-relaxed text-text-secondary">
-          If you're selected for the May 6 event in San Francisco, you'll
+          If you're selected from the waitlist for an upcoming event, you'll
           receive a separate registration invite with event details. If you
           can't attend in person or aren't selected this time, you'll remain on
-          our list for future AgentCribs opportunities.
+          the waitlist for future AgentCribs opportunities.
         </p>
         <div className="mt-12">
           <CtaButton href="/" label="&larr; Back to home" />

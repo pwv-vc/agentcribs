@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>AgentCribs - Checkup Report</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<style>
+		body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+		.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+		.report-section { border: 1px solid #222226; background: #0a0a0b; position: relative; }
+		.corner-box { position: absolute; width: 20px; height: 20px; border: 1px solid #222226; background: #000; }
+	</style>
+</head>
+<body class="bg-black text-[#fafafa]">
+	<main class="mx-auto w-full max-w-6xl px-5 py-8 md:px-10 md:py-12">
+		<header class="report-section mb-8 p-6 md:p-8">
+			<div class="corner-box left-0 top-0 -translate-x-1/2 -translate-y-1/2"></div>
+			<div class="corner-box right-0 top-0 translate-x-1/2 -translate-y-1/2"></div>
+			<div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+				<div>
+					<div class="mono mb-2 text-xs tracking-widest text-[#666]">// checkup</div>
+					<h1 class="text-4xl font-bold tracking-tight md:text-6xl">AgentCribs</h1>
+				</div>
+				<div class="mono text-left text-xs text-[#666] md:text-right">
+					<div>COMMANDCODE REPORT</div>
+					<div class="text-[#444]">2026-06-15</div>
+				</div>
+			</div>
+		</header>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="corner-box left-0 top-0 -translate-x-1/2 -translate-y-1/2"></div>
+			<div class="corner-box right-0 top-0 translate-x-1/2 -translate-y-1/2"></div>
+			<div class="grid gap-8 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+				<div>
+					<div class="mono mb-2 text-xs tracking-widest text-[#666]">// OVERALL</div>
+					<div class="flex items-baseline gap-2">
+						<div class="text-6xl font-bold tracking-tight md:text-7xl">49</div>
+						<div class="text-sm text-[#34d399]">&uarr;2</div>
+					</div>
+					<div class="mt-1 text-lg text-[#666]">/ 60</div>
+					<div class="mt-4 inline-flex border border-[#fbbf24]/30 bg-[#fbbf24]/10 px-3 py-1 text-sm text-[#fbbf24]">WATCH &mdash; Accessibility is critical</div>
+				</div>
+				<div>
+					<div class="mono mb-3 text-xs tracking-widest text-[#666]">// TL;DR</div>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Score improved +2 since prior checkup. Dark mode toggle touch target is now WCAG-compliant (44&times;44px). The CTA button uses <code class="text-[#ccc]">rounded-none</code>, a deliberate shape choice. Safe-area handling was already present but was previously flagged as missing &mdash; that's corrected now. Keyboard accessibility remains the blocking concern: focus indicators are still absent on navigation, links, filter pills, and pagination.</p>
+					<p class="mt-4 text-sm leading-6 text-[#fbbf24]">Priority: Add focus indicators to all interactive elements. Then add a skip-to-content link.</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// VITAL SIGNS</div>
+			<div class="overflow-x-auto">
+				<table class="w-full min-w-[720px] border-collapse text-sm">
+					<thead>
+						<tr class="border-b border-[#222226] text-left mono text-xs text-[#666]">
+							<th class="py-3 pr-4 font-normal">#</th>
+							<th class="py-3 pr-4 font-normal">VITAL</th>
+							<th class="py-3 pr-4 font-normal">STATUS</th>
+							<th class="py-3 pr-4 font-normal">SCORE</th>
+							<th class="py-3 font-normal">KEY FINDING</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">1</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Intentionality</td>
+							<td class="py-4 pr-4 text-[#34d399]">Healthy</td>
+							<td class="py-4 pr-4 text-[#fafafa] font-bold">9</td>
+							<td class="py-4 text-[#a0a0a0]">Warm cream + deep green palette, SemverFlourish, strong copy voice. rounded-none CTA is a deliberate shape.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">2</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Readability</td>
+							<td class="py-4 pr-4 text-[#34d399]">Healthy</td>
+							<td class="py-4 pr-4 text-[#fafafa] font-bold">9</td>
+							<td class="py-4 text-[#a0a0a0]">Comfortable measure (70-75ch), strong contrast in both themes, clear heading hierarchy.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">3</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Usability</td>
+							<td class="py-4 pr-4 text-[#34d399]">Healthy</td>
+							<td class="py-4 pr-4 text-[#fafafa] font-bold">8</td>
+							<td class="py-4 text-[#a0a0a0]">Form state persists across OAuth redirects. Dark mode toggle at 44px. Submit button still fragile on AI failure.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">4</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Responsiveness</td>
+							<td class="py-4 pr-4 text-[#34d399]">Healthy</td>
+							<td class="py-4 pr-4 text-[#fafafa] font-bold">9</td>
+							<td class="py-4 text-[#a0a0a0]">&uarr; from 8. Safe-area handling present (<code>env(safe-area-inset-bottom)</code> in layout + footer).</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">5</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Speed</td>
+							<td class="py-4 pr-4 text-[#34d399]">Healthy</td>
+							<td class="py-4 pr-4 text-[#fafafa] font-bold">9</td>
+							<td class="py-4 text-[#a0a0a0]">Self-hosted fonts with swap, RSC framework minimizes client JS, inline dark mode script prevents FOUC.</td>
+						</tr>
+						<tr>
+							<td class="py-4 pr-4 text-[#555]">6</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Accessibility</td>
+							<td class="py-4 pr-4 text-[#ef4444]">Critical</td>
+							<td class="py-4 pr-4 text-[#fafafa] font-bold">5</td>
+							<td class="py-4 text-[#a0a0a0]">&uarr; from 4. Touch target fixed. Still: no focus indicators on nav/links/pills, no skip-to-content, no ARIA on filters.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// RESOLVED SINCE LAST CHECKUP</div>
+			<div class="grid gap-4 md:grid-cols-3">
+				<article class="border border-[#1a2a1a] bg-[#0a120a] p-4">
+					<div class="mono mb-1 text-xs text-[#34d399]">FIXED &middot; P0</div>
+					<h2 class="mb-2 text-sm font-semibold">Dark mode toggle 44&times;44px</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Changed from <code class="text-[#ccc]">size-9</code> (36px) to <code class="text-[#ccc]">size-11</code> (44px). Meets WCAG 2.5.5 minimum touch target.</p>
+				</article>
+				<article class="border border-[#1a2a1a] bg-[#0a120a] p-4">
+					<div class="mono mb-1 text-xs text-[#34d399]">FIXED &middot; WATCH</div>
+					<h2 class="mb-2 text-sm font-semibold">CTA button rounded-none</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Changed from <code class="text-[#ccc]">rounded-lg</code> to <code class="text-[#ccc]">rounded-none</code>. The primary action now has its own shape, distinct from form inputs.</p>
+				</article>
+				<article class="border border-[#1a2a1a] bg-[#0a120a] p-4">
+					<div class="mono mb-1 text-xs text-[#34d399]">CORRECTED</div>
+					<h2 class="mb-2 text-sm font-semibold">Safe-area handling was present</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Prior report flagged missing <code class="text-[#ccc]">env(safe-area-inset-*)</code>. It exists in layout and footer. Responsive score corrected to 9.</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// COMPOSITION</div>
+			<div class="grid gap-6 md:grid-cols-2">
+				<div>
+					<div class="mb-3 text-xl font-semibold">Public: Learn &rarr; Decide</div>
+					<ul class="space-y-3 text-sm text-[#a0a0a0]">
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Hero leads with brand name, not generic headline</li>
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Each section passes "stand alone" test</li>
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Progressive disclosure: hero &rarr; community &rarr; event &rarr; FAQ &rarr; CTA</li>
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Community pull quote (border-l-4 accent) is a strong visual hook</li>
+						<li><span class="mono mr-2 text-[#fbbf24]">WATCH</span>FAQ section is structurally the most conventional</li>
+					</ul>
+				</div>
+				<div>
+					<div class="mb-3 text-xl font-semibold">Admin: Monitor &rarr; Operate</div>
+					<ul class="space-y-3 text-sm text-[#a0a0a0]">
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Filter pills, sort toggle, pagination, download dropdown</li>
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Metrics grid + leaderboards on dashboard</li>
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Zebra-striped table rows for scanability</li>
+						<li><span class="mono mr-2 text-[#fbbf24]">WATCH</span>No undo/confirm on status changes</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// CONTRAST REPORT</div>
+			<div class="overflow-x-auto">
+				<table class="w-full min-w-[640px] border-collapse text-sm">
+					<thead>
+						<tr class="border-b border-[#222226] text-left mono text-xs text-[#666]">
+							<th class="py-3 pr-4 font-normal">PAIR</th>
+							<th class="py-3 pr-4 font-normal">FG</th>
+							<th class="py-3 pr-4 font-normal">BG</th>
+							<th class="py-3 pr-4 font-normal">RATIO</th>
+							<th class="py-3 font-normal">WCAG</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-3 pr-4 text-[#fafafa]">Text on light</td>
+							<td class="py-3 pr-4 text-[#fafafa]">#000000</td>
+							<td class="py-3 pr-4 text-[#a0a0a0]">#fff9da</td>
+							<td class="py-3 pr-4 text-[#34d399]">17.4:1</td>
+							<td class="py-3 text-[#34d399]">AAA</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-3 pr-4 text-[#fafafa]">Text secondary</td>
+							<td class="py-3 pr-4 text-[#fafafa]">#303027</td>
+							<td class="py-3 pr-4 text-[#a0a0a0]">#fff9da</td>
+							<td class="py-3 pr-4 text-[#34d399]">9.4:1</td>
+							<td class="py-3 text-[#34d399]">AAA</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-3 pr-4 text-[#fafafa]">Accent on light</td>
+							<td class="py-3 pr-4 text-[#fafafa]">#006f1b</td>
+							<td class="py-3 pr-4 text-[#a0a0a0]">#fff9da</td>
+							<td class="py-3 pr-4 text-[#34d399]">5.9:1</td>
+							<td class="py-3 text-[#fbbf24]">AA text / AAA lg</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-3 pr-4 text-[#fafafa]">Text on dark</td>
+							<td class="py-3 pr-4 text-[#fafafa]">#f7f2df</td>
+							<td class="py-3 pr-4 text-[#a0a0a0]">#000000</td>
+							<td class="py-3 pr-4 text-[#34d399]">15.2:1</td>
+							<td class="py-3 text-[#34d399]">AAA</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-3 pr-4 text-[#fafafa]">Accent on dark</td>
+							<td class="py-3 pr-4 text-[#fafafa]">#04d936</td>
+							<td class="py-3 pr-4 text-[#a0a0a0]">#000000</td>
+							<td class="py-3 pr-4 text-[#34d399]">11.3:1</td>
+							<td class="py-3 text-[#34d399]">AAA</td>
+						</tr>
+						<tr>
+							<td class="py-3 pr-4 text-[#fafafa]">CTA text on brand</td>
+							<td class="py-3 pr-4 text-[#fafafa]">#050505</td>
+							<td class="py-3 pr-4 text-[#a0a0a0]">#00d22e</td>
+							<td class="py-3 pr-4 text-[#34d399]">11.8:1</td>
+							<td class="py-3 text-[#34d399]">AAA</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// WHAT'S WORKING</div>
+			<div class="grid gap-4 md:grid-cols-3">
+				<article class="border border-[#1f1f24] p-4">
+					<h2 class="mb-2 text-sm font-semibold">Color that means something</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Warm cream + deep green refuses the blue-violet CTA clich&eacute;. Both themes are independently designed, not generated. CTA now uses rounded-none for a deliberate, distinct shape.</p>
+				</article>
+				<article class="border border-[#1f1f24] p-4">
+					<h2 class="mb-2 text-sm font-semibold">Form state persistence</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">sessionStorage fallback + KV-backed OAuth state restoration. Form data survives cross-origin GitHub redirect and comes back intact.</p>
+				</article>
+				<article class="border border-[#1f1f24] p-4">
+					<h2 class="mb-2 text-sm font-semibold">Voice that filters</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">"This is not a beginner AI meetup" &mdash; the copy does the work of self-selection. The design supports the message without competing.</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// PRIORITY ISSUES</div>
+			<div class="space-y-5">
+
+				<article class="border border-[#2a1d22] bg-[#110b0d] p-5">
+					<div class="mono mb-2 text-xs text-[#f43f5e]">P0 &mdash; BLOCKING</div>
+					<h2 class="mb-2 text-lg font-semibold">No visible focus indicators on interactive elements</h2>
+					<p class="mb-4 text-sm leading-6 text-[#a0a0a0]">Form inputs are the only elements with <code class="text-[#ccc]">focus:ring-1 focus:ring-accent</code>. The CTA button, header nav links ("Events", "Apply"), footer links, filter pills, pagination prev/next, dark mode toggle, "Learn more about PWV", "View event details", and sort toggle all lack explicit focus styles. Keyboard users get zero visual feedback when tabbing.</p>
+					<div class="border-l border-[#fbbf24] pl-4 text-sm leading-6 text-[#fbbf24]">FIX: /design interaction &mdash; Add <code class="text-[#fbbf24]">focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2</code> to all interactive elements.</div>
+				</article>
+
+				<article class="border border-[#2a1d22] bg-[#110b0d] p-5">
+					<div class="mono mb-2 text-xs text-[#fbbf24]">P1</div>
+					<h2 class="mb-2 text-lg font-semibold">No skip-to-content link</h2>
+					<p class="mb-4 text-sm leading-6 text-[#a0a0a0]">Keyboard users must tab through the entire header (logo, nav, CTA, dark mode toggle) before reaching main content on every page load.</p>
+					<div class="border-l border-[#fbbf24] pl-4 text-sm leading-6 text-[#fbbf24]">FIX: Add a visually-hidden skip link as the first focusable element in document.tsx. Show on focus at top of viewport.</div>
+				</article>
+
+				<article class="border border-[#2a1d22] bg-[#110b0d] p-5">
+					<div class="mono mb-2 text-xs text-[#fbbf24]">P1</div>
+					<h2 class="mb-2 text-lg font-semibold">Body transition-colors not gated behind prefers-reduced-motion</h2>
+					<p class="mb-4 text-sm leading-6 text-[#a0a0a0]">The body element has <code class="text-[#ccc]">transition-colors duration-200</code> without a <code class="text-[#ccc]">prefers-reduced-motion: no-preference</code> wrapper. The SemverFlourish correctly respects the query, but the body transition does not.</p>
+					<div class="border-l border-[#fbbf24] pl-4 text-sm leading-6 text-[#fbbf24]">FIX: /design motion &mdash; Wrap in <code class="text-[#fbbf24]">@media (prefers-reduced-motion: no-preference)</code>.</div>
+				</article>
+
+				<article class="border border-[#2a1d22] bg-[#110b0d] p-5">
+					<div class="mono mb-2 text-xs text-[#fbbf24]">P2</div>
+					<h2 class="mb-2 text-lg font-semibold">Submit button disabled until AI summary completes</h2>
+					<p class="mb-4 text-sm leading-6 text-[#a0a0a0]">The submit button is disabled when <code class="text-[#ccc]">!summary</code>. If AI summarization fails silently, the user has no alternate path. No timeout fallback exists.</p>
+					<div class="border-l border-[#fbbf24] pl-4 text-sm leading-6 text-[#fbbf24]">FIX: Add a timeout that re-enables the button with a warning, or offer "Submit without summary" as a fallback.</div>
+				</article>
+
+				<article class="border border-[#2a1d22] bg-[#110b0d] p-5">
+					<div class="mono mb-2 text-xs text-[#fbbf24]">P2</div>
+					<h2 class="mb-2 text-lg font-semibold">No ARIA attributes on admin filter pills</h2>
+					<p class="mb-4 text-sm leading-6 text-[#a0a0a0]">Status filter pills lack <code class="text-[#ccc]">role</code>, <code class="text-[#ccc]">aria-current</code>, or <code class="text-[#ccc]">aria-pressed</code>. Screen readers cannot determine which filter is active.</p>
+					<div class="border-l border-[#fbbf24] pl-4 text-sm leading-6 text-[#fbbf24]">FIX: Add <code class="text-[#fbbf24]">role="list"</code> on container, <code class="text-[#fbbf24]">aria-current="page"</code> on active pill.</div>
+				</article>
+
+				<article class="border border-[#2a1d22] bg-[#110b0d] p-5">
+					<div class="mono mb-2 text-xs text-[#666]">P2 &mdash; WATCH</div>
+					<h2 class="mb-2 text-lg font-semibold">font-serif maps to DM Sans (same as sans)</h2>
+					<p class="mb-4 text-sm leading-6 text-[#a0a0a0]">The Tailwind theme defines <code class="text-[#ccc]">--font-serif</code> as <code class="text-[#ccc]">"DM Sans Variable"</code> &mdash; the same as <code class="text-[#ccc]">--font-sans</code>. Source Serif 4 is in dependencies. Either wire it up or remove the token.</p>
+				</article>
+
+				<article class="border border-[#2a1d22] bg-[#110b0d] p-5">
+					<div class="mono mb-2 text-xs text-[#666]">P2 &mdash; WATCH</div>
+					<h2 class="mb-2 text-lg font-semibold">theme-color meta tags don't match CSS bg values</h2>
+					<p class="mb-4 text-sm leading-6 text-[#a0a0a0]"><code class="text-[#ccc]">#f7f1dc</code> (light) and <code class="text-[#ccc]">#090907</code> (dark) in meta tags vs <code class="text-[#ccc]">#fff9da</code> and <code class="text-[#ccc]">#000000</code> in CSS. Subtle color flash possible on some browsers.</p>
+				</article>
+
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// NEXT MODES</div>
+			<div class="flex flex-wrap gap-2">
+				<span class="border border-[#333] px-3 py-1 text-sm text-[#a0a0a0]">/design interaction</span>
+				<span class="border border-[#333] px-3 py-1 text-sm text-[#a0a0a0]">/design motion</span>
+				<span class="border border-[#333] px-3 py-1 text-sm text-[#a0a0a0]">/design surface</span>
+			</div>
+			<p class="mt-4 text-sm leading-6 text-[#666]">Run interaction first. Focus indicators are the single highest-impact fix &mdash; they affect every keyboard user on every page. Motion handles the reduced-motion gap on body transitions. Surface hardens state handling: submit fallback, loading skeletons, error recovery.</p>
+		</section>
+
+		<footer class="mono py-8 text-center text-xs tracking-widest text-[#444]">
+			Generated with CommandCode &mdash; 2026-06-15
+		</footer>
+	</main>
+</body>
+</html>

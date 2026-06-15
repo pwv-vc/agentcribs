@@ -1,6 +1,7 @@
 import { linkFor } from "rwsdk/router";
 import type { App } from "rwsdk/worker";
 import { DarkModeToggle } from "./dark-mode-toggle";
+import { NavLink } from "@/app/components/links";
 
 const link = linkFor<App>();
 
@@ -12,14 +13,15 @@ export function Header() {
           href="/"
           className="group flex items-baseline gap-3 text-text no-underline"
         >
-          <span className="text-xl font-black tracking-normal transition-colors group-hover:text-accent sm:text-2xl">
+          <span className="text-xl font-black tracking-normal transition-colors group-hover:text-brand-green sm:text-2xl">
             AgentCribs
           </span>
           <span className="hidden font-mono text-xs uppercase text-text-secondary sm:inline">
             by PWV
           </span>
         </a>
-        <nav className="flex items-center gap-3">
+        <nav className="flex items-center gap-4">
+          <NavLink href={link("/community/events")}>Events</NavLink>
           <a
             href={link("/apply")}
             className="border border-brand-green bg-brand-green px-5 py-2 text-sm font-black text-accent-text no-underline transition-colors hover:border-brand-green-hover hover:bg-brand-green-hover"

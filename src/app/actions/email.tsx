@@ -13,6 +13,7 @@ import AdminNotificationEmail, {
 import AcceptedEmail, { acceptedText } from "@/app/emails/accepted";
 import RejectedEmail, { rejectedText } from "@/app/emails/rejected";
 import { generateRegistrationCode } from "@/app/lib/registration-code";
+import { findNextUpcomingEvent } from "@/app/queries/events";
 
 export async function sendMagicLink({
   sendEmail,
@@ -142,8 +143,9 @@ export async function sendAcceptedEmail({
   name: string;
   baseUrl: string;
 }): Promise<void> {
-  const registrationCode = generateRegistrationCode();
-  const eventUrl = "https://lu.ma/tbgovtd2?tk=jK4e9B";
+  const nextEvent = findNextUpcomingEvent();
+  const eventUrl = nextEvent?.lumaEventUrl;
+  const registrationCode = eventUrl ? generateRegistrationCode() : undefined;
 
   await sendEmail.send({
     from,

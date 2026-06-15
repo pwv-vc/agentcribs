@@ -15,7 +15,7 @@ export function NotFound({ response }: { response?: { status?: number } }) {
       />
 
       <main className="mx-auto max-w-[640px] px-6 py-24 text-center sm:px-8 sm:py-32">
-        <h1 className="font-serif text-6xl font-bold tracking-tight text-foreground sm:text-7xl md:text-8xl">
+        <h1 className="font-serif text-4xl font-bold tracking-tight text-text sm:text-7xl md:text-8xl">
           404
         </h1>
 

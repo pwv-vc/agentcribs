@@ -1,5 +1,6 @@
 import type { ApplicationData } from "@/app/actions/application";
 import { StatusBadge } from "@/app/shared/status-badge";
+import { InlineAccentLink, TableRowLink } from "@/app/components/links";
 
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString("en-US", {
@@ -38,21 +39,17 @@ export function ApplicationsTable({ items }: { items: ApplicationData[] }) {
                   </td>
                   {/* Name — top row */}
                   <td className="px-6 pt-5">
-                    <a
-                      href={`/admin/applications/${app.id}`}
-                      className="font-medium text-text no-underline underline-offset-2 transition-colors hover:text-accent hover:underline"
-                    >
+                    <TableRowLink href={`/admin/applications/${app.id}`}>
                       {app.firstName} {app.lastName}
-                    </a>
+                    </TableRowLink>
                     {app.githubHandle && (
-                      <a
+                      <InlineAccentLink
                         href={`https://github.com/${app.githubHandle}`}
-                        className="ml-2 text-accent no-underline hover:underline"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        external
+                        className="ml-2"
                       >
                         @{app.githubHandle}
-                      </a>
+                      </InlineAccentLink>
                     )}
                   </td>
                   {/* Email — top row */}
@@ -116,14 +113,13 @@ export function ApplicationsTable({ items }: { items: ApplicationData[] }) {
             {/* GitHub link - separate, not nested */}
             {app.githubHandle && (
               <div className="px-4 pb-2">
-                <a
+                <InlineAccentLink
                   href={`https://github.com/${app.githubHandle}`}
-                  className="text-sm text-accent no-underline hover:underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  external
+                  className="text-sm"
                 >
                   @{app.githubHandle}
-                </a>
+                </InlineAccentLink>
               </div>
             )}
 

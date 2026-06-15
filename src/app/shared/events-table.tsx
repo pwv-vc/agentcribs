@@ -1,5 +1,6 @@
 import type { CalendarListEventsEntry } from "@/app/lib/luma";
 import { link } from "@/app/shared/links";
+import { TableRowLink } from "@/app/components/links";
 
 function formatDate(iso?: string): string {
   if (!iso) return "-";
@@ -38,10 +39,7 @@ export function EventsTable({
                   className={`${rowBg} transition-colors hover:bg-bg-muted/50`}
                 >
                   <td className="px-6 py-5 align-middle">
-                    <a
-                      href={link("/admin/events/:id", { id: e.api_id })}
-                      className="font-medium text-text no-underline underline-offset-2 transition-colors hover:text-accent hover:underline"
-                    >
+                    <TableRowLink href={link("/admin/events/:id", { id: e.api_id })}>
                       {e.cover_url && (
                         <img
                           src={e.cover_url}
@@ -50,7 +48,7 @@ export function EventsTable({
                         />
                       )}
                       {e.name}
-                    </a>
+                    </TableRowLink>
                   </td>
                   <td className="whitespace-nowrap px-6 py-5 text-text-secondary">
                     {formatDate(e.start_at)}

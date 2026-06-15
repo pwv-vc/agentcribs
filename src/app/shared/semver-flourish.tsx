@@ -57,22 +57,22 @@ export function SemverFlourish() {
           <path d="M682 52 C732 38 760 24 812 24 C850 24 876 16 920 16" />
         </g>
 
-        <g className="semver-merge semver-merge-cyan">
-          <use href="#semver-merge-a" />
-          <use href="#semver-merge-c" />
+        <g className="semver-merge">
+          <path className="semver-merge-teal" d="M82 132 H168 C218 132 242 152 282 152" />
+          <path className="semver-merge-teal" d="M300 66 H358 C392 66 414 92 456 92" />
         </g>
-        <g className="semver-merge semver-merge-green">
-          <use href="#semver-merge-b" />
-          <use href="#semver-merge-d" />
+        <g className="semver-merge">
+          <path className="semver-merge-lavender" d="M126 232 H188 C232 232 250 184 282 152" />
+          <path className="semver-merge-lavender" d="M500 160 H584 C636 160 646 72 692 52" />
         </g>
-        <g className="semver-merge semver-merge-warm">
-          <use href="#semver-merge-e" />
-          <use href="#semver-merge-f" />
-          <use href="#semver-merge-g" />
-          <use href="#semver-merge-h" />
+        <g className="semver-merge">
+          <path className="semver-merge-periwinkle" d="M64 92 H122 C150 92 158 114 178 132" />
+          <path className="semver-merge-periwinkle" d="M222 246 H264 C300 246 314 170 348 120" />
+          <path className="semver-merge-periwinkle" d="M394 210 H462 C504 210 520 170 552 160" />
+          <path className="semver-merge-periwinkle" d="M628 228 H700 C760 228 764 64 812 24" />
         </g>
 
-        <use href="#semver-main-rail" className="semver-main-rail" />
+        <path className="semver-main-rail" d="M76 198 H210 C244 198 258 176 282 152 L364 112 C392 98 420 92 456 92 H610 C650 92 670 62 692 52 C732 38 760 24 812 24 C850 24 876 16 908 16" />
 
         <g className="semver-nodes">
           <rect className="semver-milestone" x="70" y="192" width="12" height="12" rx="1" />
@@ -108,22 +108,22 @@ export function SemverFlourish() {
             <mpath href="#semver-merge-c" />
           </animateMotion>
         </circle>
-        <circle className="semver-signal semver-branch-particle semver-branch-particle-warm" r="2.5">
+        <circle className="semver-signal semver-branch-particle semver-branch-particle-periwinkle" r="2.5">
           <animateMotion dur="32s" repeatCount="indefinite" rotate="auto">
             <mpath href="#semver-merge-b" />
           </animateMotion>
         </circle>
-        <circle className="semver-signal semver-branch-particle semver-branch-particle-cyan" r="2.25">
+        <circle className="semver-signal semver-branch-particle semver-branch-particle-teal" r="2.25">
           <animateMotion dur="36s" repeatCount="indefinite" rotate="auto">
             <mpath href="#semver-merge-f" />
           </animateMotion>
         </circle>
-        <circle className="semver-signal semver-branch-particle semver-branch-particle-warm" r="2.5">
+        <circle className="semver-signal semver-branch-particle semver-branch-particle-periwinkle" r="2.5">
           <animateMotion dur="40s" repeatCount="indefinite" rotate="auto">
             <mpath href="#semver-merge-g" />
           </animateMotion>
         </circle>
-        <circle className="semver-signal semver-branch-particle semver-branch-particle-green" r="2.75">
+        <circle className="semver-signal semver-branch-particle semver-branch-particle-lavender" r="2.75">
           <animateMotion dur="42s" repeatCount="indefinite" rotate="auto">
             <mpath href="#semver-merge-h" />
           </animateMotion>

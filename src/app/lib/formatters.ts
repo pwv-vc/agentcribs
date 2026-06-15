@@ -1,10 +1,10 @@
-export function formatDateShort(iso?: string, timezone?: string): string {
+export function formatDateShort(iso?: string, timezone = "UTC"): string {
   if (!iso) return "-";
   return new Date(iso).toLocaleDateString("en-US", {
     weekday: "short",
     month: "short",
     day: "numeric",
-    timeZone: timezone ?? undefined,
+    timeZone: timezone,
   });
 }
 

@@ -59,7 +59,7 @@ export const AdminEvents = async ({
             {cursor && (
               <a
                 href={buildHref({ cursor: "" })}
-                className="rounded-lg border border-border bg-bg px-3 py-1.5 text-sm text-text no-underline transition-colors hover:bg-bg-muted"
+                className="rounded-lg border border-border bg-bg px-4 py-2.5 text-sm text-text no-underline transition-colors hover:bg-bg-muted"
               >
                 &larr; Previous page
               </a>
@@ -67,7 +67,7 @@ export const AdminEvents = async ({
             {has_more && next_cursor && (
               <a
                 href={buildHref({ cursor: next_cursor })}
-                className="rounded-lg border border-border bg-bg px-3 py-1.5 text-sm text-text no-underline transition-colors hover:bg-bg-muted"
+                className="rounded-lg border border-border bg-bg px-4 py-2.5 text-sm text-text no-underline transition-colors hover:bg-bg-muted"
               >
                 Next page &rarr;
               </a>

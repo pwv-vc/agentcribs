@@ -1,4 +1,5 @@
 import { Seo } from "@/app/components/seo";
+import { InlineAccentLink } from "@/app/components/links";
 
 export const Terms = () => {
   return (
@@ -54,12 +55,12 @@ export const Terms = () => {
             <p className="mt-3">
               If you have any questions about these Terms or our Site, please
               contact us at{" "}
-              <a
+              <InlineAccentLink
                 href="mailto:agentcribs@pwv.com"
-                className="text-accent underline decoration-border underline-offset-2 transition-colors hover:text-accent-hover"
+                variant="underlined"
               >
                 agentcribs@pwv.com
-              </a>
+              </InlineAccentLink>
               .
             </p>
           </section>
@@ -227,7 +228,7 @@ export const Terms = () => {
               believe that anything on our Site infringes any copyright that you
               own or control, you may notify our designated agent as follows:
             </p>
-            <div className="mt-3 rounded-lg border border-border bg-surface p-4 text-sm">
+            <div className="mt-3 rounded-lg border border-border bg-bg-soft p-4 text-sm">
               <p>
                 <strong>Designated Agent:</strong> Copyright Agent
               </p>
@@ -237,12 +238,13 @@ export const Terms = () => {
               </p>
               <p>
                 <strong>E-Mail:</strong>{" "}
-                <a
+                <InlineAccentLink
                   href="mailto:agentcribs@pwv.com"
-                  className="text-accent underline decoration-border underline-offset-2"
+                  variant="underlined"
+                  className="transition-none"
                 >
                   agentcribs@pwv.com
-                </a>
+                </InlineAccentLink>
               </p>
             </div>
             <p className="mt-3">
@@ -348,15 +350,15 @@ export const Terms = () => {
             <h2 className="mb-3 text-lg font-bold text-text">Contact</h2>
             <p>
               If you have any questions about these Terms, please contact us at{" "}
-              <a
+              <InlineAccentLink
                 href="mailto:agentcribs@pwv.com"
-                className="text-accent underline decoration-border underline-offset-2 transition-colors hover:text-accent-hover"
+                variant="underlined"
               >
                 agentcribs@pwv.com
-              </a>
+              </InlineAccentLink>
               .
             </p>
-            <div className="mt-4 rounded-lg border border-border bg-surface p-4 text-sm">
+            <div className="mt-4 rounded-lg border border-border bg-bg-soft p-4 text-sm">
               <p className="font-medium text-text">PWV</p>
               <p className="text-text-secondary">314 Lytton Ave Ste 200</p>
               <p className="text-text-secondary">Palo Alto, CA 94301</p>
