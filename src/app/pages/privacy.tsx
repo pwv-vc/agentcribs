@@ -6,7 +6,7 @@ export const Privacy = () => {
       <Seo
         title="Privacy Policy"
         description="Privacy policy for AgentCribs."
-        canonical="https://agentcribs.com/privacy"
+        canonical="https://pwv.agentcribs.com/privacy"
       />
       <main className="mx-auto max-w-[720px] px-6 py-16 sm:px-8 sm:py-24">
         <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">

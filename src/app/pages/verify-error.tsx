@@ -7,7 +7,7 @@ export const VerifyError = () => {
       <Seo
         title="Verification failed"
         description="This verification link is invalid or has expired."
-        canonical="https://agentcribs.com/apply/verify/error"
+        canonical="https://pwv.agentcribs.com/apply/verify/error"
       />
       <main className="mx-auto max-w-[640px] px-6 py-24 sm:px-8 sm:py-32">
         <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">

@@ -12,8 +12,8 @@ Space is limited. People apply to join AgentCribs first. Selected applicants rec
 
 - Name: AgentCribs
 - Parent/community sponsor: PWV
-- Canonical site: https://agentcribs.com/
-- Application URL: https://agentcribs.com/apply
+- Canonical site: https://pwv.agentcribs.com/
+- Application URL: https://pwv.agentcribs.com/apply
 - Event: PWV Founders + AgentCribs
 - Event date: May 6, 2026
 - Event location: San Francisco, California
@@ -22,8 +22,8 @@ Space is limited. People apply to join AgentCribs first. Selected applicants rec
 
 ## Links
 
-- Homepage: https://agentcribs.com/
-- Apply: https://agentcribs.com/apply
+- Homepage: https://pwv.agentcribs.com/
+- Apply: https://pwv.agentcribs.com/apply
 - PWV: https://pwv.com/
 - PWV AgentCribs post: coming soon
 

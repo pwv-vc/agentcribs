@@ -33,4 +33,4 @@ Disallow: /
 User-agent: ClaudeBot
 Disallow: /
 
-Sitemap: https://agentcribs.com/sitemap.xml
+Sitemap: https://pwv.agentcribs.com/sitemap.xml

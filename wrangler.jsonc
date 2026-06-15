@@ -32,6 +32,9 @@
       "name": "SEND_EMAIL",
     },
   ],
+  "durable_objects": {
+    "bindings": [{ "name": "USER_SESSION_DO", "class_name": "UserSession" }],
+  },
   "queues": {
     "producers": [
       {
@@ -105,6 +108,7 @@
   "env": {
     "production": {
       "routes": [
+        { "pattern": "agentcribs.pwv.com", "custom_domain": true },
         {
           "pattern": "agentcribs.com",
           "custom_domain": true,

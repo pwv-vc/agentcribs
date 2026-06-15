@@ -34,7 +34,11 @@ import {
   handleDeadLetter,
   processRetries,
 } from "@/app/actions/queue";
+import { UserSession } from "@/sessions/UserSession";
+
 import type { ApplicationPayload } from "@/app/actions/application";
+
+export { UserSession };
 
 export type AppContext = {
   session?: { email: string; sub: string };

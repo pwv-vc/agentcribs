@@ -10,9 +10,9 @@ const schema = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://agentcribs.com/#organization",
+      "@id": "https://pwv.agentcribs.com/#organization",
       name: "AgentCribs",
-      url: "https://agentcribs.com/",
+      url: "https://pwv.agentcribs.com/",
       description:
         "AgentCribs is a curated PWV community project for people already building with AI agents and agentic software development workflows.",
       parentOrganization: {
@@ -24,38 +24,38 @@ const schema = {
       potentialAction: {
         "@type": "JoinAction",
         name: "Apply to join AgentCribs",
-        target: "https://agentcribs.com/apply",
+        target: "https://pwv.agentcribs.com/apply",
       },
     },
     {
       "@type": "WebPage",
-      "@id": "https://agentcribs.com/#webpage",
-      url: "https://agentcribs.com/",
+      "@id": "https://pwv.agentcribs.com/#webpage",
+      url: "https://pwv.agentcribs.com/",
       name: "AgentCribs | PWV Community + May 6 Event in San Francisco",
       description:
         "AgentCribs is a curated PWV community for builders working with AI agents. Apply for May 6 in San Francisco with Peter Levine and Tom Preston-Werner.",
       inLanguage: "en-US",
-      about: { "@id": "https://agentcribs.com/#organization" },
+      about: { "@id": "https://pwv.agentcribs.com/#organization" },
       primaryImageOfPage: {
         "@type": "ImageObject",
-        url: "https://agentcribs.com/og-image.png?v=5",
+        url: "https://pwv.agentcribs.com/og-image.png?v=5",
         width: 1200,
         height: 630,
       },
       isPartOf: {
         "@type": "WebSite",
         name: "AgentCribs",
-        url: "https://agentcribs.com/",
+        url: "https://pwv.agentcribs.com/",
       },
     },
     {
       "@type": "Event",
-      "@id": "https://agentcribs.com/#may-6-event",
+      "@id": "https://pwv.agentcribs.com/#may-6-event",
       name: "PWV Founders + AgentCribs",
       description:
         "An evening gathering in San Francisco for PWV founders, seasoned developers, and selected builders focused on agentic software development, featuring a fireside chat between Peter Levine and Tom Preston-Werner.",
       startDate: "2026-05-06",
-      url: "https://agentcribs.com/",
+      url: "https://pwv.agentcribs.com/",
       eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
       eventStatus: "https://schema.org/EventScheduled",
       location: {
@@ -76,7 +76,7 @@ const schema = {
       potentialAction: {
         "@type": "RegisterAction",
         name: "Apply to join AgentCribs",
-        target: "https://agentcribs.com/apply",
+        target: "https://pwv.agentcribs.com/apply",
       },
       performer: [
         {
@@ -93,7 +93,7 @@ const schema = {
     },
     {
       "@type": "FAQPage",
-      "@id": "https://agentcribs.com/#faq",
+      "@id": "https://pwv.agentcribs.com/#faq",
       mainEntity: [
         {
           "@type": "Question",

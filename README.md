@@ -4,7 +4,7 @@ A curated [PWV](https://www.pwv/com) community for founders, developers, and hac
 
 AgentCribs began as a private gathering of PWV founders and close friends sharing the real tools, workflows, repos, and team practices they use to build software and run companies with AI. Now it's opening selectively to more people already building with agents.
 
-Apply at [agentcribs.com](https://agentcribs.com/).
+Apply at [agentcribs.com](https://pwv.agentcribs.com/).
 
 ## PWV (Preston-Werner Ventures)
 
@@ -61,20 +61,20 @@ The worker defines 5 queues:
 
 Set these via `wrangler secret put <NAME>`:
 
-| Secret                  | Description                                                                           |
-| ----------------------- | ------------------------------------------------------------------------------------- |
-| `ADMIN_PASSWORD`        | Password for the admin panel at `/admin` (used by dev/password auth fallback)         |
-| `ADMIN_COOKIE_NAME`     | Cookie name for the admin session (defaults to `agentcribs_dev_admin_session`)        |
-| `GITHUB_CLIENT_ID`      | GitHub OAuth App client ID                                                            |
-| `GITHUB_CLIENT_SECRET`  | GitHub OAuth App client secret                                                        |
-| `GITHUB_CALLBACK_URL`   | GitHub OAuth callback URL (e.g. `https://agentcribs.com/apply/github/callback`)       |
-| `SEND_EMAIL_FROM`       | From address for transactional emails (defaults to `agentcribs@agentcribs.com`)       |
-| `APP_URL`               | Public base URL of the app (e.g. `https://agentcribs.com` or `http://localhost:5173`) |
-| `SLACK_WEBHOOK_URL`     | Slack webhook URL for application notifications (optional)                            |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID — used by AI Gateway                                            |
-| `AI_GATEWAY_NAME`       | Name of your Workers AI Gateway (e.g. `agentcribs-ai-gateway`)                        |
-| `CF_AIG_TOKEN`          | AI Gateway API token — generate via Cloudflare dashboard under AI Gateway → API Keys  |
-| `LUMA_API_SECRET`       | Luma API secret for event integration                                                 |
+| Secret                  | Description                                                                               |
+| ----------------------- | ----------------------------------------------------------------------------------------- |
+| `ADMIN_PASSWORD`        | Password for the admin panel at `/admin` (used by dev/password auth fallback)             |
+| `ADMIN_COOKIE_NAME`     | Cookie name for the admin session (defaults to `agentcribs_dev_admin_session`)            |
+| `GITHUB_CLIENT_ID`      | GitHub OAuth App client ID                                                                |
+| `GITHUB_CLIENT_SECRET`  | GitHub OAuth App client secret                                                            |
+| `GITHUB_CALLBACK_URL`   | GitHub OAuth callback URL (e.g. `https://pwv.agentcribs.com/apply/github/callback`)       |
+| `SEND_EMAIL_FROM`       | From address for transactional emails (defaults to `agentcribs@agentcribs.com`)           |
+| `APP_URL`               | Public base URL of the app (e.g. `https://pwv.agentcribs.com` or `http://localhost:5173`) |
+| `SLACK_WEBHOOK_URL`     | Slack webhook URL for application notifications (optional)                                |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID — used by AI Gateway                                                |
+| `AI_GATEWAY_NAME`       | Name of your Workers AI Gateway (e.g. `agentcribs-ai-gateway`)                            |
+| `CF_AIG_TOKEN`          | AI Gateway API token — generate via Cloudflare dashboard under AI Gateway → API Keys      |
+| `LUMA_API_SECRET`       | Luma API secret for event integration                                                     |
 
 ### Local Development
 

@@ -7,7 +7,7 @@ export const VerifySuccess = () => {
       <Seo
         title="Email verified"
         description="Your email has been verified. Your application is now under review."
-        canonical="https://agentcribs.com/apply/verify/success"
+        canonical="https://pwv.agentcribs.com/apply/verify/success"
       />
       <main className="mx-auto max-w-[640px] px-6 py-24 sm:px-8 sm:py-32">
         <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
