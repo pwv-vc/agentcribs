@@ -3,7 +3,7 @@ import { BrandLink } from "@/app/components/links";
 
 function FaqItem({ question, answer }: { question: string; answer: string }) {
   return (
-    <div className="border-t border-border py-6">
+    <div className="border-t border-border py-9">
       <h3 className="text-xl font-black leading-tight sm:text-2xl">{question}</h3>
       <p className="mt-3 leading-relaxed text-text-secondary">{answer}</p>
     </div>
@@ -15,7 +15,7 @@ export function FaqSection() {
     <section className="bg-bg">
       <div className="mx-auto max-w-[1040px] px-6 py-16 sm:px-8 sm:py-24">
         <div className="max-w-[820px]">
-          <h2 className="text-4xl font-black leading-none sm:text-5xl">FAQ</h2>
+          <h2 className="mb-9 text-4xl font-black leading-none sm:text-5xl">FAQ</h2>
 
           <FaqItem
             question="Who should apply?"
@@ -43,9 +43,9 @@ export function FaqSection() {
           />
         </div>
 
-        <div className="mt-10 border-t border-border pt-12">
+        <div className="mt-14 border-t border-border pt-14">
           <div className="max-w-[820px]">
-            <h2 className="text-4xl font-black leading-none sm:text-5xl">
+            <h2 className="text-4xl font-black leading-[1.1] sm:text-5xl sm:leading-none">
               Ready to join AgentCribs?
             </h2>
 

@@ -8,9 +8,9 @@ export function HeroSection() {
           <h1 className="max-w-[760px] text-4xl font-black leading-none sm:text-7xl md:text-8xl">
             AgentCribs
           </h1>
-          <p className="mt-8 max-w-[820px] text-xl font-black leading-[1.05] text-text sm:text-4xl md:text-5xl">
+          <h2 className="mt-8 max-w-[820px] text-xl font-black leading-[1.05] text-text sm:text-4xl md:text-5xl">
             A Curated Community for Agentic Software Builders
-          </p>
+          </h2>
           <p className="mt-8 max-w-[720px] text-lg leading-relaxed text-text-secondary sm:text-xl">
             AgentCribs is a PWV community project for people already building
             with AI agents, developer tools, command-line workflows, and agentic
@@ -19,8 +19,8 @@ export function HeroSection() {
             future of how software gets made.
           </p>
           <p className="mt-6 max-w-[720px] text-lg font-bold leading-relaxed">
-            Space is limited. Apply to join the waitlist for upcoming events
-            and community opportunities.
+            Space is limited. Apply to join the waitlist for upcoming events and
+            community opportunities.
           </p>
           <div className="mt-9">
             <CtaButton />

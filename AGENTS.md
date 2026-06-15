@@ -43,9 +43,7 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   │   │   ├── event-section.tsx
 │   │   │   ├── faq-section.tsx
 │   │   │   ├── hero-section.tsx
-│   │   │   ├── how-it-works-section.tsx
 │   │   │   ├── json-ld.tsx
-│   │   │   ├── pwv-section.tsx
 │   │   │   └── seo.tsx
 │   │   ├── layouts/           # default.tsx, admin.tsx
 │   │   ├── actions/           # Server actions
