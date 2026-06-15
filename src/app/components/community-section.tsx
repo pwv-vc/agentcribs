@@ -1,4 +1,3 @@
-import { CommunityVideo } from "@/app/components/community-video";
 import { BrandLink } from "@/app/components/links";
 
 export function CommunitySection() {
@@ -20,10 +19,6 @@ export function CommunitySection() {
             sharing the real tools, workflows, repos, and team practices they
             use to build software and run companies with AI.
           </p>
-
-          <div className="mt-8 w-full">
-            <CommunityVideo />
-          </div>
 
           <p className="mt-5 text-lg leading-relaxed text-text-secondary">
             Now we are opening the community selectively to more people already
