@@ -15,11 +15,12 @@ export const VerifySuccess = () => {
         </h1>
         <p className="mt-6 text-lg leading-relaxed">
           Your email has been verified and your application is now under review.
+          You're on the AgentCribs waitlist.
         </p>
         <p className="mt-5 text-base leading-relaxed text-text-secondary">
           We'll be in touch at the email you provided. If you're selected for
-          the May 6 event in San Francisco, you'll receive a separate
-          registration invite with event details.
+          an upcoming event, you'll receive a separate registration invite with
+          event details.
         </p>
         <div className="mt-12">
           <CtaButton href="/" label="&larr; Back to home" />

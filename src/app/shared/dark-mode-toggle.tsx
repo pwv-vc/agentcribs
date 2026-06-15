@@ -5,7 +5,7 @@ export function DarkModeToggle() {
     <button
       type="button"
       aria-label="Toggle dark mode"
-      className="flex size-9 cursor-pointer items-center justify-center rounded border border-border text-text-secondary transition-colors hover:border-accent hover:text-accent"
+      className="flex size-11 cursor-pointer items-center justify-center rounded border border-border text-text-secondary transition-colors hover:border-accent hover:text-accent"
       onClick={() => {
         const html = document.documentElement;
         const isDark = html.classList.toggle("dark");

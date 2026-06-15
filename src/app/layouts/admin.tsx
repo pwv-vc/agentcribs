@@ -58,14 +58,14 @@ export function AdminLayout({
             </a>
             <a
               href="/"
-              className="rounded-md border border-border bg-bg px-3 py-1.5 text-xs font-medium text-text-secondary no-underline transition-colors hover:bg-bg-muted hover:text-text"
+              className="rounded-md border border-border bg-bg px-4 py-2 text-sm font-medium text-text-secondary no-underline transition-colors hover:bg-bg-muted hover:text-text"
             >
               Back to site
             </a>
             {!isDev && (
               <a
                 href="/cdn-cgi/access/logout"
-                className="rounded-md border border-border bg-bg px-3 py-1.5 text-xs font-medium text-text-secondary no-underline transition-colors hover:bg-bg-muted hover:text-text"
+                className="rounded-md border border-border bg-bg px-4 py-2 text-sm font-medium text-text-secondary no-underline transition-colors hover:bg-bg-muted hover:text-text"
               >
                 Logout
               </a>
@@ -77,9 +77,9 @@ export function AdminLayout({
         </div>
       </header>
 
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 pb-[env(safe-area-inset-bottom)]">{children}</main>
 
-      <footer className="border-t border-border bg-bg-muted">
+      <footer className="border-t border-border bg-bg-muted pb-[env(safe-area-inset-bottom)]">
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-4 sm:px-8">
           <p className="text-xs text-text-secondary">AgentCribs Admin</p>
           <p className="text-xs text-text-secondary">

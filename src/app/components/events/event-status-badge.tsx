@@ -12,23 +12,22 @@ const config: Record<
   live: {
     label: "Live",
     icon: RadioIcon,
-    style: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+    style: "bg-status-live-bg text-status-live-text",
   },
   draft: {
     label: "Draft",
     icon: FileTextIcon,
-    style:
-      "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+    style: "bg-status-draft-bg text-status-draft-text",
   },
   scheduled: {
     label: "Scheduled",
     icon: TimerIcon,
-    style: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+    style: "bg-status-scheduled-bg text-status-scheduled-text",
   },
   ended: {
     label: "Ended",
     icon: FlagIcon,
-    style: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200",
+    style: "bg-status-ended-bg text-status-ended-text",
   },
 };
 
@@ -36,7 +35,7 @@ export function EventStatusBadge({ status }: { status: string }) {
   const c = config[status];
   if (!c) {
     return (
-      <span className="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+      <span className="inline-flex rounded-full bg-status-ended-bg px-2 py-0.5 text-xs font-medium text-status-ended-text">
         {status}
       </span>
     );

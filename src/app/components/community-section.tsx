@@ -1,17 +1,28 @@
+import { CommunityVideo } from "@/app/components/community-video";
+
 export function CommunitySection() {
   return (
     <section className="border-b border-border bg-bg">
-      <div className="mx-auto grid max-w-[1040px] gap-12 px-6 py-16 sm:px-8 sm:py-24 lg:grid-cols-[1fr_320px]">
-        <div className="max-w-[720px]">
+      <div className="mx-auto max-w-[1040px] px-6 py-16 sm:px-8 sm:py-24">
+        <div className="max-w-[820px]">
           <h2 className="text-4xl font-black leading-none sm:text-5xl">
-            A Curated Community for Agentic Software Builders
+            A PWV Community Project
           </h2>
 
           <p className="mt-8 text-lg leading-relaxed text-text-secondary">
-            AgentCribs began as a private gathering of PWV founders and close
-            friends sharing the real tools, workflows, repos, and team
-            practices they use to build software and run companies with AI.
+            AgentCribs is part of PWV's broader work building communities for
+            technical founders and modern hackers.
           </p>
+
+          <p className="mt-5 text-lg leading-relaxed text-text-secondary">
+            It began as a private gathering of PWV founders and close friends
+            sharing the real tools, workflows, repos, and team practices they
+            use to build software and run companies with AI.
+          </p>
+
+          <div className="mt-8 w-full">
+            <CommunityVideo />
+          </div>
 
           <p className="mt-5 text-lg leading-relaxed text-text-secondary">
             Now we are opening the community selectively to more people already
@@ -31,34 +42,16 @@ export function CommunitySection() {
             people already building who want to compare notes with peers doing
             the same.
           </p>
-        </div>
 
-        <aside className="self-start border border-[#303027] bg-[#090907] p-6 text-[#f7f2df]">
-          <img
-            src="/pwv-logo-white.svg"
-            alt="PWV"
-            className="h-auto w-24"
-            width="800"
-            height="197"
-          />
-          <h3 className="mt-8 text-2xl font-black leading-tight">
-            A PWV community project
-          </h3>
-          <p className="mt-4 leading-relaxed text-[#b9b39e]">
-            AgentCribs is part of{" "}
+          <p className="mt-10">
             <a
               href="https://pwv.com/"
-              className="font-bold text-[#04d936] no-underline hover:text-[#58f06f]"
+              className="font-bold text-accent no-underline hover:text-accent-hover"
             >
-              PWV
+              Learn more about PWV
             </a>
-            's broader work building communities for technical founders and
-            modern hackers.
           </p>
-          <p className="mt-5 font-mono text-sm text-[#b9b39e]">
-            PWV AgentCribs post coming soon.
-          </p>
-        </aside>
+        </div>
       </div>
     </section>
   );

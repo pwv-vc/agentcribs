@@ -268,7 +268,7 @@ export function ApplicationDetail({
                 @{application.githubHandle}
               </a>
               {application.githubEmailMismatch && (
-                <p className="mt-3 mb-4 flex items-center gap-1.5 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+                <p className="mt-3 mb-4 flex items-center gap-1.5 rounded-md border border-warning-border bg-warning-bg px-3 py-2 text-xs text-warning-text">
                   <WarningIcon className="shrink-0" />
                   <span>GitHub email doesn&apos;t match application email</span>
                 </p>
@@ -291,7 +291,7 @@ export function ApplicationDetail({
                           </span>
                         )}
                         {!e.verified && (
-                          <span className="inline-flex items-center gap-0.5 ml-1.5 text-amber-600">
+                          <span className="inline-flex items-center gap-0.5 ml-1.5 text-warning-text">
                             <WarningIcon />
                             unverified
                           </span>
@@ -445,7 +445,7 @@ export function ApplicationDetail({
           </div>
           <a
             href={link("/admin/applications/:id/edit", { id: application.id })}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-bg px-3 py-1.5 text-sm font-medium text-text-secondary transition-colors hover:bg-bg-soft hover:text-text"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-bg px-4 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-bg-soft hover:text-text"
           >
             <EditIcon />
             Edit

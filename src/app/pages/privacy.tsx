@@ -314,7 +314,7 @@ export const Privacy = () => {
                 agentcribs@pwv.com
               </a>.
             </p>
-            <div className="mt-4 rounded-lg border border-border bg-surface p-4 text-sm">
+            <div className="mt-4 rounded-lg border border-border bg-bg-soft p-4 text-sm">
               <p className="font-medium text-text">PWV</p>
               <p className="text-text-secondary">314 Lytton Ave Ste 200</p>
               <p className="text-text-secondary">Palo Alto, CA 94301</p>

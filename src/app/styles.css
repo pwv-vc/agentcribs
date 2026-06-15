@@ -71,6 +71,37 @@ html {
   --color-status-accepted-text: #2d5a3e;
   --color-status-rejected-bg: #fce4e0;
   --color-status-rejected-text: #7a3a32;
+
+  --color-status-live-bg: #dcfce7;
+  --color-status-live-text: #166534;
+  --color-status-scheduled-bg: #dbeafe;
+  --color-status-scheduled-text: #1e40af;
+  --color-status-draft-bg: #fef3c7;
+  --color-status-draft-text: #854d0e;
+  --color-status-ended-bg: #f3f4f6;
+  --color-status-ended-text: #1f2937;
+  --color-status-waitlist-bg: #f3e8ff;
+  --color-status-waitlist-text: #6b21a8;
+  --color-status-declined-bg: #fee2e2;
+  --color-status-declined-text: #991b1b;
+
+  --color-status-live-stat-bg: #f0fdf4;
+  --color-status-live-stat-text: #15803d;
+  --color-status-scheduled-stat-bg: #eff6ff;
+  --color-status-scheduled-stat-text: #1d4ed8;
+  --color-status-draft-stat-bg: #fffbeb;
+  --color-status-draft-stat-text: #a16207;
+  --color-status-waitlist-stat-bg: #faf5ff;
+  --color-status-waitlist-stat-text: #7e22ce;
+  --color-status-declined-stat-bg: #fef2f2;
+  --color-status-declined-stat-text: #b91c1c;
+
+  --color-warning-bg: #fef3c7;
+  --color-warning-text: #92400e;
+  --color-warning-border: #fcd34d;
+  --color-error-bg: #fee2e2;
+  --color-error-text: #991b1b;
+  --color-error-border: #fecaca;
 }
 
 .dark {
@@ -102,6 +133,37 @@ html {
   --color-status-accepted-text: #a7d4b0;
   --color-status-rejected-bg: #3a1a1a;
   --color-status-rejected-text: #f0b0a0;
+
+  --color-status-live-bg: #052e16;
+  --color-status-live-text: #86efac;
+  --color-status-scheduled-bg: #1e3a5f;
+  --color-status-scheduled-text: #93c5fd;
+  --color-status-draft-bg: #422006;
+  --color-status-draft-text: #fde68a;
+  --color-status-ended-bg: #374151;
+  --color-status-ended-text: #e5e7eb;
+  --color-status-waitlist-bg: #3b0764;
+  --color-status-waitlist-text: #d8b4fe;
+  --color-status-declined-bg: #450a0a;
+  --color-status-declined-text: #fca5a5;
+
+  --color-status-live-stat-bg: #052e16;
+  --color-status-live-stat-text: #86efac;
+  --color-status-scheduled-stat-bg: #1e3a5f;
+  --color-status-scheduled-stat-text: #93c5fd;
+  --color-status-draft-stat-bg: #422006;
+  --color-status-draft-stat-text: #fde68a;
+  --color-status-waitlist-stat-bg: #3b0764;
+  --color-status-waitlist-stat-text: #d8b4fe;
+  --color-status-declined-stat-bg: #450a0a;
+  --color-status-declined-stat-text: #fca5a5;
+
+  --color-warning-bg: #422006;
+  --color-warning-text: #fde68a;
+  --color-warning-border: #854d0e;
+  --color-error-bg: #450a0a;
+  --color-error-text: #fca5a5;
+  --color-error-border: #7f1d1d;
 }
 
 /* 🖋️ Base typography */
@@ -279,12 +341,32 @@ p, li {
 }
 
 /* 🧱 Layout helpers */
+.max-width-page {
+  max-width: 640px;
+}
+
 .max-width-content {
   max-width: 720px;
 }
 
+.max-width-content-lg {
+  max-width: 800px;
+}
+
+.max-width-section {
+  max-width: 820px;
+}
+
 .max-width-wide {
   max-width: 900px;
+}
+
+.max-width-container {
+  max-width: 1040px;
+}
+
+.max-width-admin {
+  max-width: 1200px;
 }
 
 /* 🎞️ Subtle fade-in */

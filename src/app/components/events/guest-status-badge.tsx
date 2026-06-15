@@ -15,35 +15,32 @@ const config: Record<
   approved: {
     label: "Approved",
     icon: CheckCircleIcon,
-    style: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+    style: "bg-status-live-bg text-status-live-text",
   },
   session: {
     label: "Session",
     icon: CalendarIcon,
-    style: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+    style: "bg-status-scheduled-bg text-status-scheduled-text",
   },
   pending_approval: {
     label: "Pending",
     icon: ClockIcon,
-    style:
-      "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+    style: "bg-status-draft-bg text-status-draft-text",
   },
   invited: {
     label: "Invited",
     icon: UserPlusIcon,
-    style:
-      "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+    style: "bg-status-draft-bg text-status-draft-text",
   },
   declined: {
     label: "Declined",
     icon: XCircleIcon,
-    style: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+    style: "bg-status-declined-bg text-status-declined-text",
   },
   waitlist: {
     label: "Waitlist",
     icon: ListIcon,
-    style:
-      "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
+    style: "bg-status-waitlist-bg text-status-waitlist-text",
   },
 };
 

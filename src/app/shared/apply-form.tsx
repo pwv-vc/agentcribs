@@ -422,7 +422,7 @@ export const ApplyForm = ({
               </span>
             </div>
             {githubEmailMismatch && (
-              <p className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-xs text-amber-800">
+              <p className="rounded-lg border border-warning-border bg-warning-bg px-4 py-2 text-xs text-warning-text">
                 Your GitHub email doesn't match the email entered above. The
                 mismatch will be noted in your application, but you can still
                 submit.
@@ -432,7 +432,7 @@ export const ApplyForm = ({
         ) : (
           <div>
             {error && (
-        <p className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700">
+        <p className="rounded-lg border border-error-border bg-error-bg p-3 text-sm text-error-text">
           {error}
         </p>
       )}
@@ -490,8 +490,8 @@ export const ApplyForm = ({
       </label>
 
       {error && (
-        <div className="rounded-lg border border-red-300 bg-red-50 p-4">
-          <p className="text-sm font-medium text-red-800">{error}</p>
+        <div className="rounded-lg border border-error-border bg-error-bg p-4">
+          <p className="text-sm font-medium text-error-text">{error}</p>
         </div>
       )}
 

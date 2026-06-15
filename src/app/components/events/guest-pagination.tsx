@@ -21,7 +21,7 @@ export function GuestPagination({
         {cursor && (
           <a
             href={buildHref({ guest_cursor: "" })}
-            className="rounded-lg border border-border bg-bg-soft px-3 py-1.5 text-xs font-medium text-text no-underline transition-colors hover:bg-bg-muted"
+            className="rounded-lg border border-border bg-bg-soft px-4 py-2.5 text-xs font-medium text-text no-underline transition-colors hover:bg-bg-muted"
           >
             &larr; Previous page
           </a>
@@ -29,7 +29,7 @@ export function GuestPagination({
         {hasMore && nextCursor && (
           <a
             href={buildHref({ guest_cursor: nextCursor })}
-            className="rounded-lg border border-border bg-bg-soft px-3 py-1.5 text-xs font-medium text-text no-underline transition-colors hover:bg-bg-muted"
+            className="rounded-lg border border-border bg-bg-soft px-4 py-2.5 text-xs font-medium text-text no-underline transition-colors hover:bg-bg-muted"
           >
             Next page &rarr;
           </a>

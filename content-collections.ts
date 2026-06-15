@@ -51,6 +51,31 @@ const playlist = defineCollection({
   },
 });
 
+const events = defineCollection({
+  name: "events",
+  directory: "content/events",
+  include: "*.md",
+  schema: z.object({
+    id: z.string(),
+    title: z.string(),
+    date: z.string(),
+    location: z.string(),
+    status: z.enum(["upcoming", "past", "current"]),
+    isFeatured: z.boolean().default(false),
+    speakers: z.array(
+      z.object({
+        name: z.string(),
+        affiliation: z.string().optional(),
+      }),
+    ),
+    content: z.string(),
+  }),
+  transform: async (document, context) => {
+    const html = await compileMarkdown(context, document);
+    return { ...document, content: html };
+  },
+});
+
 export default defineConfig({
-  content: [topics, playlist],
+  content: [topics, playlist, events],
 });

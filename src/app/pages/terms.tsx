@@ -227,7 +227,7 @@ export const Terms = () => {
               believe that anything on our Site infringes any copyright that you
               own or control, you may notify our designated agent as follows:
             </p>
-            <div className="mt-3 rounded-lg border border-border bg-surface p-4 text-sm">
+            <div className="mt-3 rounded-lg border border-border bg-bg-soft p-4 text-sm">
               <p>
                 <strong>Designated Agent:</strong> Copyright Agent
               </p>
@@ -356,7 +356,7 @@ export const Terms = () => {
               </a>
               .
             </p>
-            <div className="mt-4 rounded-lg border border-border bg-surface p-4 text-sm">
+            <div className="mt-4 rounded-lg border border-border bg-bg-soft p-4 text-sm">
               <p className="font-medium text-text">PWV</p>
               <p className="text-text-secondary">314 Lytton Ave Ste 200</p>
               <p className="text-text-secondary">Palo Alto, CA 94301</p>

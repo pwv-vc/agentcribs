@@ -2,7 +2,7 @@ import { SemverFlourish } from "@/app/shared/semver-flourish";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-bg">
+    <footer className="border-t border-border bg-bg pb-[max(2rem,env(safe-area-inset-bottom))]">
       <div className="mx-auto max-w-[1040px] px-6 py-10 sm:px-8 sm:py-14">
         <SemverFlourish />
       </div>

@@ -19,7 +19,13 @@ export function Header() {
             by PWV
           </span>
         </a>
-        <nav className="flex items-center gap-3">
+        <nav className="flex items-center gap-4">
+          <a
+            href={link("/community/events")}
+            className="text-sm font-medium text-text-secondary no-underline transition-colors hover:text-text"
+          >
+            Events
+          </a>
           <a
             href={link("/apply")}
             className="border border-brand-green bg-brand-green px-5 py-2 text-sm font-black text-accent-text no-underline transition-colors hover:border-brand-green-hover hover:bg-brand-green-hover"

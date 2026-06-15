@@ -5,12 +5,15 @@ See [brand/taste.md](brand/taste.md)
 # ui
 
 - Use single-column layout (no two-column grids) for form fields in the apply form. Confidence: 0.65
+- Use consistent outer container widths (`max-w-[1040px]`) with inner text `max-w-[820px]` across all home page sections — hero, community, event, and FAQ should share the same horizontal rhythm. Confidence: 0.70
+- Avoid using the heavy branded CtaButton for tertiary navigation like "Back to home" on content pages — it competes with the primary action and feels overbearing when repeated. Use a lighter text link or breadcrumb instead. Confidence: 0.65
 
 # css
 
 - For dark mode: Use sage green accent colors matching the light theme instead of orange/different tones for buttons and accents. Confidence: 0.70
 - Use white backgrounds for cards in light mode to improve text contrast and readability. Confidence: 0.75
 - Use alternating row colors (zebra striping) for list/table views to improve scanability. Confidence: 0.75
+- Name CSS status color tokens by semantic role (live, scheduled, draft, ended, declined, waitlist) rather than by source domain (event, guest, application) when the same colors serve the same meaning across domains. Confidence: 0.70
 
 # cli
 
@@ -22,7 +25,7 @@ See [cloudflare/taste.md](cloudflare/taste.md)
 
 - Query files in `src/app/queries/` should use content collections instead of redefining them inline. Confidence: 0.65
 - Always use specific query files by domain (e.g., `playlist.ts`, `user.ts`) rather than lumping unrelated queries into a generic file like `application.ts`. Confidence: 0.85
-- Apply data transformations like sorting in the query layer (server queries), not in page components. Confidence: 0.60
+- Apply data transformations like sorting in the query layer (server queries), not in page components. Confidence: 0.70
 - When exporting/downloading R2 data, include ALL keys/objects (all applications), not filtered subsets like only "accepted" status. Confidence: 0.70
 - Sort AI analysis results (how heard, story themes) by count in descending order (most frequent first). Confidence: 0.75
 
@@ -40,7 +43,13 @@ See [cloudflare/taste.md](cloudflare/taste.md)
 # security
 
 - Include `i.ytimg.com` in the `img-src` Content-Security-Policy directive when the project embeds YouTube videos. Confidence: 0.70
+- Include `www.youtube.com` in the `script-src` Content-Security-Policy directive when using `react-youtube` (the library dynamically loads the YouTube IFrame API script from that origin). Confidence: 0.70
+
+# youtube
+
+- When YouTube iframe embeds fail (e.g., Error 153), fix the embed issue directly rather than replacing with an image thumbnail fallback — prefer solving the embed problem. Confidence: 0.65
 - Include `images.lumacdn.com` and `cdn.lu.ma` in the `img-src` Content-Security-Policy directive when displaying Luma event cover images and host avatars. Confidence: 0.70
+- When using `react-youtube` (or any third-party library that extends `React.Component`), the importing file must have the `"use client"` directive — otherwise the dev server will fail with "Class extends value undefined is not a constructor or null". Confidence: 0.70
 
 # icons
 - Store all icon components in `src/app/components/icons/` with individual component files and a barrel export `index.ts`. Confidence: 0.70

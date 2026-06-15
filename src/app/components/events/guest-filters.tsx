@@ -39,7 +39,7 @@ export function GuestFilters({
             key={value}
             href={buildHref({ guest_status: value, guest_cursor: "" })}
             className={
-              "inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium no-underline " +
+              "inline-flex items-center gap-1 rounded-full px-3 py-2 text-xs font-medium no-underline " +
               (active
                 ? "bg-accent text-white"
                 : "border border-border bg-bg text-text-secondary hover:bg-bg-muted")

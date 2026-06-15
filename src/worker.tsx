@@ -26,6 +26,8 @@ import { Terms } from "@/app/pages/terms";
 import { Privacy } from "@/app/pages/privacy";
 import { Home } from "@/app/pages/home";
 import { NotFound } from "@/app/pages/not-found";
+import { EventsList } from "@/app/pages/community/events";
+import { EventDetail } from "@/app/pages/community/event-detail";
 import {
   handleProcessApplication,
   handleSendEmail,
@@ -64,6 +66,10 @@ export const app = defineApp([
       route("/apply/verify", handleVerificationCallback),
       route("/apply/verify/success", VerifySuccess),
       route("/apply/verify/error", VerifyError),
+      route("/community/events", EventsList),
+      route("/community/events/:id", ({ params }) => (
+        <EventDetail id={params.id} />
+      )),
     ]),
     // Authentication in production handled by Cloudflare One Access policies
     // but we will try to populate the session with the authenticated user's email

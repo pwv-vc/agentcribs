@@ -130,8 +130,8 @@ export function AdminApplicationEdit({ application }: AdminApplicationEditProps)
           </label>
 
           {error && (
-            <div className="rounded-lg border border-red-300 bg-red-50 p-4">
-              <p className="text-sm font-medium text-red-800">{error}</p>
+            <div className="rounded-lg border border-error-border bg-error-bg p-4">
+              <p className="text-sm font-medium text-error-text">{error}</p>
             </div>
           )}
 

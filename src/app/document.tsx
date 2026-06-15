@@ -7,7 +7,7 @@ export const Document: React.FC<{
   <html lang="en">
     <head>
       <meta charSet="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       <meta name="theme-color" content="#f7f1dc" media="(prefers-color-scheme: light)" />
       <meta name="theme-color" content="#090907" media="(prefers-color-scheme: dark)" />
 
