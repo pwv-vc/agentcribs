@@ -1,3 +1,4 @@
+import { CommunityVideo } from "@/app/components/community-video";
 import { BrandLink } from "@/app/components/links";
 
 export function CommunitySection() {
@@ -25,6 +26,10 @@ export function CommunitySection() {
             experimenting, learning, and building with agentic software
             development.
           </p>
+
+          <div className="mt-8 w-full">
+            <CommunityVideo />
+          </div>
 
           <p className="mt-5 text-lg leading-relaxed text-text-secondary">
             The strongest fit is a technical founder, senior developer, or
