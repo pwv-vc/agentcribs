@@ -7,7 +7,7 @@ export function CommunitySection() {
       <div className="mx-auto max-w-[1040px] px-6 py-16 sm:px-8 sm:py-24">
         <div className="max-w-[820px]">
           <h2 className="text-4xl font-black leading-none sm:text-5xl">
-            A PWV Community Project
+            A PWV Developer Community
           </h2>
 
           <p className="mt-8 text-lg leading-relaxed text-text-secondary">
