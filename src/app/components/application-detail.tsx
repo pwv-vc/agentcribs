@@ -12,6 +12,7 @@ import {
 } from "@/app/actions/application";
 import { StatusBadge } from "@/app/shared/status-badge";
 import { link } from "@/app/shared/links";
+import { InlineAccentLink } from "@/app/components/links";
 import {
   MailIcon,
   SendIcon,
@@ -259,14 +260,13 @@ export function ApplicationDetail({
               GitHub
             </dt>
             <dd className="text-sm">
-              <a
+              <InlineAccentLink
                 href={`https://github.com/${application.githubHandle}`}
-                className="font-medium text-accent no-underline hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
+                external
+                className="font-medium"
               >
                 @{application.githubHandle}
-              </a>
+              </InlineAccentLink>
               {application.githubEmailMismatch && (
                 <p className="mt-3 mb-4 flex items-center gap-1.5 rounded-md border border-warning-border bg-warning-bg px-3 py-2 text-xs text-warning-text">
                   <WarningIcon className="shrink-0" />
@@ -314,14 +314,12 @@ export function ApplicationDetail({
                   {application.githubProfile.blog && (
                     <p>
                       Blog:{" "}
-                      <a
+                      <InlineAccentLink
                         href={application.githubProfile.blog}
-                        className="text-accent no-underline hover:underline"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        external
                       >
                         {application.githubProfile.blog}
-                      </a>
+                      </InlineAccentLink>
                     </p>
                   )}
                   {application.githubProfile.bio && (

@@ -1,4 +1,5 @@
 import { SemverFlourish } from "@/app/shared/semver-flourish";
+import { FooterLink } from "@/app/components/links";
 
 export function Footer() {
   return (
@@ -15,12 +16,8 @@ export function Footer() {
           community project.
         </p>
         <div className="flex items-center gap-6">
-          <a href="/terms" className="text-sm text-text-secondary no-underline underline-offset-2 transition-colors hover:text-text hover:underline">
-            Terms
-          </a>
-          <a href="/privacy" className="text-sm text-text-secondary no-underline underline-offset-2 transition-colors hover:text-text hover:underline">
-            Privacy
-          </a>
+          <FooterLink href="/terms">Terms</FooterLink>
+          <FooterLink href="/privacy">Privacy</FooterLink>
         </div>
       </div>
     </footer>

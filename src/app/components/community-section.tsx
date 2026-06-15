@@ -1,4 +1,5 @@
 import { CommunityVideo } from "@/app/components/community-video";
+import { BrandLink } from "@/app/components/links";
 
 export function CommunitySection() {
   return (
@@ -37,19 +38,16 @@ export function CommunitySection() {
             the command line.
           </p>
 
-          <p className="mt-7 border-l-4 border-accent pl-5 text-xl font-black leading-tight">
+          <p className="mt-7 border-l-4 border-pwv-green pl-5 text-xl font-black leading-tight">
             This is not a beginner AI meetup. It is a working community for
             people already building who want to compare notes with peers doing
             the same.
           </p>
 
           <p className="mt-10">
-            <a
-              href="https://pwv.com/"
-              className="font-bold text-accent no-underline hover:text-accent-hover"
-            >
+            <BrandLink href="https://pwv.com/" external>
               Learn more about PWV
-            </a>
+            </BrandLink>
           </p>
         </div>
       </div>

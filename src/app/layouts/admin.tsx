@@ -1,5 +1,6 @@
 import { link } from "@/app/shared/links";
 import { MobileNav } from "@/app/components/admin/mobile-nav";
+import { NavLink } from "@/app/components/links";
 
 export function AdminLayout({
   children,
@@ -38,24 +39,9 @@ export function AdminLayout({
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-6">
-            <a
-              href={link("/admin/dashboard")}
-              className="text-sm font-medium text-text-secondary no-underline transition-colors hover:text-text"
-            >
-              Dashboard
-            </a>
-            <a
-              href={link("/admin/applications")}
-              className="text-sm font-medium text-text-secondary no-underline transition-colors hover:text-text"
-            >
-              Applications
-            </a>
-            <a
-              href={link("/admin/events")}
-              className="text-sm font-medium text-text-secondary no-underline transition-colors hover:text-text"
-            >
-              Events
-            </a>
+            <NavLink href={link("/admin/dashboard")}>Dashboard</NavLink>
+            <NavLink href={link("/admin/applications")}>Applications</NavLink>
+            <NavLink href={link("/admin/events")}>Events</NavLink>
             <a
               href="/"
               className="rounded-md border border-border bg-bg px-4 py-2 text-sm font-medium text-text-secondary no-underline transition-colors hover:bg-bg-muted hover:text-text"

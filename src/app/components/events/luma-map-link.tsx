@@ -1,3 +1,5 @@
+import { InlineAccentLink } from "@/app/components/links";
+
 export function LumaMapLink({
   googleMapsPlaceId,
 }: {
@@ -10,14 +12,9 @@ export function LumaMapLink({
         Map
       </dt>
       <dd className="text-sm">
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-accent no-underline hover:underline"
-        >
+        <InlineAccentLink href={url} external>
           View on Google Maps
-        </a>
+        </InlineAccentLink>
       </dd>
     </div>
   );

@@ -1,4 +1,5 @@
 import { CtaButton } from "@/app/shared/cta-button";
+import { BrandLink } from "@/app/components/links";
 
 function FaqItem({ question, answer }: { question: string; answer: string }) {
   return (
@@ -58,23 +59,17 @@ export function FaqSection() {
 
             <p className="mt-8 leading-relaxed">
               Learn more about PWV at{" "}
-              <a
-                href="https://pwv.com/"
-                className="font-bold text-accent no-underline hover:text-accent-hover"
-              >
+              <BrandLink href="https://pwv.com/" external>
                 pwv.com
-              </a>
+              </BrandLink>
               .
             </p>
 
             <p className="mt-2 leading-relaxed">
               Need help? Email{" "}
-              <a
-                href="mailto:contact@agentcribs.com"
-                className="font-bold text-accent no-underline hover:text-accent-hover"
-              >
+              <BrandLink href="mailto:contact@agentcribs.com">
                 contact@agentcribs.com
-              </a>
+              </BrandLink>
               .
             </p>
           </div>

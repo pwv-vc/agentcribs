@@ -1,4 +1,5 @@
 import { Seo } from "@/app/components/seo";
+import { InlineAccentLink } from "@/app/components/links";
 
 export const Privacy = () => {
   return (
@@ -290,9 +291,12 @@ export const Privacy = () => {
               California's "Shine the Light" law (Civil Code Section § 1798.83) allows California residents to
               request certain information pertaining to our disclosure of personal information to third parties for
               their direct marketing purposes. To make such a request, please contact us at{" "}
-              <a href="mailto:agentcribs@pwv.com" className="text-accent underline decoration-border underline-offset-2 transition-colors hover:text-accent-hover">
+              <InlineAccentLink
+                href="mailto:agentcribs@pwv.com"
+                variant="underlined"
+              >
                 agentcribs@pwv.com
-              </a>.
+              </InlineAccentLink>.
             </p>
           </section>
 
@@ -310,9 +314,12 @@ export const Privacy = () => {
             <p>
               If you have any questions about our privacy practices or this Privacy Policy, or to exercise your
               rights as detailed in this Privacy Policy, please contact us at{" "}
-              <a href="mailto:agentcribs@pwv.com" className="text-accent underline decoration-border underline-offset-2 transition-colors hover:text-accent-hover">
+              <InlineAccentLink
+                href="mailto:agentcribs@pwv.com"
+                variant="underlined"
+              >
                 agentcribs@pwv.com
-              </a>.
+              </InlineAccentLink>.
             </p>
             <div className="mt-4 rounded-lg border border-border bg-bg-soft p-4 text-sm">
               <p className="font-medium text-text">PWV</p>

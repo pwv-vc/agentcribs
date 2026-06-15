@@ -10,7 +10,7 @@ See [brand/taste.md](brand/taste.md)
 
 # css
 
-- For dark mode: Use sage green accent colors matching the light theme instead of orange/different tones for buttons and accents. Confidence: 0.70
+- For dark mode: Use teal family (`#00d2c8` brand teal / `#88fff8` soft-teal) for buttons and accents, not the dark sage or bright green tones. The user is moving away from dark sage; the accent role shifts to teal, not just lighter greens. Confidence: 0.75
 - Use white backgrounds for cards in light mode to improve text contrast and readability. Confidence: 0.75
 - Use alternating row colors (zebra striping) for list/table views to improve scanability. Confidence: 0.75
 - Name CSS status color tokens by semantic role (live, scheduled, draft, ended, declined, waitlist) rather than by source domain (event, guest, application) when the same colors serve the same meaning across domains. Confidence: 0.70
@@ -22,13 +22,7 @@ See [brand/taste.md](brand/taste.md)
 # cloudflare
 See [cloudflare/taste.md](cloudflare/taste.md)
 # data
-
-- Query files in `src/app/queries/` should use content collections instead of redefining them inline. Confidence: 0.65
-- Always use specific query files by domain (e.g., `playlist.ts`, `user.ts`) rather than lumping unrelated queries into a generic file like `application.ts`. Confidence: 0.85
-- Apply data transformations like sorting in the query layer (server queries), not in page components. Confidence: 0.70
-- When exporting/downloading R2 data, include ALL keys/objects (all applications), not filtered subsets like only "accepted" status. Confidence: 0.70
-- Sort AI analysis results (how heard, story themes) by count in descending order (most frequent first). Confidence: 0.75
-
+See [data/taste.md](data/taste.md)
 # logging
 
 - Remove console debug/log statements from server action files and middleware before considering them complete — don't leave `log()` calls or `console.log` in production code. Confidence: 0.65
@@ -53,6 +47,7 @@ See [cloudflare/taste.md](cloudflare/taste.md)
 
 # icons
 - Store all icon components in `src/app/components/icons/` with individual component files and a barrel export `index.ts`. Confidence: 0.70
+- For event format badges: use a house-heart icon (lucide-style) for "in person" and a web camera icon for "remote" format indicators. Confidence: 0.75
 
 # slack
 

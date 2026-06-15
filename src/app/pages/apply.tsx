@@ -19,8 +19,7 @@ export const Apply = async () => {
         </h1>
         <p className="mt-4 text-base leading-relaxed text-text-secondary">
           Apply to join the AgentCribs waitlist. When events are announced,
-          selected applicants from the waitlist receive registration invites
-          and community opportunities.
+          you'll receive registration invites and community opportunities.
         </p>
 
         <ApplyForm topics={topics} />

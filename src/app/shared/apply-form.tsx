@@ -9,6 +9,7 @@ import {
   restoreOAuthFormState,
 } from "../actions/github";
 import { summarizeStory } from "./summarize";
+import { InlineAccentLink } from "@/app/components/links";
 
 const SESSION_KEY = "agentcribs-apply-form";
 
@@ -478,14 +479,9 @@ export const ApplyForm = ({
         />
         <span className="text-sm leading-relaxed text-text-secondary">
           I accept the{" "}
-          <a
-            href="/terms"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-accent underline decoration-border underline-offset-2 transition-colors hover:text-accent-hover"
-          >
+          <InlineAccentLink href="/terms" external variant="underlined">
             Terms and Conditions
-          </a>
+          </InlineAccentLink>
         </span>
       </label>
 

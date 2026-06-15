@@ -43,127 +43,163 @@ html {
   --font-serif: "DM Sans Variable", Inter, system-ui, -apple-system, sans-serif;
   --font-mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
-  --color-bg: #fff9da;
-  --color-bg-soft: #ffffff;
-  --color-bg-muted: #e4e4e4;
-  --color-bg-secondary: #fff9da;
-  --color-text: #000000;
-  --color-text-secondary: #303027;
-  --color-accent: #006f1b;
-  --color-accent-hover: #005a16;
-  --color-accent-text: #050505;
-  --color-brand-green: #00d22e;
-  --color-brand-green-hover: #85ffa0;
-  --color-border: #d9d9d9;
-  --color-cyan: #00d2c8;
+  --color-pwv-black: oklch(0% 0 0);
+  --color-pwv-white: oklch(100% 0 0);
+  --color-pwv-gray: oklch(90% 0 0);
+  --color-pwv-green: oklch(78% 0.235 145);
+  --color-pwv-deep-green: oklch(38% 0.16 145);
+  --color-pwv-teal: oklch(78% 0.165 192);
 
-  --color-code-bg: #11110d;
-  --color-code-text: #04d936;
+  --color-pwv-soft-green: oklch(92% 0.165 145);
+  --color-pwv-soft-teal: oklch(94% 0.115 192);
+  --color-pwv-soft-yellow: oklch(94% 0.07 95);
+  --color-pwv-soft-coral: oklch(86% 0.07 22);
+  --color-pwv-soft-lavender: oklch(85% 0.085 295);
+  --color-pwv-soft-periwinkle: oklch(86% 0.06 250);
 
-  --color-all-active-bg: #04d936;
-  --color-all-active-text: #050505;
+  --color-pwv-light-green: oklch(96% 0.075 145);
+  --color-pwv-light-teal: oklch(97% 0.045 195);
+  --color-pwv-light-yellow: oklch(97.5% 0.035 95);
+  --color-pwv-light-coral: oklch(91% 0.045 22);
+  --color-pwv-light-lavender: oklch(91% 0.06 295);
+  --color-pwv-light-periwinkle: oklch(91% 0.04 250);
 
-  --color-status-unverified-bg: #e0e7ff;
-  --color-status-unverified-text: #3730a3;
-  --color-status-pending-bg: #fef3c7;
-  --color-status-pending-text: #92400e;
-  --color-status-accepted-bg: #d1e8d5;
-  --color-status-accepted-text: #2d5a3e;
-  --color-status-rejected-bg: #fce4e0;
-  --color-status-rejected-text: #7a3a32;
+  --color-bg: oklch(97.5% 0.035 95);
+  --color-bg-soft: oklch(100% 0 0);
+  --color-bg-muted: oklch(90% 0 0);
+  --color-bg-secondary: oklch(97.5% 0.035 95);
+  --color-text: oklch(8% 0 0);
+  --color-text-secondary: oklch(28% 0.005 95);
+  --color-accent: oklch(65% 0.2 145);
+  --color-accent-hover: oklch(55% 0.18 145);
+  --color-accent-text: oklch(100% 0 0);
+  --color-brand-green: oklch(78% 0.235 145);
+  --color-brand-green-hover: oklch(68% 0.22 145);
+  --color-border: oklch(86% 0.005 95);
+  --color-cyan: oklch(78% 0.165 192);
 
-  --color-status-live-bg: #dcfce7;
-  --color-status-live-text: #166534;
-  --color-status-scheduled-bg: #dbeafe;
-  --color-status-scheduled-text: #1e40af;
-  --color-status-draft-bg: #fef3c7;
-  --color-status-draft-text: #854d0e;
-  --color-status-ended-bg: #f3f4f6;
-  --color-status-ended-text: #1f2937;
-  --color-status-waitlist-bg: #f3e8ff;
-  --color-status-waitlist-text: #6b21a8;
-  --color-status-declined-bg: #fee2e2;
-  --color-status-declined-text: #991b1b;
+  --color-code-bg: oklch(15% 0.005 95);
+  --color-code-text: oklch(78% 0.165 192);
 
-  --color-status-live-stat-bg: #f0fdf4;
-  --color-status-live-stat-text: #15803d;
-  --color-status-scheduled-stat-bg: #eff6ff;
-  --color-status-scheduled-stat-text: #1d4ed8;
-  --color-status-draft-stat-bg: #fffbeb;
-  --color-status-draft-stat-text: #a16207;
-  --color-status-waitlist-stat-bg: #faf5ff;
-  --color-status-waitlist-stat-text: #7e22ce;
-  --color-status-declined-stat-bg: #fef2f2;
-  --color-status-declined-stat-text: #b91c1c;
+  --color-all-active-bg: oklch(78% 0.165 192);
+  --color-all-active-text: oklch(5% 0 0);
 
-  --color-warning-bg: #fef3c7;
-  --color-warning-text: #92400e;
-  --color-warning-border: #fcd34d;
-  --color-error-bg: #fee2e2;
-  --color-error-text: #991b1b;
-  --color-error-border: #fecaca;
+  --color-status-unverified-bg: oklch(94% 0.03 270);
+  --color-status-unverified-text: oklch(38% 0.12 270);
+  --color-status-pending-bg: oklch(95% 0.06 80);
+  --color-status-pending-text: oklch(42% 0.12 70);
+  --color-status-accepted-bg: oklch(96% 0.04 192);
+  --color-status-accepted-text: oklch(42% 0.10 192);
+  --color-status-rejected-bg: oklch(94% 0.04 30);
+  --color-status-rejected-text: oklch(45% 0.10 30);
+
+  --color-status-live-bg: oklch(95% 0.06 145);
+  --color-status-live-text: oklch(40% 0.13 145);
+  --color-status-scheduled-bg: oklch(95% 0.04 240);
+  --color-status-scheduled-text: oklch(40% 0.13 240);
+  --color-status-draft-bg: oklch(95% 0.06 80);
+  --color-status-draft-text: oklch(40% 0.10 80);
+  --color-status-ended-bg: oklch(95% 0.005 95);
+  --color-status-ended-text: oklch(30% 0.005 95);
+  --color-status-waitlist-bg: oklch(95% 0.05 295);
+  --color-status-waitlist-text: oklch(40% 0.15 295);
+  --color-status-declined-bg: oklch(94% 0.05 25);
+  --color-status-declined-text: oklch(45% 0.18 25);
+
+  --color-format-inperson-bg: oklch(96% 0.04 192);
+  --color-format-inperson-text: oklch(42% 0.10 192);
+  --color-format-remote-bg: oklch(95% 0.04 240);
+  --color-format-remote-text: oklch(40% 0.13 240);
+  --color-format-hybrid-bg: oklch(91% 0.04 250);
+  --color-format-hybrid-text: oklch(35% 0.12 250);
+
+  --color-status-live-stat-bg: oklch(96% 0.05 145);
+  --color-status-live-stat-text: oklch(40% 0.13 145);
+  --color-status-scheduled-stat-bg: oklch(96% 0.03 240);
+  --color-status-scheduled-stat-text: oklch(40% 0.13 240);
+  --color-status-draft-stat-bg: oklch(96% 0.05 80);
+  --color-status-draft-stat-text: oklch(40% 0.10 80);
+  --color-status-waitlist-stat-bg: oklch(96% 0.04 295);
+  --color-status-waitlist-stat-text: oklch(40% 0.15 295);
+  --color-status-declined-stat-bg: oklch(95% 0.05 25);
+  --color-status-declined-stat-text: oklch(45% 0.18 25);
+
+  --color-warning-bg: oklch(95% 0.06 80);
+  --color-warning-text: oklch(42% 0.12 70);
+  --color-warning-border: oklch(80% 0.14 80);
+  --color-error-bg: oklch(94% 0.05 25);
+  --color-error-text: oklch(45% 0.18 25);
+  --color-error-border: oklch(80% 0.13 25);
 }
 
 .dark {
-  --color-bg: #000000;
-  --color-bg-soft: #0a0a0a;
-  --color-bg-muted: #111111;
-  --color-bg-secondary: #0a0a0a;
-  --color-text: #f7f2df;
-  --color-text-secondary: #d7d0bb;
-  --color-accent: #04d936;
-  --color-accent-hover: #58f06f;
-  --color-accent-text: #050505;
-  --color-brand-green: #00d22e;
-  --color-brand-green-hover: #85ffa0;
-  --color-border: #303027;
-  --color-cyan: #00d2c8;
+  --color-bg: oklch(8% 0 0);
+  --color-bg-soft: oklch(12% 0.005 95);
+  --color-bg-muted: oklch(15% 0.005 95);
+  --color-bg-secondary: oklch(12% 0.005 95);
+  --color-text: oklch(94% 0.02 95);
+  --color-text-secondary: oklch(82% 0.015 95);
+  --color-accent: oklch(80% 0.15 145);
+  --color-accent-hover: oklch(72% 0.16 145);
+  --color-accent-text: oklch(5% 0 0);
+  --color-brand-green: oklch(78% 0.235 145);
+  --color-brand-green-hover: oklch(70% 0.22 145);
+  --color-pwv-green-hover: oklch(85% 0.22 145);
+  --color-border: oklch(28% 0.01 95);
+  --color-cyan: oklch(78% 0.165 192);
 
-  --color-code-bg: #151511;
-  --color-code-text: #04d936;
+  --color-code-bg: oklch(18% 0.005 95);
+  --color-code-text: oklch(94% 0.115 192);
 
-  --color-all-active-bg: #1a3a2a;
-  --color-all-active-text: #a7d4b0;
+  --color-all-active-bg: oklch(28% 0.08 192);
+  --color-all-active-text: oklch(94% 0.115 192);
 
-  --color-status-unverified-bg: #1e1b4b;
-  --color-status-unverified-text: #c7d2fe;
-  --color-status-pending-bg: #78350f;
-  --color-status-pending-text: #fde68a;
-  --color-status-accepted-bg: #1a3a2a;
-  --color-status-accepted-text: #a7d4b0;
-  --color-status-rejected-bg: #3a1a1a;
-  --color-status-rejected-text: #f0b0a0;
+  --color-status-unverified-bg: oklch(25% 0.08 270);
+  --color-status-unverified-text: oklch(85% 0.08 270);
+  --color-status-pending-bg: oklch(28% 0.08 75);
+  --color-status-pending-text: oklch(88% 0.12 80);
+  --color-status-accepted-bg: oklch(28% 0.06 192);
+  --color-status-accepted-text: oklch(88% 0.10 192);
+  --color-status-rejected-bg: oklch(28% 0.08 30);
+  --color-status-rejected-text: oklch(85% 0.08 30);
 
-  --color-status-live-bg: #052e16;
-  --color-status-live-text: #86efac;
-  --color-status-scheduled-bg: #1e3a5f;
-  --color-status-scheduled-text: #93c5fd;
-  --color-status-draft-bg: #422006;
-  --color-status-draft-text: #fde68a;
-  --color-status-ended-bg: #374151;
-  --color-status-ended-text: #e5e7eb;
-  --color-status-waitlist-bg: #3b0764;
-  --color-status-waitlist-text: #d8b4fe;
-  --color-status-declined-bg: #450a0a;
-  --color-status-declined-text: #fca5a5;
+  --color-status-live-bg: oklch(28% 0.10 145);
+  --color-status-live-text: oklch(85% 0.15 145);
+  --color-status-scheduled-bg: oklch(25% 0.08 240);
+  --color-status-scheduled-text: oklch(85% 0.10 240);
+  --color-status-draft-bg: oklch(28% 0.06 80);
+  --color-status-draft-text: oklch(88% 0.10 80);
+  --color-status-ended-bg: oklch(25% 0.005 95);
+  --color-status-ended-text: oklch(80% 0.005 95);
+  --color-status-waitlist-bg: oklch(28% 0.10 295);
+  --color-status-waitlist-text: oklch(85% 0.12 295);
+  --color-status-declined-bg: oklch(28% 0.12 25);
+  --color-status-declined-text: oklch(85% 0.15 25);
 
-  --color-status-live-stat-bg: #052e16;
-  --color-status-live-stat-text: #86efac;
-  --color-status-scheduled-stat-bg: #1e3a5f;
-  --color-status-scheduled-stat-text: #93c5fd;
-  --color-status-draft-stat-bg: #422006;
-  --color-status-draft-stat-text: #fde68a;
-  --color-status-waitlist-stat-bg: #3b0764;
-  --color-status-waitlist-stat-text: #d8b4fe;
-  --color-status-declined-stat-bg: #450a0a;
-  --color-status-declined-stat-text: #fca5a5;
+  --color-format-inperson-bg: oklch(28% 0.06 192);
+  --color-format-inperson-text: oklch(88% 0.10 192);
+  --color-format-remote-bg: oklch(25% 0.08 240);
+  --color-format-remote-text: oklch(85% 0.10 240);
+  --color-format-hybrid-bg: oklch(28% 0.08 250);
+  --color-format-hybrid-text: oklch(85% 0.08 250);
 
-  --color-warning-bg: #422006;
-  --color-warning-text: #fde68a;
-  --color-warning-border: #854d0e;
-  --color-error-bg: #450a0a;
-  --color-error-text: #fca5a5;
-  --color-error-border: #7f1d1d;
+  --color-status-live-stat-bg: oklch(28% 0.10 145);
+  --color-status-live-stat-text: oklch(85% 0.15 145);
+  --color-status-scheduled-stat-bg: oklch(25% 0.08 240);
+  --color-status-scheduled-stat-text: oklch(85% 0.10 240);
+  --color-status-draft-stat-bg: oklch(28% 0.06 80);
+  --color-status-draft-stat-text: oklch(88% 0.10 80);
+  --color-status-waitlist-stat-bg: oklch(28% 0.10 295);
+  --color-status-waitlist-stat-text: oklch(85% 0.12 295);
+  --color-status-declined-stat-bg: oklch(28% 0.12 25);
+  --color-status-declined-stat-text: oklch(85% 0.15 25);
+
+  --color-warning-bg: oklch(28% 0.08 75);
+  --color-warning-text: oklch(88% 0.12 80);
+  --color-warning-border: oklch(50% 0.12 75);
+  --color-error-bg: oklch(28% 0.12 25);
+  --color-error-text: oklch(85% 0.15 25);
+  --color-error-border: oklch(50% 0.15 25);
 }
 
 /* 🖋️ Base typography */
@@ -203,12 +239,12 @@ p, li {
 }
 
 .semver-flourish {
-  --semver-branch-cyan: #008f89;
-  --semver-branch-green: #2f8f45;
-  --semver-branch-warm: #9a7b22;
-  --semver-label: #006f1b;
-  --semver-main: #00d2c8;
-  --semver-node: #00d2c8;
+  --semver-branch-teal: var(--color-pwv-teal);
+  --semver-branch-lavender: oklch(60% 0.225 295);
+  --semver-branch-periwinkle: oklch(65% 0.18 250);
+  --semver-label: var(--color-pwv-teal);
+  --semver-main: var(--color-pwv-teal);
+  --semver-node: var(--color-pwv-teal);
   color: var(--color-text);
   margin-inline: auto;
   max-width: 920px;
@@ -225,9 +261,9 @@ p, li {
 .semver-main-rail {
   fill: none;
   stroke: var(--semver-main);
+  stroke-width: 4.5;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 4.5;
 }
 
 .semver-merge {
@@ -237,19 +273,19 @@ p, li {
   stroke-width: 2.25;
 }
 
-.semver-merge-cyan {
-  opacity: 0.68;
-  stroke: var(--semver-branch-cyan);
+.semver-merge-teal {
+  fill: none;
+  stroke: var(--semver-branch-teal);
 }
 
-.semver-merge-green {
-  opacity: 0.52;
-  stroke: var(--semver-branch-green);
+.semver-merge-lavender {
+  fill: none;
+  stroke: var(--semver-branch-lavender);
 }
 
-.semver-merge-warm {
-  opacity: 0.46;
-  stroke: var(--semver-branch-warm);
+.semver-merge-periwinkle {
+  fill: none;
+  stroke: var(--semver-branch-periwinkle);
 }
 
 .semver-nodes {
@@ -274,33 +310,33 @@ p, li {
 }
 
 .semver-main-signal {
-  filter: drop-shadow(0 0 10px rgb(0 210 200 / 0.24));
+  filter: drop-shadow(0 0 10px oklch(78% 0.165 192 / 0.24));
 }
 
 .semver-merge-signal {
-  fill: var(--semver-branch-cyan);
-  opacity: 0.45;
+  fill: var(--semver-branch-teal);
+  opacity: 0.65;
 }
 
 .semver-merge-signal-alt {
-  fill: var(--semver-branch-warm);
-  opacity: 0.38;
+  fill: var(--semver-branch-periwinkle);
+  opacity: 0.58;
 }
 
 .semver-branch-particle {
-  opacity: 0.3;
+  opacity: 0.45;
 }
 
-.semver-branch-particle-cyan {
-  fill: var(--semver-branch-cyan);
+.semver-branch-particle-teal {
+  fill: var(--semver-branch-teal);
 }
 
-.semver-branch-particle-green {
-  fill: var(--semver-branch-green);
+.semver-branch-particle-lavender {
+  fill: var(--semver-branch-lavender);
 }
 
-.semver-branch-particle-warm {
-  fill: var(--semver-branch-warm);
+.semver-branch-particle-periwinkle {
+  fill: var(--semver-branch-periwinkle);
 }
 
 .dark .semver-guide {
@@ -308,12 +344,12 @@ p, li {
 }
 
 .dark .semver-flourish {
-  --semver-branch-cyan: #88fff8;
-  --semver-branch-green: #85ffa0;
-  --semver-branch-warm: #ffef9e;
-  --semver-label: #d7d0bb;
-  --semver-main: #00d2c8;
-  --semver-node: #88fff8;
+  --semver-branch-teal: var(--color-pwv-soft-teal);
+  --semver-branch-lavender: var(--color-pwv-soft-lavender);
+  --semver-branch-periwinkle: var(--color-pwv-soft-periwinkle);
+  --semver-label: var(--color-pwv-soft-teal);
+  --semver-main: var(--color-pwv-teal);
+  --semver-node: var(--color-pwv-soft-teal);
 }
 
 @media (max-width: 640px) {

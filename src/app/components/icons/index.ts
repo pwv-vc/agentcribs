@@ -16,4 +16,11 @@ export { FileTextIcon } from "./file-text";
 export { TimerIcon } from "./timer";
 export { FlagIcon } from "./flag";
 export { WarningIcon } from "./warning";
+export { HouseHeartIcon } from "./house-heart";
+export { WebcamIcon } from "./webcam";
+export { ArrowBranchIcon } from "./arrow-branch";
 export { SparkleIcon } from "./sparkle";
+export { SparkleFilledIcon } from "./sparkle-filled";
+export { RadioFilledIcon } from "./radio-filled";
+export { ClockFilledIcon } from "./clock-filled";
+

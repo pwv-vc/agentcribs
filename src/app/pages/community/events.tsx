@@ -7,28 +7,7 @@ import {
   type Event,
 } from "@/app/queries/events";
 import { formatDateShort } from "@/app/lib/formatters";
-
-function statusLabel(status: Event["status"]): string {
-  switch (status) {
-    case "upcoming":
-      return "Upcoming";
-    case "current":
-      return "Happening now";
-    case "past":
-      return "Past";
-  }
-}
-
-function statusColor(status: Event["status"]): string {
-  switch (status) {
-    case "upcoming":
-      return "bg-status-live-bg text-status-live-text";
-    case "current":
-      return "bg-status-scheduled-bg text-status-scheduled-text";
-    case "past":
-      return "bg-status-ended-bg text-status-ended-text";
-  }
-}
+import { FormatBadge, EventStatusPill } from "@/app/lib/event-badges";
 
 function FeaturedEventCard({ event }: { event: Event }) {
   return (
@@ -38,8 +17,8 @@ function FeaturedEventCard({ event }: { event: Event }) {
     >
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-sm font-medium text-accent">
-            {formatDateShort(event.date)} &middot; {event.location}
+          <p className="text-sm font-medium text-pwv-green">
+            {formatDateShort(event.date, event.timezone ?? "America/New_York")} &middot; {event.location}
           </p>
           <h2 className="mt-2 text-2xl font-black leading-tight sm:text-3xl">
             {event.title}
@@ -54,11 +33,10 @@ function FeaturedEventCard({ event }: { event: Event }) {
             </p>
           )}
         </div>
-        <span
-          className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${statusColor(event.status)}`}
-        >
-          {statusLabel(event.status)}
-        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          <FormatBadge format={event.format} size="md" />
+          <EventStatusPill status={event.status} size="md" />
+        </div>
       </div>
     </a>
   );
@@ -68,12 +46,12 @@ function EventCard({ event }: { event: Event }) {
   return (
     <a
       href={link("/community/events/:id", { id: event.id })}
-      className="group block rounded-lg border border-border bg-bg-soft p-6 transition-colors hover:border-accent/30 sm:p-8"
+      className="group block rounded-lg border border-border bg-bg p-6 transition-colors hover:border-accent/30 sm:p-8"
     >
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-sm text-text-secondary">
-            {formatDateShort(event.date)} &middot; {event.location}
+            {formatDateShort(event.date, event.timezone ?? "America/New_York")} &middot; {event.location}
           </p>
           <h2 className="mt-2 text-xl font-bold leading-snug sm:text-2xl">
             {event.title}
@@ -88,11 +66,10 @@ function EventCard({ event }: { event: Event }) {
             </p>
           )}
         </div>
-        <span
-          className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${statusColor(event.status)}`}
-        >
-          {statusLabel(event.status)}
-        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          <FormatBadge format={event.format} size="md" />
+          <EventStatusPill status={event.status} size="md" />
+        </div>
       </div>
     </a>
   );
@@ -102,13 +79,14 @@ function PastEventRow({ event }: { event: Event }) {
   return (
     <a
       href={link("/community/events/:id", { id: event.id })}
-      className="group flex flex-wrap items-baseline gap-x-6 gap-y-1 rounded-none border-b border-border pb-4 transition-colors hover:text-accent"
+      className="group flex flex-wrap items-baseline gap-x-6 gap-y-1 rounded-none border-b border-border pb-4 transition-colors hover:text-pwv-green"
     >
       <span className="text-sm tabular-nums text-text-secondary w-28 shrink-0">
-        {formatDateShort(event.date)}
+        {formatDateShort(event.date, event.timezone ?? "America/New_York")}
       </span>
       <span className="text-lg font-bold">{event.title}</span>
       <span className="text-sm text-text-secondary">{event.location}</span>
+      <FormatBadge format={event.format} size="sm" />
     </a>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { link } from "@/app/shared/links";
+import { NavLink } from "@/app/components/links";
 
 interface MobileNavProps {
   displayEmailAddress?: string;
@@ -52,31 +53,28 @@ export function MobileNav({ displayEmailAddress, isDev }: MobileNavProps) {
                   {displayEmailAddress}
                 </span>
               )}
-              <a
+              <NavLink
                 href={link("/admin/applications")}
-                className="rounded-md px-3 py-2 text-sm font-medium text-text-secondary no-underline transition-colors hover:bg-bg-muted hover:text-text"
+                className="rounded-md px-3 py-2 hover:bg-bg-muted"
               >
                 Applications
-              </a>
-              <a
+              </NavLink>
+              <NavLink
                 href={link("/admin/events")}
-                className="rounded-md px-3 py-2 text-sm font-medium text-text-secondary no-underline transition-colors hover:bg-bg-muted hover:text-text"
+                className="rounded-md px-3 py-2 hover:bg-bg-muted"
               >
                 Events
-              </a>
-              <a
-                href="/"
-                className="rounded-md px-3 py-2 text-sm font-medium text-text-secondary no-underline transition-colors hover:bg-bg-muted hover:text-text"
-              >
+              </NavLink>
+              <NavLink href="/" className="rounded-md px-3 py-2 hover:bg-bg-muted">
                 Back to site
-              </a>
+              </NavLink>
               {!isDev && (
-                <a
+                <NavLink
                   href="/cdn-cgi/access/logout"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-text-secondary no-underline transition-colors hover:bg-bg-muted hover:text-text"
+                  className="rounded-md px-3 py-2 hover:bg-bg-muted"
                 >
                   Logout
-                </a>
+                </NavLink>
               )}
             </div>
           </div>

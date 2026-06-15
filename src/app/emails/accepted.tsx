@@ -7,8 +7,8 @@ export default function AcceptedEmail({
   eventUrl,
 }: {
   name: string;
-  registrationCode: string;
-  eventUrl: string;
+  registrationCode?: string;
+  eventUrl?: string;
 }) {
   return (
     <Html>
@@ -21,18 +21,30 @@ export default function AcceptedEmail({
             We're thrilled to welcome you to AgentCribs! Your application has
             been <strong>accepted</strong>.
           </Text>
-          <Text style={paragraph}>
-            Here's the invite link to the event:
-          </Text>
-          <Text style={linkBlock}>
-            <Link href={eventUrl} style={link}>
-              {eventUrl}
-            </Link>
-          </Text>
-          <Text style={paragraph}>
-            Use this registration code:{" "}
-            <strong style={code}>{registrationCode}</strong>
-          </Text>
+          {eventUrl ? (
+            <>
+              <Text style={paragraph}>
+                Here's the invite link to the event:
+              </Text>
+              <Text style={linkBlock}>
+                <Link href={eventUrl} style={link}>
+                  {eventUrl}
+                </Link>
+              </Text>
+              {registrationCode ? (
+                <Text style={paragraph}>
+                  Use this registration code:{" "}
+                  <strong style={code}>{registrationCode}</strong>
+                </Text>
+              ) : null}
+            </>
+          ) : (
+            <Text style={paragraph}>
+              We don't have an upcoming event on the calendar just yet, so
+              you've been added to our waitlist. You'll be the first to know
+              when the next event is announced — no need to re-apply.
+            </Text>
+          )}
           <Text style={closing}>— AgentCribs Team</Text>
         </Container>
       </Body>
@@ -46,17 +58,29 @@ export function acceptedText({
   eventUrl,
 }: {
   name: string;
-  registrationCode: string;
-  eventUrl: string;
+  registrationCode?: string;
+  eventUrl?: string;
 }) {
-  return `Hi ${name},
+  if (eventUrl) {
+    return `Hi ${name},
 
 We're thrilled to welcome you to AgentCribs! Your application has been accepted.
 
 Here's the invite link to the event:
 ${eventUrl}
 
-Use this registration code: ${registrationCode}
+${
+  registrationCode
+    ? `Use this registration code: ${registrationCode}\n\n`
+    : ""
+}— AgentCribs Team`;
+  }
+
+  return `Hi ${name},
+
+We're thrilled to welcome you to AgentCribs! Your application has been accepted.
+
+We don't have an upcoming event on the calendar just yet, so you've been added to our waitlist. You'll be the first to know when the next event is announced — no need to re-apply.
 
 — AgentCribs Team`;
 }
