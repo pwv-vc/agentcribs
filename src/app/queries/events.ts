@@ -3,6 +3,7 @@ import { serverQuery } from "rwsdk/worker";
 import { allEvents } from "content-collections";
 
 export type Event = (typeof allEvents)[number];
+export type EventStatus = "upcoming" | "current" | "past";
 
 export function findNextUpcomingEvent(): Event | null {
   const now = new Date();

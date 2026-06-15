@@ -93,7 +93,7 @@ const events = defineCollection({
       day: "2-digit",
     }).format(eventDate);
 
-    let status: string;
+    let status: "upcoming" | "current" | "past";
     if (nowInTz === eventDateInTz) {
       status = "current";
     } else if (eventDate < now) {

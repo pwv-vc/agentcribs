@@ -1,9 +1,9 @@
-import type { Event } from "@/app/queries/events";
+import type { EventStatus } from "@/app/queries/events";
 
-export function formatLabel(format: Event["format"]): string {
+export function formatLabel(format: string): string {
   switch (format) {
     case "in-person":
-      return "In person";
+      return "In Person";
     case "remote":
       return "Remote";
     case "hybrid":
@@ -13,7 +13,7 @@ export function formatLabel(format: Event["format"]): string {
   }
 }
 
-export function formatColor(format: Event["format"]): string {
+export function formatColor(format: string): string {
   switch (format) {
     case "in-person":
       return "bg-format-inperson-bg text-format-inperson-text";
@@ -26,7 +26,7 @@ export function formatColor(format: Event["format"]): string {
   }
 }
 
-export function statusLabel(status: Event["status"]): string {
+export function statusLabel(status: EventStatus): string {
   switch (status) {
     case "upcoming":
       return "Upcoming";
@@ -37,7 +37,7 @@ export function statusLabel(status: Event["status"]): string {
   }
 }
 
-export function statusColor(status: Event["status"]): string {
+export function statusColor(status: EventStatus): string {
   switch (status) {
     case "upcoming":
       return "bg-status-live-bg text-status-live-text";

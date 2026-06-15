@@ -3,7 +3,7 @@ import { HouseHeartIcon, WebcamIcon, ArrowBranchIcon } from "@/app/components/ic
 
 const config = {
   "in-person": {
-    label: "In person",
+    label: "In Person",
     className: "bg-format-inperson-bg text-format-inperson-text",
     Icon: HouseHeartIcon,
   },

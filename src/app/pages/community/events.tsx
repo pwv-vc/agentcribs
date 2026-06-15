@@ -79,7 +79,7 @@ function PastEventRow({ event }: { event: Event }) {
   return (
     <a
       href={link("/community/events/:id", { id: event.id })}
-      className="group flex flex-wrap items-baseline gap-x-6 gap-y-1 rounded-none border-b border-border pb-4 transition-colors hover:text-pwv-green"
+      className="group flex flex-wrap items-center gap-x-6 gap-y-1 rounded-none border-b border-border pb-4 transition-colors hover:text-pwv-green"
     >
       <span className="text-sm tabular-nums text-text-secondary w-28 shrink-0">
         {formatDateShort(event.date, event.timezone ?? "America/New_York")}

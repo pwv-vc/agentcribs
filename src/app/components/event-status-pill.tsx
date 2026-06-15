@@ -1,4 +1,4 @@
-import type { Event } from "@/app/queries/events";
+import type { EventStatus } from "@/app/queries/events";
 import { SparkleFilledIcon, RadioFilledIcon, ClockFilledIcon } from "@/app/components/icons";
 
 const config = {
@@ -31,7 +31,7 @@ export function EventStatusPill({
   status,
   size = "md",
 }: {
-  status: Event["status"];
+  status: EventStatus;
   size?: Size;
 }) {
   const c = config[status];

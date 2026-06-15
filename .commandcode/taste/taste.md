@@ -8,6 +8,10 @@ See [brand/taste.md](brand/taste.md)
 - Use consistent outer container widths (`max-w-[1040px]`) with inner text `max-w-[820px]` across all home page sections — hero, community, event, and FAQ should share the same horizontal rhythm. Confidence: 0.70
 - Avoid using the heavy branded CtaButton for tertiary navigation like "Back to home" on content pages — it competes with the primary action and feels overbearing when repeated. Use a lighter text link or breadcrumb instead. Confidence: 0.65
 
+# labels
+
+- Capitalize words in format labels (e.g., "In Person" not "In person"). Confidence: 0.80
+
 # css
 
 - For dark mode: Use teal family (`#00d2c8` brand teal / `#88fff8` soft-teal) for buttons and accents, not the dark sage or bright green tones. The user is moving away from dark sage; the accent role shifts to teal, not just lighter greens. Confidence: 0.75
