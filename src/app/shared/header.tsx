@@ -21,6 +21,7 @@ export function Header() {
           </span>
         </a>
         <nav className="flex items-center gap-4">
+          <NavLink href={link("/podcasts")}>Podcasts</NavLink>
           <NavLink href={link("/community/events")}>Events</NavLink>
           <a
             href={link("/apply")}

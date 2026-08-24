@@ -106,6 +106,83 @@ const events = defineCollection({
   },
 });
 
+const podcastEpisodeSchema = z.object({
+  number: z.string(),
+  guest: z.string(),
+  title: z.string(),
+  description: z.string(),
+  image: z.string(),
+  imageAlt: z.string(),
+});
+
+const podcastHostSchema = z.object({
+  name: z.string(),
+  role: z.string(),
+  bio: z.string(),
+  image: z.string(),
+  imageAlt: z.string(),
+});
+
+const podcastSeasonSchema = z.object({
+  number: z.number(),
+  title: z.string().optional(),
+  episodes: z.array(podcastEpisodeSchema),
+});
+
+const podcasts = defineCollection({
+  name: "podcasts",
+  directory: "content/podcasts",
+  include: "*.md",
+  schema: z.object({
+    id: z.string(),
+    name: z.string(),
+    tagline: z.string(),
+    description: z.string(),
+    url: z.string().url(),
+    logo: z.string().optional(),
+    logoAlt: z.string().optional(),
+    sponsor: z.string().optional(),
+    trailer: z
+      .object({
+        videoId: z.string(),
+        label: z.string().optional(),
+      })
+      .optional(),
+    isFeatured: z.boolean().default(false),
+    image: z.string().optional(),
+    imageAlt: z.string().optional(),
+    imageWidth: z.number().optional(),
+    imageHeight: z.number().optional(),
+    hosts: z.array(podcastHostSchema),
+    seasons: z.array(podcastSeasonSchema),
+    content: z.string(),
+  }),
+  transform: async (document, context) => {
+    const html = await compileMarkdown(context, document);
+    const totalEpisodes = document.seasons.reduce(
+      (sum, season) => sum + season.episodes.length,
+      0,
+    );
+    return { ...document, content: html, totalEpisodes };
+  },
+});
+
+const faqs = defineCollection({
+  name: "faqs",
+  directory: "content/faqs",
+  include: "*.md",
+  schema: z.object({
+    id: z.string(),
+    question: z.string(),
+    order: z.number().default(0),
+    content: z.string(),
+  }),
+  transform: async (document, context) => {
+    const html = await compileMarkdown(context, document);
+    return { ...document, content: html };
+  },
+});
+
 export default defineConfig({
-  content: [topics, playlist, events],
+  content: [topics, playlist, events, podcasts, faqs],
 });

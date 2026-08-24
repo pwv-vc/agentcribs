@@ -20,6 +20,8 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   ├── app/
 │   │   ├── pages/             # Route/page components
 │   │   │   ├── home.tsx
+│   │   │   ├── podcasts.tsx        # /podcasts index (from podcasts collection)
+│   │   │   ├── podcasts/[id].tsx   # /podcasts/:id detail (seasons, episodes, hosts, trailer)
 │   │   │   ├── apply.tsx
 │   │   │   ├── thank-you.tsx
 │   │   │   ├── verify-success.tsx
@@ -37,6 +39,7 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   │   ├── components/        # Reusable UI components
 │   │   │   ├── admin/         # Admin-specific components
 │   │   │   ├── events/        # Event-related components
+│   │   │   ├── podcasts/      # Podcast components (trailer, seasons, episodes, hosts, cards)
 │   │   │   ├── icons/         # Icon components (barrel export index.ts)
 │   │   │   ├── application-detail.tsx
 │   │   │   ├── community-section.tsx
@@ -53,7 +56,7 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   │   │   └── queue.ts       # Queue handlers: process-application, send-email, notifications, slack, dead-letter
 │   │   ├── emails/            # Email templates (admin-notification, pending-review, accepted, rejected, magic-link)
 │   │   ├── lib/               # ai.ts (AI Gateway), events.ts, formatters.ts, luma.ts, registration-code.ts, seo.ts
-│   │   ├── queries/           # Data fetching: application.ts, topics.ts
+│   │   ├── queries/           # Data fetching: application.ts, topics.ts, events.ts, podcasts.ts, faqs.ts
 │   │   ├── middleware/        # Route middleware
 │   │   │   ├── auth/basic.ts          # Dev password auth fallback (not wired by default)
 │   │   │   ├── cloudflare-session.ts  # Cloudflare One Access session hydration
@@ -67,9 +70,13 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   │   └── styles.css
 ├── content/                   # Content Collections source
 │   ├── topics/                # *.md — application topic definitions (id, label, content)
+│   ├── events/                # *.md — community events (id, date, location, speakers, content)
+│   ├── podcasts/              # *.md — podcasts (id, name, tagline, logo, sponsor, trailer videoId, hosts, seasons with episodes)
+│   ├── faqs/                  # *.md — FAQ entries (question, order, content) rendered on home + FAQPage schema
+│   └── playlist/              # *.json — video playlists
 ├── public/                    # Static assets (favicons, robots.txt, sitemap, manifest)
 ├── types/                     # Shim type declarations (css.d.ts, rw.d.ts, vite.d.ts)
-├── content-collections.ts     # Content Collections config (topics + playlist schemas)
+├── content-collections.ts     # Content Collections config (topics, playlist, events, podcasts, faqs schemas)
 ├── worker-configuration.d.ts  # Manual Env type declarations (bindings + secrets)
 ├── wrangler.jsonc             # Cloudflare Workers config — KV, R2, email, queues, secrets
 ├── vite.config.mts            # Vite build config
