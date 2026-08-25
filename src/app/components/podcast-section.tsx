@@ -5,6 +5,11 @@ import { PodcastLogo, PodcastTrailer } from "@/app/components/podcasts";
 export function PodcastSection({ podcast }: { podcast: Podcast | null }) {
   if (!podcast) return null;
 
+  const seasonNumbers = podcast.seasons.map((s) => s.number).join(", ");
+  const firstSeasonGuests = podcast.seasons[0]?.episodes
+    .map((e) => e.guest)
+    .join(", ");
+
   return (
     <section className="border-b border-border bg-pwv-black text-pwv-white">
       <div className="mx-auto max-w-[1040px] px-6 py-16 sm:px-8 sm:py-24">
@@ -34,9 +39,7 @@ export function PodcastSection({ podcast }: { podcast: Podcast | null }) {
                   Sponsored by {podcast.sponsor}.{" "}
                 </>
               )}
-              Season{" "}
-              {podcast.seasons.map((s) => s.number).join(", ")} features{" "}
-              {podcast.seasons[0].episodes.map((e) => e.guest).join(", ")}.
+              Season {seasonNumbers} features {firstSeasonGuests}.
             </p>
             <p className="mt-6">
               <a
@@ -49,7 +52,7 @@ export function PodcastSection({ podcast }: { podcast: Podcast | null }) {
                 |
                 </span>
               <a
-                href="/podcasts"
+                href={link("/podcasts")}
                 className="inline-block px-2 py-3 text-base font-bold text-pwv-white no-underline transition-colors hover:text-pwv-green"
               >
                 All podcasts

@@ -14,18 +14,28 @@ export type SeoProps = {
   canonical?: string;
   /** Override the OG image path. Defaults to /og-image.png. */
   ogImage?: string;
+  /** Alt text for the OG image. Defaults to the site-wide alt. */
+  ogImageAlt?: string;
+  /** Cache-bust version for the OG image. Defaults to OG_IMAGE_CB. */
+  ogImageVersion?: string | number;
+  /** Intrinsic image dimensions, rendered as og:image:width/height. */
+  ogImageWidth?: number;
+  ogImageHeight?: number;
   ogType?: "website" | "article";
   /** When true, sets <meta name="robots" content="noindex,nofollow">. */
   noIndex?: boolean;
 };
 
+const DEFAULT_OG_IMAGE_WIDTH = "1200";
+const DEFAULT_OG_IMAGE_HEIGHT = "630";
+
 function absoluteUrl(path: string) {
   return new URL(path, SITE_URL).toString();
 }
 
-function ogImageUrl(path: string) {
+function ogImageUrl(path: string, version?: string | number) {
   const url = new URL(path, SITE_URL);
-  url.searchParams.set("v", OG_IMAGE_CB);
+  url.searchParams.set("v", String(version ?? OG_IMAGE_CB));
   return url.toString();
 }
 
@@ -34,12 +44,19 @@ export const Seo = ({
   description,
   canonical = SITE_URL,
   ogImage = OG_IMAGE,
+  ogImageAlt = OG_IMAGE_ALT,
+  ogImageVersion,
+  ogImageWidth,
+  ogImageHeight,
   ogType = "website",
   noIndex = false,
 }: SeoProps) => {
   const fullTitle = `${title} | ${SITE_NAME}`;
   const canonicalUrl = absoluteUrl(canonical);
-  const imageUrl = ogImageUrl(ogImage);
+  const imageUrl = ogImageUrl(ogImage, ogImageVersion);
+  const imageAlt = ogImageAlt;
+  const imageWidth = String(ogImageWidth ?? DEFAULT_OG_IMAGE_WIDTH);
+  const imageHeight = String(ogImageHeight ?? DEFAULT_OG_IMAGE_HEIGHT);
 
   return (
     <>
@@ -52,14 +69,14 @@ export const Seo = ({
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:image" content={imageUrl} />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
-      <meta property="og:image:alt" content={OG_IMAGE_ALT} />
+      <meta property="og:image:width" content={imageWidth} />
+      <meta property="og:image:height" content={imageHeight} />
+      <meta property="og:image:alt" content={imageAlt} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={imageUrl} />
-      <meta name="twitter:image:alt" content={OG_IMAGE_ALT} />
+      <meta name="twitter:image:alt" content={imageAlt} />
       {TWITTER_HANDLE && <meta name="twitter:site" content={TWITTER_HANDLE} />}
       {noIndex && <meta name="robots" content="noindex,nofollow" />}
     </>

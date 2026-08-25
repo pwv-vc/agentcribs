@@ -1,3 +1,4 @@
+import { link } from "@/app/shared/links";
 import type {
   Podcast,
   PodcastEpisode,
@@ -152,7 +153,7 @@ export function PodcastCard({
 }) {
   return (
     <a
-      href={`/podcasts/${podcast.id}`}
+      href={link("/podcasts/:id", { id: podcast.id })}
       className="group block rounded-lg border border-border bg-bg-soft p-6 transition-colors hover:border-accent/40 sm:p-8"
     >
       <div className="flex flex-wrap items-start justify-between gap-4">

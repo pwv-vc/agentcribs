@@ -77,3 +77,8 @@ See [data/taste.md](data/taste.md)
 - Keep AGENTS.md concise and optimized for prompt context windows — include only essential information (commands, project structure, key conventions) with minimal detail, so coding agents can quickly find context and explore the codebase. Confidence: 0.70
 - Always keep README.md up to date with current features, project structure, and environment variables/secrets needed to run the project. Confidence: 0.70
 - Always keep AGENTS.md up to date with current project structure and conventions so coding agents don't need to re-explore the codebase. Confidence: 0.70
+
+# seo
+- Make SEO and Open Graph tags content-driven — derive per-page title/description/OG image from the content itself (frontmatter fields like `ogImage`, `ogImageAlt`) rather than hardcoding a static site-wide OG image. Confidence: 0.85
+- Cache-bust images via a version query param (e.g., `?v=N`) so image updates propagate easily; bumping one number in content/config should refresh all references to those images. Confidence: 0.8
+- Make OG image dimensions content-driven too — expose `ogImageWidth`/`ogImageHeight` frontmatter fields rendered as `og:image:width`/`og:image:height` instead of hardcoding pixel sizes (1200×630, 1500×1500) in page components. Confidence: 0.75

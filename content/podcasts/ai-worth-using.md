@@ -10,6 +10,11 @@ url: https://aiworthusing.com/
 logo: /podcast/logo.svg
 logoAlt: AI Worth Using logo
 sponsor: AgentCribs
+ogImage: /podcast/laptop-hero.jpg
+ogImageAlt: AI Worth Using — a podcast from the AgentCribs community
+ogImageWidth: 1500
+ogImageHeight: 1500
+imagesVersion: 1
 trailer:
   videoId: aed5be809f711db50ac9d91dcf2a5864
   label: AI Worth Using Trailer

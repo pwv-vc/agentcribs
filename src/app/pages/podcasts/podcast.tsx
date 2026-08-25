@@ -9,17 +9,28 @@ import {
   PodcastLogo,
 } from "@/app/components/podcasts";
 import { getPodcast } from "@/app/queries/podcasts";
+import { link } from "@/app/shared/links";
 import { APP_URL } from "@/app/lib/url";
 
-export const PodcastDetail = async ({ id }: { id: string }) => {
+export const PodcastDetail = async ({
+  id,
+  response,
+}: {
+  id: string;
+  response?: { status?: number };
+}) => {
   const podcast = await getPodcast(id);
 
   if (!podcast) {
+    if (response) {
+      response.status = 404;
+    }
     return (
       <>
         <Seo
           title="Podcast Not Found | AgentCribs"
           description="The requested podcast could not be found."
+          noIndex
         />
         <main className="mx-auto max-w-[800px] px-6 py-24 sm:px-8 sm:py-32">
           <h1 className="text-3xl font-black tracking-tight">Podcast not found</h1>
@@ -27,12 +38,17 @@ export const PodcastDetail = async ({ id }: { id: string }) => {
             The podcast you're looking for doesn't exist or was removed.
           </p>
           <div className="mt-8">
-            <BackLink href="/podcasts">&larr; Back to podcasts</BackLink>
+            <BackLink href={link("/podcasts")}>&larr; Back to podcasts</BackLink>
           </div>
         </main>
       </>
     );
   }
+
+  const seriesImage = podcast.ogImage ?? podcast.image;
+  const seriesImageUrl = seriesImage
+    ? `${APP_URL}${seriesImage}?v=${podcast.imagesVersion}`
+    : null;
 
   const schema = {
     "@context": "https://schema.org",
@@ -43,6 +59,7 @@ export const PodcastDetail = async ({ id }: { id: string }) => {
         name: podcast.name,
         url: podcast.url,
         description: podcast.description,
+        ...(seriesImageUrl ? { image: seriesImageUrl } : {}),
         sponsor: {
           "@type": "Organization",
           name: "AgentCribs",
@@ -86,6 +103,11 @@ export const PodcastDetail = async ({ id }: { id: string }) => {
         title={`${podcast.name} | ${podcast.tagline}`}
         description={podcast.description}
         canonical={`/podcasts/${podcast.id}`}
+        ogImage={podcast.ogImage ?? podcast.image}
+        ogImageAlt={podcast.ogImageAlt ?? podcast.imageAlt}
+        ogImageVersion={podcast.imagesVersion}
+        ogImageWidth={podcast.ogImageWidth}
+        ogImageHeight={podcast.ogImageHeight}
       />
       <JsonLd schema={schema} />
 

@@ -153,6 +153,13 @@ const podcasts = defineCollection({
     imageAlt: z.string().optional(),
     imageWidth: z.number().optional(),
     imageHeight: z.number().optional(),
+    // Social share (Open Graph / Twitter) image overrides. Falls back to image.
+    ogImage: z.string().optional(),
+    ogImageAlt: z.string().optional(),
+    ogImageWidth: z.number().optional(),
+    ogImageHeight: z.number().optional(),
+    // Bump to cache-bust all podcast images after replacing files.
+    imagesVersion: z.number().default(1),
     hosts: z.array(podcastHostSchema),
     seasons: z.array(podcastSeasonSchema),
     content: z.string(),
@@ -163,7 +170,25 @@ const podcasts = defineCollection({
       (sum, season) => sum + season.episodes.length,
       0,
     );
-    return { ...document, content: html, totalEpisodes };
+
+    const bust = (src?: string) =>
+      src ? `${src}${src.includes("?") ? "&" : "?"}v=${document.imagesVersion}` : src;
+
+    return {
+      ...document,
+      content: html,
+      totalEpisodes,
+      image: bust(document.image),
+      logo: bust(document.logo),
+      hosts: document.hosts.map((host) => ({ ...host, image: bust(host.image) })),
+      seasons: document.seasons.map((season) => ({
+        ...season,
+        episodes: season.episodes.map((episode) => ({
+          ...episode,
+          image: bust(episode.image),
+        })),
+      })),
+    };
   },
 });
 

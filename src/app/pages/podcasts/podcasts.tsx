@@ -1,11 +1,14 @@
 import { Seo } from "@/app/components/seo";
 import { JsonLd } from "@/app/components/json-ld";
 import { PodcastCard } from "@/app/components/podcasts";
-import { getPodcasts } from "@/app/queries/podcasts";
+import { getPodcasts, getFeaturedPodcast } from "@/app/queries/podcasts";
 import { APP_URL } from "@/app/lib/url";
 
 export const Podcasts = async () => {
-  const podcasts = await getPodcasts();
+  const [podcasts, featured] = await Promise.all([
+    getPodcasts(),
+    getFeaturedPodcast(),
+  ]);
 
   const schema = {
     "@context": "https://schema.org",
@@ -28,6 +31,11 @@ export const Podcasts = async () => {
         title="Podcasts from the AgentCribs community"
         description="Podcasts sponsored by AgentCribs and PWV. AI Worth Using shows how the top AI engineers build, with live demos from leading AI developers."
         canonical="/podcasts"
+        ogImage={featured?.ogImage ?? featured?.image}
+        ogImageAlt={featured?.ogImageAlt ?? featured?.imageAlt}
+        ogImageVersion={featured?.imagesVersion}
+        ogImageWidth={featured?.ogImageWidth}
+        ogImageHeight={featured?.ogImageHeight}
       />
       <JsonLd schema={schema} />
 
