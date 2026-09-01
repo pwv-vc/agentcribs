@@ -67,6 +67,7 @@ html {
   --color-bg: oklch(97.5% 0.035 95);
   --color-bg-soft: oklch(100% 0 0);
   --color-bg-muted: oklch(90% 0 0);
+  --color-bg-deep: oklch(21% 0.06 145);
   --color-bg-secondary: oklch(97.5% 0.035 95);
   --color-text: oklch(8% 0 0);
   --color-text-secondary: oklch(28% 0.005 95);
@@ -136,6 +137,7 @@ html {
   --color-bg: oklch(8% 0 0);
   --color-bg-soft: oklch(12% 0.005 95);
   --color-bg-muted: oklch(15% 0.005 95);
+  --color-bg-deep: oklch(16% 0.045 145);
   --color-bg-secondary: oklch(12% 0.005 95);
   --color-text: oklch(94% 0.02 95);
   --color-text-secondary: oklch(82% 0.015 95);

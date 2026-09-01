@@ -12,7 +12,7 @@ export function PodcastSection({ podcast }: { podcast: Podcast | null }) {
     .join(", ");
 
   return (
-    <section className="border-b border-border bg-pwv-black text-pwv-white">
+    <section className="border-b border-border bg-bg-deep text-pwv-white">
       <div className="mx-auto max-w-[1040px] px-6 py-16 sm:px-8 sm:py-24">
         <div className="grid gap-10 lg:grid-cols-[300px_1fr]">
           <div>

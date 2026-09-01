@@ -18,6 +18,7 @@ See [brand/taste.md](brand/taste.md)
 
 - For dark mode: Use teal family (`#00d2c8` brand teal / `#88fff8` soft-teal) for buttons and accents, not the dark sage or bright green tones. The user is moving away from dark sage; the accent role shifts to teal, not just lighter greens. Confidence: 0.75
 - Use white backgrounds for cards in light mode to improve text contrast and readability. Confidence: 0.75
+- Avoid hardcoded black section backgrounds (e.g., `bg-black`) — they break light/dark mode theming. Choose an alternate background color that works in both modes while still being visually distinct from surrounding sections. Confidence: 0.75
 - Use alternating row colors (zebra striping) for list/table views to improve scanability. Confidence: 0.75
 - Name CSS status color tokens by semantic role (live, scheduled, draft, ended, declined, waitlist) rather than by source domain (event, guest, application) when the same colors serve the same meaning across domains. Confidence: 0.70
 
@@ -29,6 +30,10 @@ See [brand/taste.md](brand/taste.md)
 
 - Sends terse fix requests (e.g., just "fix" followed by pasted tool warning/error output) and expects the tool's own recommended fix applied directly. Confidence: 0.55
 - Will supply exact URLs/factual values directly (e.g., pasted the trailer's YouTube watch URL after searches stalled) — when a specific external link or fact is needed and quick searches don't find it, ask the user rather than running long web search/fetch chains. Confidence: 0.6
+
+# dev-server
+
+- Uses ngrok tunnels with a custom static domain (e.g., `agentcribs.ngrok.dev`) to preview local dev servers. When Vite blocks the tunnel host ("Blocked request. This host ... is not allowed"), add the host to `server.allowedHosts` in vite.config.mts — allow the specific host rather than disabling host checking (`allowedHosts: true`), and note the dev server needs a restart for it to take effect. Confidence: 0.6
 
 # cloudflare
 See [cloudflare/taste.md](cloudflare/taste.md)

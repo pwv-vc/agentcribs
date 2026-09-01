@@ -39,7 +39,7 @@ export const Podcasts = async () => {
       />
       <JsonLd schema={schema} />
 
-      <section className="bg-pwv-black text-pwv-white">
+      <section className="bg-bg-deep text-pwv-white">
         <div className="mx-auto max-w-[1040px] px-6 py-14 sm:px-8 sm:py-20">
           <span className="label-text">AgentCribs Podcasts</span>
           <h1 className="mt-2 text-5xl font-black leading-none sm:text-7xl">

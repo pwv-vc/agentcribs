@@ -106,7 +106,7 @@ export function PodcastSeasonSection({
 
 export function PodcastHostCard({ host }: { host: PodcastHost }) {
   return (
-    <div className="flex flex-col overflow-hidden rounded-lg border border-pwv-white/10 bg-pwv-black">
+    <div className="flex flex-col overflow-hidden rounded-lg border border-pwv-white/10 bg-bg-deep">
       <img
         src={host.image}
         alt={host.imageAlt}

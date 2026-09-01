@@ -8,7 +8,6 @@ import {
   PodcastHostCard,
   PodcastLogo,
 } from "@/app/components/podcasts";
-import { PodcastLinks } from "@/app/components/podcasts/podcast-links";
 import { getPodcast } from "@/app/queries/podcasts";
 import { link } from "@/app/shared/links";
 import { APP_URL } from "@/app/lib/url";
@@ -118,19 +117,10 @@ export const PodcastDetail = async ({
       />
       <JsonLd schema={schema} />
 
-      <section className="bg-pwv-black text-pwv-white">
+      <section className="bg-bg-deep text-pwv-white">
         <div className="mx-auto max-w-[1040px] px-6 py-14 sm:px-8 sm:py-20">
-          <p className="text-sm font-bold">
-            <BackLink href="/podcasts" onDark>Podcasts</BackLink>
-            <span className="mx-2" aria-hidden="true">
-              /
-            </span>
-            <span className="font-mono text-xs uppercase tracking-widest text-pwv-green">
-              {podcast.name}
-            </span>
-          </p>
           {podcast.sponsor && (
-            <div className="mt-8 flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-2 rounded-full border border-pwv-green/40 bg-pwv-green/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-pwv-green">
                 <RadioFilledIcon className="h-3.5 w-3.5" aria-hidden="true" />
                 Sponsored by {podcast.sponsor}
@@ -153,20 +143,22 @@ export const PodcastDetail = async ({
             {podcast.description}
           </p>
 
-          <PodcastLinks links={podcast.links} onDark className="mt-8" />
+          <p className="mt-8">
+            <a
+              href={podcast.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block border border-brand-green bg-brand-green px-6 py-3 text-base font-black text-accent-text no-underline transition-colors hover:border-brand-green-hover hover:bg-brand-green-hover sm:px-8 sm:py-4 sm:text-lg"
+            >
+              Watch the show
+            </a>
+          </p>
 
           {podcast.trailer && (
             <div className="mt-10 max-w-[820px]">
               <PodcastTrailer
                 videoId={podcast.trailer.videoId}
                 label={podcast.trailer.label}
-              />
-              <PodcastLinks
-                links={podcast.trailer.links}
-                size="sm"
-                onDark
-                className="mt-3"
-                labels={{ youtube: podcast.trailer.label }}
               />
             </div>
           )}
@@ -216,6 +208,9 @@ export const PodcastDetail = async ({
           </div>
           <div className="mt-14 border-t border-border pt-14">
             <div className="prose max-w-[820px]" dangerouslySetInnerHTML={{ __html: podcast.content }} />
+          </div>
+          <div className="mt-12">
+            <BackLink href={link("/podcasts")}>&larr; Back to podcasts</BackLink>
           </div>
         </div>
       </section>
