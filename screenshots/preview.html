@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Full-page screenshots — AgentCribs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=DM+Sans:opsz,wght@9..40,100..900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: oklch(8% 0 0);
+    --bg-soft: oklch(12% 0.005 95);
+    --text: oklch(94% 0.02 95);
+    --text-secondary: oklch(82% 0.015 95);
+    --border: oklch(28% 0.01 95);
+    --accent: oklch(80% 0.15 145);
+    --accent-text: oklch(5% 0 0);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "DM Sans", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,h4 { letter-spacing: 0; line-height: 0.98; margin: 0; }
+
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 48px 24px 96px; }
+  .page-head h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; }
+  .page-head .sub { color: var(--text-secondary); max-width: 60ch; margin-top: 12px; line-height: 1.55; }
+  .label-text {
+    font-family: "DM Mono", monospace; font-weight: 400;
+    text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent);
+    display: flex; align-items: center; gap: 12px; margin: 0;
+  }
+
+  nav.jump {
+    position: sticky; top: 0; z-index: 40;
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    background: color-mix(in oklab, var(--bg) 82%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+  }
+  nav.jump a {
+    font-family: "DM Mono", monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.1em; text-decoration: none; color: var(--text-secondary);
+    border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px;
+    transition: border-color .2s ease-out, color .2s ease-out;
+  }
+  nav.jump a:hover { border-color: var(--accent); color: var(--text); }
+
+  section.shot { margin-top: 72px; scroll-margin-top: 72px; }
+  .shot-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
+  .shot-head h2 { font-size: 1.35rem; font-weight: 900; }
+  .shot-head .route {
+    font-family: "DM Mono", monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--text-secondary); white-space: nowrap;
+  }
+  .shot-head .spec { font-family: "DM Mono", monospace; font-size: 11px; color: var(--text-secondary); margin-left: auto; }
+  .frame {
+    border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+    background: var(--bg-soft);
+  }
+  .frame img { display: block; width: 100%; height: auto; }
+  .frame figcaption {
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    padding: 12px 18px; border-top: 1px solid var(--border);
+    font-family: "DM Mono", monospace; font-size: 11px; color: var(--text-secondary);
+  }
+  footer.note { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-secondary); font-size: .85rem; max-width: 70ch; line-height: 1.6; }
+</style>
+</head>
+<body>
+<nav class="jump">
+  <span class="label-text" style="margin-right:auto">Full-page captures · 1440×900</span>
+  <a href="#home">Home</a>
+  <a href="#podcasts">Podcasts</a>
+  <a href="#podcast">Podcast detail</a>
+</nav>
+
+<div class="wrap">
+  <header class="page-head">
+    <p class="label-text">◉ Screenshot review</p>
+    <h1>AgentCribs full-page captures</h1>
+    <p class="sub">Fresh full-page screenshots of the home page, podcasts index, and the AI Worth Using detail page — captured at 1440&times;900 against the local dev server, with time left for the Cloudflare Stream trailer to load its poster and player chrome.</p>
+  </header>
+
+  <section class="shot" id="home">
+    <div class="shot-head">
+      <h2>Home</h2>
+      <span class="route">/</span>
+      <span class="spec">1440 × 5782 · home-full.png</span>
+    </div>
+    <figure class="frame">
+      <img src="home-full.png" alt="Full-page screenshot of the AgentCribs home page">
+      <figcaption>
+        <span>Hero, community, events, FAQ</span>
+        <span>home-full.png</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="shot" id="podcasts">
+    <div class="shot-head">
+      <h2>Podcasts</h2>
+      <span class="route">/podcasts</span>
+      <span class="spec">1440 × 1403 · podcasts-full.png</span>
+    </div>
+    <figure class="frame">
+      <img src="podcasts-full.png" alt="Full-page screenshot of the podcasts index page">
+      <figcaption>
+        <span>Featured show card — AI Worth Using</span>
+        <span>podcasts-full.png</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="shot" id="podcast">
+    <div class="shot-head">
+      <h2>Podcast detail</h2>
+      <span class="route">/podcasts/ai-worth-using</span>
+      <span class="spec">1440 × 4827 · podcast-ai-worth-using-full.png</span>
+    </div>
+    <figure class="frame">
+      <img src="podcast-ai-worth-using-full.png" alt="Full-page screenshot of the AI Worth Using podcast detail page">
+      <figcaption>
+        <span>Trailer poster loaded · 6 episodes · hosts</span>
+        <span>podcast-ai-worth-using-full.png</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <footer class="note">
+    Captured with agent-browser against the local Vite dev server. Full-page PNGs in <code>screenshots/</code>; the trailer iframe was left to reach network idle plus several seconds of settle time so the poster and player chrome rendered completely.
+  </footer>
+</div>
+</body>
+</html>

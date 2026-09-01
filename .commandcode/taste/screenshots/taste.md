@@ -5,3 +5,4 @@
 - Run browser automation in an isolated named session (e.g., `agent-browser --session <project>-shots`) instead of the default shared session, so concurrently open human/other-agent tabs can't hijack or pollute captures. Confidence: 0.7
 - Always visually verify each captured screenshot by reading the image back and checking for black boxes or missing content before handing it off. Confidence: 0.7
 - Clean up fully after browser capture tasks: delete temporary check screenshots, close the browser session, and kill the background dev server that was started for the task. Confidence: 0.7
+- When asked to capture page screenshots, assemble the full-page captures into a single static HTML preview page (e.g., `screenshots/preview.html`) so all pages can be reviewed in one place; reference the PNGs as relative siblings so the page works directly from the file system. Confidence: 0.8
