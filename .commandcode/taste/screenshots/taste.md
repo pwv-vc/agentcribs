@@ -4,5 +4,6 @@
 - Lazy iframes (video/trailer embeds) need extra dwell time centered in view (~5–10s) before they mount and render; verify with a quick viewport screenshot before the final full-page capture. Confidence: 0.7
 - Run browser automation in an isolated named session (e.g., `agent-browser --session <project>-shots`) instead of the default shared session, so concurrently open human/other-agent tabs can't hijack or pollute captures. Confidence: 0.7
 - Always visually verify each captured screenshot by reading the image back and checking for black boxes or missing content before handing it off. Confidence: 0.7
+- When a vision read of a screenshot is ambiguous for layout questions (centering, alignment, gaps), don't re-screenshot and guess again — verify geometrically by evaluating `getBoundingClientRect()` measurements on the live DOM in the browser session. Confidence: 0.6
 - Clean up fully after browser capture tasks: delete temporary check screenshots, close the browser session, and kill the background dev server that was started for the task. Confidence: 0.7
 - When asked to capture page screenshots, assemble the full-page captures into a single static HTML preview page (e.g., `screenshots/preview.html`) so all pages can be reviewed in one place; reference the PNGs as relative siblings so the page works directly from the file system. Confidence: 0.8

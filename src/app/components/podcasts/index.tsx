@@ -89,7 +89,7 @@ export function PodcastSeasonSection({
 
   return (
     <section className="mt-14 first:mt-0">
-      <div className="flex flex-wrap items-baseline gap-3">
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
         <h3 className="text-2xl font-black leading-tight sm:text-3xl">{label}</h3>
         <span className="text-sm font-medium text-text-secondary">
           {season.episodes.length} episode{season.episodes.length === 1 ? "" : "s"}
@@ -163,12 +163,16 @@ export function PodcastCard({
 }: {
   podcast: Podcast;
 }) {
+  const episodeThumbs = podcast.seasons
+    .flatMap((season) => season.episodes)
+    .slice(0, 6);
+
   return (
     <a
       href={link("/podcasts/:id", { id: podcast.id })}
       className="group block rounded-lg border border-border bg-bg-soft p-6 transition-colors hover:border-accent/40 sm:p-8"
     >
-      <div className="flex flex-wrap items-start justify-between gap-4">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
         <div className="max-w-[560px]">
           <p className="label-text flex items-center gap-3 text-xs">
             <span>
@@ -194,21 +198,48 @@ export function PodcastCard({
             {podcast.description}
           </p>
         </div>
-        {podcast.image && (
-          <img
-            src={podcast.image}
-            alt={podcast.imageAlt ?? podcast.name}
-            width={podcast.imageWidth ?? 360}
-            height={podcast.imageHeight ?? 360}
-            loading="lazy"
-            decoding="async"
-            className="hidden h-28 w-28 rounded-lg object-cover sm:block"
-          />
+        {episodeThumbs.length > 0 ? (
+          <div className="sm:shrink-0">
+            <ul className="grid grid-cols-3 gap-2 sm:gap-2">
+              {episodeThumbs.map((episode) => (
+                <li key={episode.number}>
+                  <img
+                    src={episode.image}
+                    alt=""
+                    width={360}
+                    height={360}
+                    loading="lazy"
+                    decoding="async"
+                    className="aspect-square w-full rounded-md border border-border object-cover transition-colors group-hover:border-accent/40 sm:w-20"
+                  />
+                </li>
+              ))}
+            </ul>
+            <p className="mt-2 text-xs font-bold text-pwv-deep-green group-hover:underline dark:text-pwv-green">
+              {podcast.totalEpisodes} episode
+              {podcast.totalEpisodes === 1 ? "" : "s"}
+            </p>
+          </div>
+        ) : (
+          <div className="sm:shrink-0">
+            {podcast.image && (
+              <img
+                src={podcast.image}
+                alt={podcast.imageAlt ?? podcast.name}
+                width={podcast.imageWidth ?? 360}
+                height={podcast.imageHeight ?? 360}
+                loading="lazy"
+                decoding="async"
+                className="hidden aspect-square w-28 rounded-lg object-cover sm:block"
+              />
+            )}
+            <p className="mt-2 text-xs font-bold text-pwv-deep-green group-hover:underline dark:text-pwv-green">
+              {podcast.totalEpisodes} episode
+              {podcast.totalEpisodes === 1 ? "" : "s"}
+            </p>
+          </div>
         )}
       </div>
-      <p className="mt-4 text-sm font-bold text-pwv-deep-green group-hover:underline dark:text-pwv-green">
-        {podcast.totalEpisodes} episode{podcast.totalEpisodes === 1 ? "" : "s"}
-      </p>
     </a>
   );
 }

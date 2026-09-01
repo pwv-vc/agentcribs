@@ -69,3 +69,31 @@ export function PodcastLinks({
     </ul>
   );
 }
+
+export function PodcastSubscribeLinks({
+  links,
+  labels,
+  className = "",
+}: {
+  links?: Links;
+  labels?: Partial<Record<PlatformKey, string>>;
+  className?: string;
+}) {
+  const items = PLATFORMS.filter(({ key }) => links?.[key]);
+  if (items.length === 0) return null;
+
+  return (
+    <div className={`text-center ${className}`}>
+      <p className="text-md font-extrabold uppercase tracking-widest text-pwv-white/60">
+        Watch. Listen. Subscribe.
+      </p>
+      <PodcastLinks
+        links={links}
+        size="sm"
+        onDark
+        labels={labels}
+        className="mt-2 justify-center"
+      />
+    </div>
+  );
+}

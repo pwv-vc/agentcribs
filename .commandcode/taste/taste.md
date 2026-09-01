@@ -3,13 +3,7 @@
 See [brand/taste.md](brand/taste.md)
 
 # ui
-
-- Use single-column layout (no two-column grids) for form fields in the apply form. Confidence: 0.65
-- Use consistent outer container widths (`max-w-[1040px]`) with inner text `max-w-[820px]` across all home page sections — hero, community, event, and FAQ should share the same horizontal rhythm. Confidence: 0.70
-- Avoid using the heavy branded CtaButton for tertiary navigation like "Back to home" on content pages — it competes with the primary action and feels overbearing when repeated. Use a lighter text link or breadcrumb instead. Confidence: 0.65
-- In card layouts, place guest social/platform link pills (LinkedIn, X, etc.) in their own row directly below the episode title (not the bio) — not above, inline with, or sharing a row with other links (episode platform listen links stay beneath them in their own row). Confidence: 0.75
-- Keep the vertical spacing above guest social pills tight when they sit directly beneath a title — prefer a small margin (e.g., `mt-1.5`) over a larger one like `mt-3`. Confidence: 0.5
-
+See [ui/taste.md](ui/taste.md)
 # labels
 
 - Capitalize words in format labels (e.g., "In Person" not "In person"). Confidence: 0.80
@@ -28,8 +22,9 @@ See [brand/taste.md](brand/taste.md)
 
 # communication
 
-- Sends terse fix requests (e.g., just "fix" followed by pasted tool warning/error output) and expects the tool's own recommended fix applied directly. Confidence: 0.55
+- Sends terse requests (e.g., just "fix" followed by pasted tool warning/error output, or "center this" with IDE-selected lines as the only context) and expects the direct, minimal edit applied to the referenced code — not exploration or extended explanation. Confidence: 0.60
 - Will supply exact URLs/factual values directly (e.g., pasted the trailer's YouTube watch URL after searches stalled) — when a specific external link or fact is needed and quick searches don't find it, ask the user rather than running long web search/fetch chains. Confidence: 0.6
+- For copywriting requests, explicitly asks for a few short candidate options up front ("give me a few ideas of short call to action copy") — present multiple concise options with visual previews, then wire in the winner once they pick. Confidence: 0.6
 
 # dev-server
 
@@ -99,6 +94,10 @@ See [data/taste.md](data/taste.md)
 - Cache-bust images via a version query param (e.g., `?v=N`) so image updates propagate easily; bumping one number in content/config should refresh all references to those images. Confidence: 0.8
 - Make OG image dimensions content-driven too — expose `ogImageWidth`/`ogImageHeight` frontmatter fields rendered as `og:image:width`/`og:image:height` instead of hardcoding pixel sizes (1200×630, 1500×1500) in page components. Confidence: 0.75
 - Add `sameAs` arrays to JSON-LD structured data entities (e.g., `PodcastSeries`) from content-driven social/platform links (show URL, LinkedIn, X, Apple) for entity identity. Confidence: 0.70
+
+# screenshots
+See [screenshots/taste.md](screenshots/taste.md)
+sameAs` arrays to JSON-LD structured data entities (e.g., `PodcastSeries`) from content-driven social/platform links (show URL, LinkedIn, X, Apple) for entity identity. Confidence: 0.70
 
 # screenshots
 See [screenshots/taste.md](screenshots/taste.md)

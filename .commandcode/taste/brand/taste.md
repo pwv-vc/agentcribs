@@ -13,3 +13,4 @@
 - For CTA button hover states and nav logotype hover, use a slightly darker PWV green (hue 145) rather than the teal/blue-green (hue 192) accent color — the teal hover reads as "off brand" on these elements. Reserve teal accent for inline content links and semver flourishes only. Confidence: 0.75
 - Keep CTA button hover green at a similar lightness to `pwv-green` (oklch ~78% lightness) — the dark green hover (oklch 48% lightness) is too dark compared to the base `pwv-green`. Use a moderately darker green (oklch ~65-68% lightness) instead. Confidence: 0.72
 - Use white text (`text-accent-text` or white) on hover for links that use brand green hover states, instead of retaining black text on the darker green background. Confidence: 0.72
+- Prefers ultra-short, punchy staccato CTA copy for subscribe prompts (chose "Watch. Listen. Subscribe." over longer sentence-style options) — the shortest, most imperative variant wins for calls to action. Confidence: 0.65

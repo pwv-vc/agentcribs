@@ -8,6 +8,7 @@ import {
   PodcastHostCard,
   PodcastLogo,
 } from "@/app/components/podcasts";
+import { PodcastSubscribeLinks } from "@/app/components/podcasts/podcast-links";
 import { getPodcast } from "@/app/queries/podcasts";
 import { link } from "@/app/shared/links";
 import { APP_URL } from "@/app/lib/url";
@@ -33,12 +34,16 @@ export const PodcastDetail = async ({
           noIndex
         />
         <main className="mx-auto max-w-[800px] px-6 py-24 sm:px-8 sm:py-32">
-          <h1 className="text-3xl font-black tracking-tight">Podcast not found</h1>
+          <h1 className="text-3xl font-black tracking-tight">
+            Podcast not found
+          </h1>
           <p className="mt-4 text-text-secondary">
             The podcast you're looking for doesn't exist or was removed.
           </p>
           <div className="mt-8">
-            <BackLink href={link("/podcasts")}>&larr; Back to podcasts</BackLink>
+            <BackLink href={link("/podcasts")}>
+              &larr; Back to podcasts
+            </BackLink>
           </div>
         </main>
       </>
@@ -150,7 +155,7 @@ export const PodcastDetail = async ({
               rel="noopener noreferrer"
               className="inline-block border border-brand-green bg-brand-green px-6 py-3 text-base font-black text-accent-text no-underline transition-colors hover:border-brand-green-hover hover:bg-brand-green-hover sm:px-8 sm:py-4 sm:text-lg"
             >
-              Watch the show
+              Learn about the show
             </a>
           </p>
 
@@ -159,6 +164,11 @@ export const PodcastDetail = async ({
               <PodcastTrailer
                 videoId={podcast.trailer.videoId}
                 label={podcast.trailer.label}
+              />
+              <PodcastSubscribeLinks
+                links={podcast.trailer.links}
+                className="mt-3"
+                labels={{ youtube: podcast.trailer.label }}
               />
             </div>
           )}
@@ -169,9 +179,6 @@ export const PodcastDetail = async ({
         <div className="mx-auto max-w-[1040px] px-6 py-16 sm:px-8 sm:py-24">
           <div className="max-w-[820px]">
             <span className="label-text">Seasons</span>
-            <h2 className="mt-2 text-4xl font-black leading-none sm:text-5xl">
-              {podcast.totalEpisodes} Episodes
-            </h2>
           </div>
           <div className="mt-10 max-w-[820px]">
             {podcast.seasons.map((season) => (
@@ -207,10 +214,15 @@ export const PodcastDetail = async ({
             ))}
           </div>
           <div className="mt-14 border-t border-border pt-14">
-            <div className="prose max-w-[820px]" dangerouslySetInnerHTML={{ __html: podcast.content }} />
+            <div
+              className="prose max-w-[820px]"
+              dangerouslySetInnerHTML={{ __html: podcast.content }}
+            />
           </div>
           <div className="mt-12">
-            <BackLink href={link("/podcasts")}>&larr; Back to podcasts</BackLink>
+            <BackLink href={link("/podcasts")}>
+              &larr; Back to podcasts
+            </BackLink>
           </div>
         </div>
       </section>

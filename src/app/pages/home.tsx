@@ -138,8 +138,8 @@ export const Home = async () => {
       />
       <JsonLd schema={schema} />
       <HeroSection />
-      <PodcastSection podcast={featuredPodcast} />
       <CommunitySection />
+      <PodcastSection podcast={featuredPodcast} />
       <EventSection event={featuredEvent} />
       <FaqSection />
     </>
