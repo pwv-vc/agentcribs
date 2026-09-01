@@ -23,4 +23,10 @@ export { SparkleIcon } from "./sparkle";
 export { SparkleFilledIcon } from "./sparkle-filled";
 export { RadioFilledIcon } from "./radio-filled";
 export { ClockFilledIcon } from "./clock-filled";
+export { AppleIcon } from "./apple";
+export { SpotifyIcon } from "./spotify";
+export { YoutubeIcon } from "./youtube";
+export { LinkedinIcon } from "./linkedin";
+export { XIcon } from "./x";
+export { GlobeIcon } from "./globe";
 

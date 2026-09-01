@@ -6,6 +6,7 @@ import type {
   PodcastSeason,
 } from "@/app/queries/podcasts";
 import { RadioFilledIcon } from "@/app/components/icons";
+import { PodcastLinks } from "./podcast-links";
 
 const STREAM_CUSTOMER = "customer-k7ms15mqb129fv5n";
 
@@ -37,11 +38,6 @@ export function PodcastTrailer({
           allowFullScreen
         />
       </div>
-      {label && (
-        <figcaption className="mt-3 text-sm text-pwv-white/60">
-          {label}
-        </figcaption>
-      )}
     </figure>
   );
 }
@@ -64,13 +60,21 @@ export function PodcastEpisodeCard({
       />
       <div>
         <p className="label-text text-xs">{episode.number}</p>
-        <h4 className="mt-1 text-2xl font-black leading-tight">{episode.guest}</h4>
+        <h4 className="mt-1 text-2xl font-black leading-tight">
+          {episode.guest.name}
+        </h4>
         <p className="mt-1 text-base font-bold leading-snug text-pwv-deep-green dark:text-pwv-green">
           {episode.title}
         </p>
+        <PodcastLinks
+          links={episode.guest.links}
+          size="xs"
+          className="mt-1.5"
+        />
         <p className="mt-3 leading-relaxed text-text-secondary">
           {episode.description}
         </p>
+        <PodcastLinks links={episode.links} size="sm" className="mt-4" />
       </div>
     </article>
   );
@@ -102,7 +106,7 @@ export function PodcastSeasonSection({
 
 export function PodcastHostCard({ host }: { host: PodcastHost }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-pwv-white/10 bg-pwv-black">
+    <div className="flex flex-col overflow-hidden rounded-lg border border-pwv-white/10 bg-pwv-black">
       <img
         src={host.image}
         alt={host.imageAlt}
@@ -112,7 +116,7 @@ export function PodcastHostCard({ host }: { host: PodcastHost }) {
         decoding="async"
         className="aspect-[4/3] w-full object-cover object-top"
       />
-      <div className="p-6">
+      <div className="flex flex-1 flex-col p-6">
         <h3 className="text-2xl font-black leading-tight text-pwv-white">
           {host.name}
         </h3>
@@ -120,6 +124,14 @@ export function PodcastHostCard({ host }: { host: PodcastHost }) {
         <p className="mt-3 text-sm leading-relaxed text-pwv-white/75">
           {host.bio}
         </p>
+        {host.links && (
+          <PodcastLinks
+            links={host.links}
+            size="sm"
+            onDark
+            className="mt-auto pt-4"
+          />
+        )}
       </div>
     </div>
   );

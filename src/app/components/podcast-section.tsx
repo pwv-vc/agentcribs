@@ -1,13 +1,14 @@
 import { link } from "@/app/shared/links";
 import type { Podcast } from "@/app/queries/podcasts";
 import { PodcastLogo, PodcastTrailer } from "@/app/components/podcasts";
+import { PodcastLinks } from "@/app/components/podcasts/podcast-links";
 
 export function PodcastSection({ podcast }: { podcast: Podcast | null }) {
   if (!podcast) return null;
 
   const seasonNumbers = podcast.seasons.map((s) => s.number).join(", ");
   const firstSeasonGuests = podcast.seasons[0]?.episodes
-    .map((e) => e.guest)
+    .map((e) => e.guest.name)
     .join(", ");
 
   return (
@@ -62,11 +63,19 @@ export function PodcastSection({ podcast }: { podcast: Podcast | null }) {
         </div>
 
         {podcast.trailer && (
-          <PodcastTrailer
-            videoId={podcast.trailer.videoId}
-            label={podcast.trailer.label}
-            className="mt-12 max-w-[820px]"
-          />
+          <div className="mt-12 max-w-[820px]">
+            <PodcastTrailer
+              videoId={podcast.trailer.videoId}
+              label={podcast.trailer.label}
+            />
+            <PodcastLinks
+              links={podcast.trailer.links}
+              size="sm"
+              onDark
+              className="mt-3"
+              labels={{ youtube: podcast.trailer.label }}
+            />
+          </div>
         )}
       </div>
     </section>

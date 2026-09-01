@@ -18,6 +18,15 @@ imagesVersion: 1
 trailer:
   videoId: aed5be809f711db50ac9d91dcf2a5864
   label: AI Worth Using Trailer
+  links:
+    youtube: https://www.youtube.com/watch?v=2iF7tdKAYWU
+    spotify: https://open.spotify.com/episode/3wPvRjnJYQoY25vep5aigw
+    apple: https://podcasts.apple.com/us/podcast/ai-worth-using-podcast-official-trailer/id6805129805?i=1000786058791
+links:
+  show: https://aiworthusing.com
+  apple: https://podcasts.apple.com/us/podcast/id6805129805
+  linkedin: https://linkedin.com/company/ai-worth-using
+  x: https://x.com/aiworthusing
 isFeatured: true
 hosts:
   - name: Sam Odio
@@ -28,6 +37,9 @@ hosts:
       focused on why any of it matters.
     image: /podcast/hero-sam-web.png
     imageAlt: Sam Odio, co-host of AI Worth Using
+    links:
+      linkedin: https://linkedin.com/in/samodio
+      x: https://x.com/sodio
   - name: Tom Preston-Werner
     role: Co-founder, GitHub
     bio: >-
@@ -36,11 +48,18 @@ hosts:
       questions that only come up once the terminal is open.
     image: /podcast/hero-tom-web.png
     imageAlt: Tom Preston-Werner, co-host of AI Worth Using
+    links:
+      linkedin: https://linkedin.com/in/mojombo
+      x: https://x.com/mojombo
 seasons:
   - number: 1
     episodes:
       - number: EP.01
-        guest: Jesse Vincent
+        guest:
+          name: Jesse Vincent
+          links:
+            linkedin: https://linkedin.com/in/jessevincent
+            x: https://x.com/obra
         title: Creator of Superpowers; Former Lead Maintainer for Perl
         description: >-
           Open-source veteran Jesse Vincent built Superpowers, currently the #1
@@ -48,18 +67,31 @@ seasons:
           rewrite GitHub, and Tom accepts the challenge.
         image: /podcast/guest-jesse.jpg
         imageAlt: Jesse Vincent — AI Worth Using cover
+        links:
+          youtube: https://www.youtube.com/watch?v=QeNVb-UfV3s
+          spotify: https://open.spotify.com/episode/5L042ZT26xJNzpyjHgPHui
+          apple: https://podcasts.apple.com/us/podcast/when-claude-deleted-my-tests-jesse-vincent-creator/id6805129805?i=1000786066425
       - number: EP.02
-        guest: Wes McKinney
+        guest:
+          name: Wes McKinney
+          links:
+            linkedin: https://linkedin.com/in/wesmckinn
+            x: https://x.com/wesmckinn
         title: Creator of Pandas; Co-Creator of Apache Arrow and Ibis
         description: >-
           Humans quickly get sick of doing code reviews, but AI never tires. Data
           tooling visionary Wes McKinney comes on the show to discuss Roborev, his
-          latest project to keep agents busy doing code reviews continuously in
-          the background.
+          latest project to keep agents busy doing code reviews continuously in the
+          background.
         image: /podcast/guest-wes.jpg
         imageAlt: Wes McKinney — AI Worth Using cover
+        links:
+          youtube: https://youtu.be/SyXRrdUvkbY
+          spotify: https://open.spotify.com/episode/5CUVbPH49kafldS82M5TDj
+          apple: https://podcasts.apple.com/us/podcast/the-adversarial-review-system-every-ai-coding-agent/id6805129805?i=1000786066337
       - number: EP.03
-        guest: Harper Reed
+        guest:
+          name: Harper Reed
         title: 2389 Research; former CTO, Obama 2012
         description: >-
           Why use one agent when you can use 10? Harper Reed's Test Kitchen gives
@@ -69,7 +101,8 @@ seasons:
         image: /podcast/guest-harper.jpg
         imageAlt: Harper Reed — AI Worth Using cover
       - number: EP.04
-        guest: Naveen Jain
+        guest:
+          name: Naveen Jain
         title: Founder of Viome and Moon Express
         description: >-
           Naveen Jain starts companies aimed at problems most people call
@@ -79,7 +112,8 @@ seasons:
         image: /podcast/guest-naveen.jpg
         imageAlt: Naveen Jain — AI Worth Using cover
       - number: EP.05
-        guest: Peter Steinberger
+        guest:
+          name: Peter Steinberger
         title: Creator of OpenClaw, Now at OpenAI
         description: >-
           What happens when you stop treating agents like chatbots and start
@@ -90,7 +124,8 @@ seasons:
         image: /podcast/guest-peter.jpg
         imageAlt: Peter Steinberger — AI Worth Using cover
       - number: EP.06
-        guest: Logan Kilpatrick
+        guest:
+          name: Logan Kilpatrick
         title: Product Lead for Google AI Studio and the Gemini API
         description: >-
           Developers don't need more AI tools. They need ones that work. Logan

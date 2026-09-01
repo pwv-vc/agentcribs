@@ -8,6 +8,7 @@ import {
   PodcastHostCard,
   PodcastLogo,
 } from "@/app/components/podcasts";
+import { PodcastLinks } from "@/app/components/podcasts/podcast-links";
 import { getPodcast } from "@/app/queries/podcasts";
 import { link } from "@/app/shared/links";
 import { APP_URL } from "@/app/lib/url";
@@ -59,6 +60,9 @@ export const PodcastDetail = async ({
         name: podcast.name,
         url: podcast.url,
         description: podcast.description,
+        ...(podcast.links
+          ? { sameAs: Object.values(podcast.links).filter(Boolean) }
+          : {}),
         ...(seriesImageUrl ? { image: seriesImageUrl } : {}),
         sponsor: {
           "@type": "Organization",
@@ -74,12 +78,15 @@ export const PodcastDetail = async ({
           "@type": "Person",
           name: host.name,
           jobTitle: host.role,
+          ...(host.links
+            ? { sameAs: Object.values(host.links).filter(Boolean) }
+            : {}),
         })),
         episode: podcast.seasons.flatMap((season) =>
           season.episodes.map((episode) => ({
             "@type": "PodcastEpisode",
             episodeNumber: Number(episode.number.replace(/\D/g, "")),
-            name: `${episode.guest}: ${episode.title}`,
+            name: `${episode.guest.name}: ${episode.title}`,
             description: episode.description,
             image: `${APP_URL}${episode.image}`,
             url: podcast.url,
@@ -146,11 +153,20 @@ export const PodcastDetail = async ({
             {podcast.description}
           </p>
 
+          <PodcastLinks links={podcast.links} onDark className="mt-8" />
+
           {podcast.trailer && (
             <div className="mt-10 max-w-[820px]">
               <PodcastTrailer
                 videoId={podcast.trailer.videoId}
                 label={podcast.trailer.label}
+              />
+              <PodcastLinks
+                links={podcast.trailer.links}
+                size="sm"
+                onDark
+                className="mt-3"
+                labels={{ youtube: podcast.trailer.label }}
               />
             </div>
           )}

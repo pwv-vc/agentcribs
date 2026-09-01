@@ -106,13 +106,36 @@ const events = defineCollection({
   },
 });
 
+// Platforms where a podcast, trailer, or episode can be watched or listened to.
+// Each present field renders as an icon + label pill on the podcast page.
+const platformLinksSchema = z.object({
+  apple: z.string().url().optional(), // Apple Podcasts
+  spotify: z.string().url().optional(), // Spotify
+  youtube: z.string().url().optional(), // YouTube video/channel
+});
+
+// Social profiles for a person (podcast host or episode guest).
+const personLinksSchema = z.object({
+  linkedin: z.string().url().optional(), // LinkedIn profile
+  x: z.string().url().optional(), // X (Twitter)
+});
+
+// Links for the podcast itself: platforms, show homepage, and show socials.
+const podcastLinksSchema = platformLinksSchema
+  .extend({ show: z.string().url().optional() }) // the show homepage
+  .extend(personLinksSchema.shape);
+
 const podcastEpisodeSchema = z.object({
   number: z.string(),
-  guest: z.string(),
+  guest: z.object({
+    name: z.string(),
+    links: personLinksSchema.optional(),
+  }),
   title: z.string(),
   description: z.string(),
   image: z.string(),
   imageAlt: z.string(),
+  links: platformLinksSchema.optional(),
 });
 
 const podcastHostSchema = z.object({
@@ -121,6 +144,7 @@ const podcastHostSchema = z.object({
   bio: z.string(),
   image: z.string(),
   imageAlt: z.string(),
+  links: personLinksSchema.optional(),
 });
 
 const podcastSeasonSchema = z.object({
@@ -146,8 +170,10 @@ const podcasts = defineCollection({
       .object({
         videoId: z.string(),
         label: z.string().optional(),
+        links: platformLinksSchema.optional(),
       })
       .optional(),
+    links: podcastLinksSchema.optional(),
     isFeatured: z.boolean().default(false),
     image: z.string().optional(),
     imageAlt: z.string().optional(),

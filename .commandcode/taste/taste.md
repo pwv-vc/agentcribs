@@ -7,6 +7,8 @@ See [brand/taste.md](brand/taste.md)
 - Use single-column layout (no two-column grids) for form fields in the apply form. Confidence: 0.65
 - Use consistent outer container widths (`max-w-[1040px]`) with inner text `max-w-[820px]` across all home page sections — hero, community, event, and FAQ should share the same horizontal rhythm. Confidence: 0.70
 - Avoid using the heavy branded CtaButton for tertiary navigation like "Back to home" on content pages — it competes with the primary action and feels overbearing when repeated. Use a lighter text link or breadcrumb instead. Confidence: 0.65
+- In card layouts, place guest social/platform link pills (LinkedIn, X, etc.) in their own row directly below the episode title (not the bio) — not above, inline with, or sharing a row with other links (episode platform listen links stay beneath them in their own row). Confidence: 0.75
+- Keep the vertical spacing above guest social pills tight when they sit directly beneath a title — prefer a small margin (e.g., `mt-1.5`) over a larger one like `mt-3`. Confidence: 0.5
 
 # labels
 
@@ -22,6 +24,11 @@ See [brand/taste.md](brand/taste.md)
 # cli
 
 - Never run `npx wrangler deploy --dry-run` to verify builds; use `pn build`, `pn generate`, or `pn check` instead. Confidence: 0.85
+
+# communication
+
+- Sends terse fix requests (e.g., just "fix" followed by pasted tool warning/error output) and expects the tool's own recommended fix applied directly. Confidence: 0.55
+- Will supply exact URLs/factual values directly (e.g., pasted the trailer's YouTube watch URL after searches stalled) — when a specific external link or fact is needed and quick searches don't find it, ask the user rather than running long web search/fetch chains. Confidence: 0.6
 
 # cloudflare
 See [cloudflare/taste.md](cloudflare/taste.md)
@@ -52,6 +59,9 @@ See [data/taste.md](data/taste.md)
 # icons
 - Store all icon components in `src/app/components/icons/` with individual component files and a barrel export `index.ts`. Confidence: 0.70
 - For event format badges: use a house-heart icon (lucide-style) for "in person" and a web camera icon for "remote" format indicators. Confidence: 0.75
+- Use recognizable platform/brand icons alongside external links (Spotify, Apple Podcasts, YouTube, LinkedIn, X/socials) so link destinations are visually identifiable. Confidence: 0.75
+- Icon components accept `{ className?: string }` and use `fill="currentColor"` (brand/platform glyphs) or lucide-style `stroke="currentColor"` with `strokeWidth={2}` (generic UI icons like globe), on a 24×24 viewBox. Confidence: 0.70
+- Present external platform/social links as icon + label pill buttons (rounded-full, bordered, small text), with `target="_blank" rel="noopener noreferrer"` — applies both to collections of links and to single links; when a section shows a plain caption for something that already has a link in content frontmatter (e.g., a trailer's YouTube URL), replace the caption with the icon pill. Confidence: 0.80
 
 # slack
 
@@ -59,6 +69,7 @@ See [data/taste.md](data/taste.md)
 
 # html
 - In hero sections, use `<h2>` (not `<p>`) for the tagline/subtitle beneath the `<h1>` to maintain proper semantic heading hierarchy. Confidence: 0.75
+- Provide an `onDark` variant prop for components that render on both light and dark surfaces (e.g., link pills, back links), switching between theme tokens (`border-border`, `text-text-secondary`) and fixed white-translucent tones (`border-pwv-white/20`, `text-pwv-white/80`). Confidence: 0.70
 
 # c15t
 
@@ -82,6 +93,7 @@ See [data/taste.md](data/taste.md)
 - Make SEO and Open Graph tags content-driven — derive per-page title/description/OG image from the content itself (frontmatter fields like `ogImage`, `ogImageAlt`) rather than hardcoding a static site-wide OG image. Confidence: 0.85
 - Cache-bust images via a version query param (e.g., `?v=N`) so image updates propagate easily; bumping one number in content/config should refresh all references to those images. Confidence: 0.8
 - Make OG image dimensions content-driven too — expose `ogImageWidth`/`ogImageHeight` frontmatter fields rendered as `og:image:width`/`og:image:height` instead of hardcoding pixel sizes (1200×630, 1500×1500) in page components. Confidence: 0.75
+- Add `sameAs` arrays to JSON-LD structured data entities (e.g., `PodcastSeries`) from content-driven social/platform links (show URL, LinkedIn, X, Apple) for entity identity. Confidence: 0.70
 
 # screenshots
 See [screenshots/taste.md](screenshots/taste.md)

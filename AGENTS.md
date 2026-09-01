@@ -21,7 +21,7 @@ AgentCribs is a [RedwoodSDK](https://rwsdk.com) (`rwsdk`) project — an RSC-bas
 │   │   ├── pages/             # Route/page components
 │   │   │   ├── home.tsx
 │   │   │   ├── podcasts.tsx        # /podcasts index (from podcasts collection)
-│   │   │   ├── podcasts/[id].tsx   # /podcasts/:id detail (seasons, episodes, hosts, trailer)
+│   │   │   ├── podcasts/podcast.tsx   # /podcasts/:id detail (seasons, episodes, hosts, trailer)
 │   │   │   ├── apply.tsx
 │   │   │   ├── thank-you.tsx
 │   │   │   ├── verify-success.tsx
