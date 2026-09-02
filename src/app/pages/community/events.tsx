@@ -11,12 +11,12 @@ import { FormatBadge, EventStatusPill } from "@/app/lib/event-badges";
 
 function FeaturedEventCard({ event }: { event: Event }) {
   return (
-    <a
-      href={link("/community/events/:id", { id: event.id })}
-      className="group block rounded-lg border-2 border-accent bg-accent/5 p-6 transition-colors hover:bg-accent/10 sm:p-8"
-    >
+    <div className="group block rounded-lg border-2 border-accent bg-accent/5 p-6 transition-colors hover:bg-accent/10 sm:p-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
+        <a
+          href={link("/community/events/:id", { id: event.id })}
+          className="min-w-0"
+        >
           <p className="text-sm font-medium text-pwv-green">
             {formatDateShort(event.date, event.timezone ?? "America/New_York")} &middot; {event.location}
           </p>
@@ -32,13 +32,25 @@ function FeaturedEventCard({ event }: { event: Event }) {
                 .join(", ")}
             </p>
           )}
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <FormatBadge format={event.format} size="md" />
-          <EventStatusPill status={event.status} size="md" />
+        </a>
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <FormatBadge format={event.format} size="md" />
+            <EventStatusPill status={event.status} size="md" />
+          </div>
+          {(event.lumaEventUrl || event.waitlist) && (
+            <a
+              href={event.lumaEventUrl ?? "/apply"}
+              target={event.lumaEventUrl ? "_blank" : undefined}
+              rel={event.lumaEventUrl ? "noopener noreferrer" : undefined}
+              className="inline-block border border-accent bg-accent px-4 py-2 text-sm font-black text-accent-text no-underline transition-colors hover:bg-accent/90"
+            >
+              Register
+            </a>
+          )}
         </div>
       </div>
-    </a>
+    </div>
   );
 }
 

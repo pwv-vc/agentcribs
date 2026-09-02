@@ -7,6 +7,10 @@ import { BrandLink } from "@/app/components/links";
 export function EventSection({ event }: { event: Event | null }) {
   if (!event) return null;
 
+  const externalRegistration = event.lumaEventUrl;
+  const registerHref = externalRegistration ?? (event.waitlist ? "/apply" : link("/community/events/:id", { id: event.id }));
+  const registerLabel = externalRegistration ? "Register now" : event.waitlist ? "Register" : "Details coming soon";
+
   return (
     <section className="border-b border-border bg-bg">
       <div className="mx-auto grid max-w-[1040px] gap-10 px-6 py-16 sm:px-8 sm:py-24 lg:grid-cols-[300px_1fr]">
@@ -44,10 +48,17 @@ export function EventSection({ event }: { event: Event | null }) {
           </div>
 
           <p className="mt-6">
-            <BrandLink href={link("/community/events/:id", { id: event.id })}>
-              View event details
-            </BrandLink>
-            <span className="mx-2 text-border">|</span>
+            <a
+              href={registerHref}
+              target={externalRegistration ? "_blank" : undefined}
+              rel={externalRegistration ? "noopener noreferrer" : undefined}
+              className="inline-block border border-brand-green bg-brand-green px-6 py-3 text-base font-black text-accent-text no-underline transition-colors hover:border-brand-green-hover hover:bg-brand-green-hover sm:px-8 sm:py-4 sm:text-lg"
+            >
+              {registerLabel}
+            </a>
+            <span className="mx-2 text-border" aria-hidden="true">
+              |
+            </span>
             <BrandLink href={link("/community/events")}>
               All events
             </BrandLink>

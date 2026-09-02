@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Podcast card concepts — AI Worth Using</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=DM+Sans:opsz,wght@9..40,100..900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pwv-green: oklch(78% 0.235 145);
+    --pwv-deep-green: oklch(38% 0.16 145);
+    --pwv-teal: oklch(78% 0.165 192);
+    --bg: oklch(8% 0 0);
+    --bg-soft: oklch(12% 0.005 95);
+    --text: oklch(94% 0.02 95);
+    --text-secondary: oklch(82% 0.015 95);
+    --border: oklch(28% 0.01 95);
+    --accent: oklch(80% 0.15 145);
+    --accent-text: oklch(5% 0 0);
+  }
+  html:not(.dark) {
+    --bg: oklch(97.5% 0.035 95);
+    --bg-soft: oklch(100% 0 0);
+    --text: oklch(8% 0 0);
+    --text-secondary: oklch(28% 0.005 95);
+    --border: oklch(86% 0.005 95);
+    --accent: oklch(65% 0.2 145);
+    --accent-text: oklch(100% 0 0);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "DM Sans", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,h4 { letter-spacing: 0; line-height: 0.98; margin: 0; }
+
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 48px 24px 96px; }
+  .page-head h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; }
+  .page-head .sub { color: var(--text-secondary); max-width: 60ch; margin-top: 12px; line-height: 1.55; }
+  .theme-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 50;
+    font-family: "DM Mono", monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.14em; padding: 10px 14px; border-radius: 999px;
+    border: 1px solid var(--border); background: var(--bg-soft); color: var(--text);
+    cursor: pointer;
+  }
+
+  .label-text {
+    font-family: "DM Mono", monospace; font-weight: 400;
+    text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent);
+    display: flex; align-items: center; gap: 12px; margin: 0;
+  }
+  .label-text .sponsor { color: var(--text-secondary); text-transform: none; letter-spacing: normal; font-weight: 700; font-family: "DM Sans", sans-serif; }
+
+  section.concept { margin-top: 72px; }
+  .concept-head { margin-bottom: 20px; }
+  .concept-head h2 { font-size: 1.35rem; font-weight: 900; display: inline; }
+  .concept-head .tag {
+    font-family: "DM Mono", monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.14em; color: var(--text-secondary); white-space: nowrap; margin-left: 12px;
+  }
+  .concept-head p { color: var(--text-secondary); margin: 6px 0 0; max-width: 68ch; line-height: 1.55; }
+
+  /* ============ CURRENT (baseline) ============ */
+  .card-current {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--bg-soft); border: 1px solid var(--border);
+    border-radius: 12px; padding: 32px; transition: border-color .2s ease-out;
+  }
+  .card-current:hover { border-color: color-mix(in oklab, var(--accent) 40%, transparent); }
+  .card-current .row { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+  .card-current h2 { font-size: 1.6rem; font-weight: 900; }
+  .card-current .tagline { font-weight: 700; margin-top: 16px; }
+  .card-current .desc { color: var(--text-secondary); max-width: 56ch; margin-top: 10px; line-height: 1.55; }
+  .card-current img.thumb { width: 112px; height: 112px; border-radius: 12px; object-fit: cover; }
+  .card-current .episodes { margin-top: 14px; font-weight: 700; font-size: .875rem; }
+  html:not(.dark) .card-current .tagline,
+  html:not(.dark) .card-current .episodes { color: var(--pwv-deep-green); }
+  .dark .card-current .tagline, .dark .card-current .episodes { color: var(--pwv-green); }
+  .logo-badge { width: 48px; height: 48px; border-radius: 12px; }
+
+  /* ============ shared bits ============ */
+  .pod-link { display: block; text-decoration: none; color: inherit; -webkit-tap-highlight-color: transparent; border-radius: 16px; }
+  .pod-card { position: relative; overflow: hidden; transition: transform .25s ease-out, border-color .25s ease-out, box-shadow .25s ease-out; will-change: transform; }
+  .pod-link:hover .pod-card { transform: translateY(-3px); }
+  .pod-link:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+  .cta-row { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: .875rem; }
+  .cta-row svg { transition: transform .25s ease-out; }
+  .pod-link:hover .cta-row svg { transform: translateX(4px); }
+
+  .pill {
+    font-family: "DM Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: .1em;
+    border: 1px solid var(--border); padding: 6px 12px; border-radius: 999px; color: var(--text-secondary);
+  }
+  .pill.solid { background: var(--accent); color: var(--accent-text); border-color: transparent; font-weight: 700; }
+
+  /* ============ CONCEPT 1 — Crossfade episode covers ============ */
+  .c1-card {
+    display: grid; grid-template-columns: 220px 1fr;
+    background: var(--bg-soft); border: 1px solid var(--border); border-radius: 16px;
+  }
+  .c1-media { position: relative; min-height: 260px; overflow: hidden; background: oklch(15% 0.02 145); }
+  .c1-media img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0; animation: c1-cycle 27s infinite; scale: 1.06;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .c1-media img:nth-child(1) { animation-delay: 0s; opacity: 1; }
+    .c1-media img:nth-child(2) { animation-delay: 4.5s; }
+    .c1-media img:nth-child(3) { animation-delay: 9s; }
+    .c1-media img:nth-child(4) { animation-delay: 13.5s; }
+    .c1-media img:nth-child(5) { animation-delay: 18s; }
+    .c1-media img:nth-child(6) { animation-delay: 22.5s; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .c1-media img:nth-child(n+2) { display: none; }
+  }
+  @keyframes c1-cycle {
+    0%, 13% { opacity: 1; }
+    20%, 100% { opacity: 0; }
+  }
+  .c1-scrim { position: absolute; inset: 0; background: linear-gradient(to top, oklch(8% 0 / .55), transparent 45%); pointer-events: none; }
+  .c1-chip {
+    position: absolute; left: 12px; bottom: 12px;
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+    background: oklch(8% 0 / .65); color: oklch(100% 0 0);
+    backdrop-filter: blur(6px); border: 1px solid oklch(100% 0 / .15);
+    padding: 5px 10px; border-radius: 999px;
+  }
+  .c1-dot { width: 6px; height: 6px; border-radius: 999px; background: var(--pwv-teal); }
+  .c1-body { padding: 28px 32px; display: flex; flex-direction: column; }
+  .c1-body h2 { font-size: 1.7rem; font-weight: 900; margin-top: 12px; }
+  .c1-tagline { font-weight: 700; margin-top: 6px; }
+  html:not(.dark) .c1-tagline { color: var(--pwv-deep-green); }
+  .dark .c1-tagline { color: var(--pwv-green); }
+  .c1-desc { color: var(--text-secondary); max-width: 52ch; margin-top: 10px; line-height: 1.55; }
+  .c1-foot { margin-top: auto; padding-top: 22px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .c1-hosts { display: flex; align-items: center; padding-left: 10px; }
+  .c1-hosts img { width: 34px; height: 34px; border-radius: 999px; object-fit: cover; object-position: top; border: 2px solid var(--bg-soft); margin-left: -10px; background: var(--bg-muted, #222); }
+  .c1-hosts img:first-child { margin-left: -10px; }
+  .c1-count { font-family: "DM Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--text-secondary); }
+
+  /* ============ CONCEPT 2 — Hosts as soft bg wash ============ */
+  .c2-card {
+    position: relative; isolation: isolate;
+    background: var(--bg-soft); border: 1px solid var(--border); border-radius: 16px;
+    padding: 36px 40px;
+  }
+  .c2-bg { position: absolute; inset: 0; z-index: -1; display: flex; justify-content: flex-end; align-items: flex-end; gap: 24px; pointer-events: none; }
+  .c2-bg img {
+    height: 115%; width: auto; object-fit: contain; object-position: bottom;
+    filter: grayscale(.35);
+    opacity: .14;
+    transition: opacity .35s ease-out, filter .35s ease-out, transform .35s ease-out;
+  }
+  .c2-bg img:first-child { mask-image: radial-gradient(110% 110% at 78% 95%, black 25%, transparent 68%); }
+  .c2-bg img:last-child { mask-image: radial-gradient(110% 110% at 96% 90%, black 25%, transparent 68%); }
+  .pod-link:hover .c2-bg img { opacity: .3; filter: grayscale(0) contrast(1.05); transform: translateY(-6px); }
+  .c2-tint {
+    position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      radial-gradient(55% 75% at 82% 100%, oklch(78% 0.235 145 / .08), transparent 70%),
+      radial-gradient(45% 60% at 98% 10%, oklch(78% 0.165 192 / .07), transparent 70%);
+  }
+  .c2-body { max-width: 62%; }
+  .c2-body h2 { font-size: 1.9rem; font-weight: 900; }
+  .c2-tagline { font-weight: 700; margin-top: 8px; }
+  html:not(.dark) .c2-tagline { color: var(--pwv-deep-green); }
+  .dark .c2-tagline { color: var(--pwv-green); }
+  .c2-desc { color: var(--text-secondary); max-width: 48ch; margin-top: 10px; line-height: 1.55; }
+  .c2-meta-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 18px; }
+
+  /* ============ CONCEPT 3 — Fanned deck ============ */
+  .c3-card {
+    display: grid; grid-template-columns: 1fr 230px; gap: 36px; align-items: center;
+    background: var(--bg-soft); border: 1px solid var(--border); border-radius: 16px; padding: 32px;
+  }
+  .deck { position: relative; height: 210px; }
+  .deck img {
+    position: absolute; top: 17px; left: calc(50% - 88px);
+    width: 176px; height: 176px; border-radius: 14px; object-fit: cover;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 2px oklch(0% 0 0 / .2), 0 12px 24px -12px oklch(0% 0 0 / .35);
+    transform-origin: 50% 120%;
+    transition: transform .35s cubic-bezier(.22, 1, .36, 1);
+    background: var(--bg-muted, #333);
+  }
+  .deck img:nth-child(1) { transform: rotate(-10deg) translateX(-52px); z-index: 1; }
+  .deck img:nth-child(2) { transform: rotate(-4deg) translateX(-18px); z-index: 2; }
+  .deck img:nth-child(3) { transform: rotate(0deg); z-index: 3; }
+  .deck img:nth-child(4) { transform: rotate(4deg) translateX(18px); z-index: 4; }
+  .deck img:nth-child(5) { transform: rotate(10deg) translateX(52px); z-index: 5; }
+  .deck img:nth-child(6) { transform: rotate(16deg) translateX(88px); z-index: 6; }
+  .pod-link:hover .deck img:nth-child(1) { transform: rotate(-16deg) translateX(-76px) translateY(-8px); }
+  .pod-link:hover .deck img:nth-child(2) { transform: rotate(-8deg) translateX(-26px) translateY(-4px); }
+  .pod-link:hover .deck img:nth-child(3) { transform: rotate(0deg) translateY(-2px); }
+  .pod-link:hover .deck img:nth-child(4) { transform: rotate(8deg) translateX(26px) translateY(-4px); }
+  .pod-link:hover .deck img:nth-child(5) { transform: rotate(16deg) translateX(76px) translateY(-8px); }
+  .pod-link:hover .deck img:nth-child(6) { transform: rotate(24deg) translateX(118px) translateY(-14px); }
+  .deck-badge {
+    position: absolute; right: calc(50% - 150px); bottom: 0; z-index: 7;
+    background: var(--accent); color: var(--accent-text);
+    font-family: "DM Mono", monospace; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    padding: 6px 12px; border-radius: 999px; box-shadow: 0 6px 16px -6px oklch(0% 0 0 / .4);
+  }
+  .c3-copy h2 { font-size: 1.75rem; font-weight: 900; margin-top: 12px; }
+  .c3-tagline { font-weight: 700; margin-top: 6px; }
+  html:not(.dark) .c3-tagline { color: var(--pwv-deep-green); }
+  .dark .c3-tagline { color: var(--pwv-green); }
+  .c3-desc { color: var(--text-secondary); max-width: 46ch; margin-top: 10px; line-height: 1.55; }
+  .c3-actions { margin-top: 20px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+
+  /* ============ CONCEPT 4 — Filmstrip ticker ============ */
+  .c4-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 16px; }
+  .c4-strip-wrap { position: relative; border-bottom: 1px solid var(--border); background: oklch(20% 0.02 145); }
+  .dark .c4-strip-wrap { background: oklch(8% 0 0); }
+  .c4-strip {
+    display: flex; width: max-content; animation: c4-scroll 30s linear infinite;
+    mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  }
+  .pod-link:hover .c4-strip { animation-play-state: paused; }
+  .c4-strip img { width: 132px; aspect-ratio: 1; object-fit: cover; opacity: .85; display: block; }
+  .c4-strip img + img { border-left: 1px solid oklch(100% 0 / .08); }
+  @keyframes c4-scroll { to { transform: translateX(-50%); } }
+  .c4-live {
+    position: absolute; left: 14px; top: 14px; display: inline-flex; align-items: center; gap: 8px;
+    font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+    color: oklch(100% 0 0); background: oklch(8% 0 / .55); border: 1px solid oklch(100% 0 / .18);
+    padding: 5px 10px; border-radius: 999px; backdrop-filter: blur(6px);
+  }
+  .c4-live::before {
+    content: ""; width: 7px; height: 7px; border-radius: 999px; background: var(--pwv-green);
+    animation: c4-pulse 2s ease-out infinite;
+  }
+  .c4-guests-pill { left: auto; right: 14px; }
+  .c4-guests-pill::before { display: none; }
+  @keyframes c4-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 oklch(78% 0.235 145 / .55); }
+    50% { box-shadow: 0 0 0 5px oklch(78% 0.235 145 / 0); }
+  }
+  .c4-body { padding: 28px 32px; }
+  .c4-title-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .c4-title-row h2 { font-size: 1.7rem; font-weight: 900; margin-top: 8px; }
+  .c4-tagline { font-weight: 700; margin-top: 6px; }
+  html:not(.dark) .c4-tagline { color: var(--pwv-deep-green); }
+  .dark .c4-tagline { color: var(--pwv-green); }
+  .c4-desc { color: var(--text-secondary); max-width: 56ch; margin-top: 10px; line-height: 1.55; }
+  .c4-guests { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 16px; align-items: center; }
+  .guest-chip {
+    font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: .06em; text-transform: uppercase;
+    border: 1px dashed var(--border); color: var(--text-secondary); padding: 4px 10px; border-radius: 6px;
+  }
+
+  /* ============ CONCEPT 5 — On-air dark broadcast ============ */
+  .c5-card {
+    display: grid; grid-template-columns: 1fr 300px;
+    background: linear-gradient(135deg, oklch(15% 0.03 145), oklch(8% 0 0));
+    border: 1px solid oklch(78% 0.235 145 / .22); border-radius: 16px;
+    overflow: hidden; position: relative;
+  }
+  .c5-card::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(70% 90% at 100% 0%, oklch(78% 0.165 192 / .14), transparent 60%),
+      radial-gradient(60% 80% at 0% 100%, oklch(78% 0.235 145 / .1), transparent 60%);
+  }
+  .c5-body { padding: 36px 40px; position: relative; }
+  .c5-label { color: var(--pwv-green); }
+  .c5-body h2 { font-size: 2.1rem; font-weight: 900; color: oklch(100% 0 0); margin-top: 12px; }
+  .c5-body .tagline { color: var(--pwv-teal); font-weight: 700; margin-top: 8px; }
+  .c5-body .desc { color: oklch(85% 0.01 95 / .72); max-width: 50ch; margin-top: 12px; line-height: 1.55; }
+  .c5-cta { margin-top: 24px; display: inline-flex; align-items: center; gap: 14px; }
+  .play-btn {
+    width: 52px; height: 52px; border-radius: 999px; display: grid; place-items: center;
+    background: var(--pwv-green); color: oklch(8% 0 0); flex: none;
+    transition: transform .25s ease-out, box-shadow .25s ease-out;
+  }
+  .pod-link:hover .play-btn { transform: scale(1.08); box-shadow: 0 0 24px oklch(78% 0.235 145 / .45); }
+  .c5-cta .txt { font-weight: 800; font-size: .9rem; color: oklch(100% 0 0); }
+  .c5-cta .txt small { display: block; font-weight: 500; font-size: .75rem; color: oklch(85% 0.01 95 / .55); margin-top: 2px; }
+  .c5-side { position: relative; display: grid; grid-template-columns: 1fr 1fr; }
+  .hosts-col { display: grid; grid-template-rows: 1fr 1fr; }
+  .host-img { position: relative; overflow: hidden; min-height: 130px; }
+  .host-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .host-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, oklch(8% 0 0 / .35), transparent 45%); }
+  .eps-col { display: grid; grid-template-rows: repeat(3, 1fr); }
+  .eps-col img { width: 100%; height: 100%; object-fit: cover; border-left: 1px solid oklch(100% 0 / .08); }
+  .eps-col img + img { border-top: 1px solid oklch(100% 0 / .08); }
+  .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+  .eq i { width: 2px; background: currentColor; animation: eq 1s ease-in-out infinite; }
+  .eq i:nth-child(1) { height: 40%; }
+  .eq i:nth-child(2) { height: 100%; animation-delay: .15s; }
+  .eq i:nth-child(3) { height: 60%; animation-delay: .3s; }
+  .eq i:nth-child(4) { height: 80%; animation-delay: .45s; }
+  @keyframes eq { 0%,100% { transform: scaleY(.4);} 50% { transform: scaleY(1);} }
+
+  /* ============ responsive ============ */
+  @media (max-width: 720px) {
+    .wrap { padding: 32px 16px 72px; }
+    .c1-card { grid-template-columns: 1fr; }
+    .c1-media { min-height: 190px; }
+    .c2-card { padding: 28px 24px; }
+    .c2-body { max-width: 100%; }
+    .c2-bg { justify-content: center; opacity: .6; }
+    .c3-card { grid-template-columns: 1fr; gap: 24px; }
+    .deck { height: 180px; }
+    .deck img { width: 140px; height: 140px; left: calc(50% - 70px); top: 14px; }
+    .deck img:nth-child(1) { transform: rotate(-8deg) translateX(-40px); }
+    .deck img:nth-child(6) { transform: rotate(14deg) translateX(66px); }
+    .deck-badge { right: calc(50% - 122px); }
+    .pod-link:hover .deck img:nth-child(1) { transform: rotate(-12deg) translateX(-52px); }
+    .pod-link:hover .deck img:nth-child(6) { transform: rotate(20deg) translateX(92px); }
+    .c5-card { grid-template-columns: 1fr; }
+    .c5-side { grid-template-columns: 1fr 1fr; }
+    .eps-col { display: none; }
+    .c5-side { grid-template-columns: 1fr; }
+    .hosts-col { grid-template-rows: 170px 170px; }
+    .c4-strip img { width: 104px; }
+  }
+  @media (prefers-reduced-motion: reduce), (.reduce-motion) {
+    *, *::before, *::after {
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .01ms !important;
+    }
+  }
+
+  footer.note { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-secondary); font-size: .85rem; max-width: 70ch; line-height: 1.6; }
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle">Theme: dark</button>
+
+<div class="wrap">
+  <header class="page-head">
+    <p class="label-text">◉ Design exploration</p>
+    <h1>Podcast list card, five ways</h1>
+    <p class="sub">The current card is a flat bordered box with one static thumbnail. Below are five directions built with the real content: six guest covers, Sam and Tom cutouts, the show logo, and the site's DM Sans / DM Mono type plus brand greens and teals. Hover every card; each concept has a hover state worth watching. Use the toggle top-right for light mode.</p>
+  </header>
+
+  <!-- BASELINE -->
+  <section class="concept" id="current">
+    <div class="concept-head">
+      <h2>Current card</h2><span class="tag">baseline for comparison</span>
+      <p>The existing PodcastCard as it renders on /podcasts today.</p>
+    </div>
+    <a class="card-current pod-link" href="#">
+      <div class="row">
+        <div>
+          <p class="label-text">◉ Podcast <span class="sponsor">Sponsored by AgentCribs</span></p>
+          <div style="display:flex;align-items:center;gap:16px;margin-top:8px;">
+            <img class="logo-badge" src="/podcast/logo.svg" alt="">
+            <h2>AI Worth Using</h2>
+          </div>
+        </div>
+        <img class="thumb" src="/podcast/guest-jesse.jpg" alt="">
+      </div>
+      <p class="tagline">Discover how the top AI engineers build</p>
+      <p class="desc">Leading AI developers come on to show what they are shipping and the open source tools behind it. Co-hosts Sam Odio and Tom Preston-Werner install the software with them and demo it live.</p>
+      <p class="episodes">6 episodes</p>
+    </a>
+  </section>
+
+  <!-- CONCEPT 1 -->
+  <section class="concept" id="c1">
+    <div class="concept-head">
+      <h2>01 · Episode crossfade</h2><span class="tag">your cycle-animation idea</span>
+      <p>A tall media panel cycles through all six guest covers on a slow crossfade loop with a subtle zoom drift. A mono chip in the corner names the guest on screen. Calm and editorial, zero JS.</p>
+    </div>
+    <a class="pod-link" href="#">
+      <article class="pod-card c1-card">
+        <div class="c1-media">
+          <img src="/podcast/guest-jesse.jpg" alt="">
+          <img src="/podcast/guest-wes.jpg" alt="">
+          <img src="/podcast/guest-harper.jpg" alt="">
+          <img src="/podcast/guest-naveen.jpg" alt="">
+          <img src="/podcast/guest-peter.jpg" alt="">
+          <img src="/podcast/guest-logan.jpg" alt="">
+          <div class="c1-scrim"></div>
+          <span class="c1-chip"><span class="c1-dot"></span> EP.01 Jesse Vincent</span>
+        </div>
+        <div class="c1-body">
+          <p class="label-text">◉ Podcast · <span class="sponsor">AgentCribs</span></p>
+          <h2>AI Worth Using</h2>
+          <p class="c1-tagline">Discover how the top AI engineers build</p>
+          <p class="c1-desc">Leading AI developers come on to show what they are shipping and the open source tools behind it. Co-hosts Sam Odio and Tom Preston-Werner install the software with them and demo it live.</p>
+          <div class="c1-foot">
+            <div class="c1-hosts">
+              <img src="/podcast/hero-sam-web.png" alt="">
+              <img src="/podcast/hero-tom-web.png" alt="">
+            </div>
+            <span class="c1-count">6 episodes · Season 1</span>
+          </div>
+        </div>
+      </article>
+    </a>
+  </section>
+
+  <!-- CONCEPT 2 -->
+  <section class="concept" id="c2">
+    <div class="concept-head">
+      <h2>02 · Hosts as soft background</h2><span class="tag">your hosts-as-bg idea</span>
+      <p>Sam and Tom sit oversized at the card's edge as a grayscale wash behind the copy, tinted with brand green and teal gradients. On hover they gain full color, brighten, and lean up toward you.</p>
+    </div>
+    <a class="pod-link" href="#">
+      <article class="pod-card c2-card">
+        <div class="c2-bg">
+          <img src="/podcast/hero-sam-web.png" alt="">
+          <img src="/podcast/hero-tom-web.png" alt="">
+        </div>
+        <div class="c2-tint"></div>
+        <div class="c2-body">
+          <p class="label-text">◉ Podcast</p>
+          <div style="display:flex;align-items:center;gap:14px;margin-top:10px;">
+            <img src="/podcast/logo.svg" alt="" style="width:44px;height:44px;border-radius:12px;">
+            <h2>AI Worth Using</h2>
+          </div>
+          <p class="c2-tagline">Discover how the top AI engineers build</p>
+          <p class="c2-desc">Leading AI developers come on to show what they are shipping and the open source tools behind it. Co-hosts Sam Odio and Tom Preston-Werner install the software with them and demo it live.</p>
+          <div class="c2-meta-row">
+            <span class="pill solid">6 episodes</span>
+            <span class="pill">Season 1</span>
+            <span class="pill">Jesse Vincent → Logan Kilpatrick</span>
+          </div>
+        </div>
+      </article>
+    </a>
+  </section>
+
+  <!-- CONCEPT 3 -->
+  <section class="concept" id="c3">
+    <div class="concept-head">
+      <h2>03 · Guest deck fan</h2><span class="tag">tactile, physical metaphor</span>
+      <p>Six covers fanned like a hand of cards around a shared pivot. On hover the fan spreads wider and lifts. Reads instantly as "a collection of episodes", and the badge anchors the count.</p>
+    </div>
+    <a class="pod-link" href="#">
+      <article class="pod-card c3-card">
+        <div class="c3-copy">
+          <p class="label-text">◉ Podcast · <span class="sponsor">AgentCribs</span></p>
+          <h2>AI Worth Using</h2>
+          <p class="c3-tagline">Discover how the top AI engineers build</p>
+          <p class="c3-desc">Leading AI developers come on to show what they are shipping and the open source tools behind it. Co-hosts Sam Odio and Tom Preston-Werner install the software with them and demo it live.</p>
+          <div class="c3-actions">
+            <span class="pill">Hosted by Sam &amp; Tom</span>
+            <span class="cta-row">Browse episodes
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </div>
+        </div>
+        <div class="deck">
+          <img src="/podcast/guest-jesse.jpg" alt="">
+          <img src="/podcast/guest-wes.jpg" alt="">
+          <img src="/podcast/guest-harper.jpg" alt="">
+          <img src="/podcast/guest-naveen.jpg" alt="">
+          <img src="/podcast/guest-peter.jpg" alt="">
+          <img src="/podcast/guest-logan.jpg" alt="">
+          <span class="deck-badge">EP.01–06</span>
+        </div>
+      </article>
+    </a>
+  </section>
+
+  <!-- CONCEPT 4 -->
+  <section class="concept" id="c4">
+    <div class="concept-head">
+      <h2>04 · Filmstrip ticker</h2><span class="tag">ambient motion, pauses on hover</span>
+      <p>All six covers run in an infinite marquee across the card's top edge, faded at both ends, under a pulsing "On air" pill. The strip pauses when you hover so you can actually look. Motion says "this show keeps producing".</p>
+    </div>
+    <a class="pod-link" href="#">
+      <article class="pod-card c4-card">
+        <div class="c4-strip-wrap">
+          <div class="c4-strip">
+            <img src="/podcast/guest-jesse.jpg" alt=""><img src="/podcast/guest-wes.jpg" alt=""><img src="/podcast/guest-harper.jpg" alt=""><img src="/podcast/guest-naveen.jpg" alt=""><img src="/podcast/guest-peter.jpg" alt=""><img src="/podcast/guest-logan.jpg" alt="">
+            <img src="/podcast/guest-jesse.jpg" alt=""><img src="/podcast/guest-wes.jpg" alt=""><img src="/podcast/guest-harper.jpg" alt=""><img src="/podcast/guest-naveen.jpg" alt=""><img src="/podcast/guest-peter.jpg" alt=""><img src="/podcast/guest-logan.jpg" alt="">
+          </div>
+          <span class="c4-live">Season 1 · On air</span>
+          <span class="c4-live c4-guests-pill">6 guests</span>
+        </div>
+        <div class="c4-body">
+          <div class="c4-title-row">
+            <div>
+              <p class="label-text">◉ Podcast</p>
+              <h2>AI Worth Using</h2>
+            </div>
+            <img src="/podcast/logo.svg" alt="" style="width:52px;height:52px;border-radius:12px;">
+          </div>
+          <p class="c4-tagline">Discover how the top AI engineers build</p>
+          <p class="c4-desc">Leading AI developers come on to show what they are shipping and the open source tools behind it. Co-hosts Sam Odio and Tom Preston-Werner install the software with them and demo it live.</p>
+          <div class="c4-guests">
+            <span class="guest-chip">Jesse Vincent</span>
+            <span class="guest-chip">Wes McKinney</span>
+            <span class="guest-chip">Harper Reed</span>
+            <span class="guest-chip">Naveen Jain</span>
+            <span class="guest-chip">Peter Steinberger</span>
+            <span class="guest-chip">Logan Kilpatrick</span>
+            <span class="cta-row" style="margin-left:auto;">Listen
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </div>
+        </div>
+      </article>
+    </a>
+  </section>
+
+  <!-- CONCEPT 5 -->
+  <section class="concept" id="c5">
+    <div class="concept-head">
+      <h2>05 · On-air broadcast panel</h2><span class="tag">statement register, always dark</span>
+      <p>A permanently dark panel that reads like a studio feed: gradient-lit stage, glowing play button, host cutouts stacked beside a wall of episode frames, animated EQ bars. The boldest of the five, and identical in both themes.</p>
+    </div>
+    <a class="pod-link" href="#">
+      <article class="pod-card c5-card">
+        <div class="c5-body">
+          <p class="label-text c5-label"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Now recording</p>
+          <h2>AI Worth Using</h2>
+          <p class="tagline">Discover how the top AI engineers build</p>
+          <p class="desc">Leading AI developers come on to show what they are shipping and the open source tools behind it. Co-hosts Sam Odio and Tom Preston-Werner install the software with them and demo it live.</p>
+          <div class="c5-cta">
+            <span class="play-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72c0 .8.87 1.3 1.56.88l10.54-6.86a1.05 1.05 0 0 0 0-1.76L9.56 4.26A1.04 1.04 0 0 0 8 5.14z"/></svg>
+            </span>
+            <span class="txt">Watch the trailer<small>Season 1 · 6 episodes</small></span>
+          </div>
+        </div>
+        <div class="c5-side">
+          <div class="hosts-col">
+            <div class="host-img"><img src="/podcast/hero-sam-web.png" alt=""></div>
+            <div class="host-img"><img src="/podcast/hero-tom-web.png" alt=""></div>
+          </div>
+          <div class="eps-col">
+            <img src="/podcast/guest-jesse.jpg" alt="">
+            <img src="/podcast/guest-wes.jpg" alt="">
+            <img src="/podcast/guest-harper.jpg" alt="">
+          </div>
+        </div>
+      </article>
+    </a>
+  </section>
+
+  <footer class="note">
+    All five concepts use real assets from <code>/public/podcast</code>, the DM Sans / DM Mono pairing, and the oklch palette from styles.css. Every animation is CSS-only and respects prefers-reduced-motion. Pick a direction (or mix one, e.g. Concept 1's media panel with Concept 2's hover treatment) and I'll implement it in <code>src/app/components/podcasts/index.tsx</code>.
+  </footer>
+</div>
+
+<script>
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle.addEventListener('click', () => {
+    const dark = document.documentElement.classList.toggle('dark');
+    themeToggle.textContent = 'Theme: ' + (dark ? 'dark' : 'light');
+  });
+
+  // Manual motion kill switch for testing reduced motion
+  const style = document.createElement('style');
+  style.textContent = '.reduce-motion *, .reduce-motion *::before, .reduce-motion *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }';
+  document.head.appendChild(style);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'm' && e.target === document.body) {
+      document.documentElement.classList.toggle('reduce-motion');
+    }
+  });
+</script>
+</body>
+</html>

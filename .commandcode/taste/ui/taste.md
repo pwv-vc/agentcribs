@@ -1,0 +1,10 @@
+# ui
+- Use single-column layout (no two-column grids) for form fields in the apply form. Confidence: 0.65
+- Use consistent outer container widths (`max-w-[1040px]`) with inner text `max-w-[820px]` across all home page sections — hero, community, event, and FAQ should share the same horizontal rhythm. Confidence: 0.70
+- Avoid using the heavy branded CtaButton for tertiary navigation like "Back to home" on content pages — it competes with the primary action and feels overbearing when repeated. Use a lighter text link or breadcrumb instead. Confidence: 0.65
+- In card layouts, place guest social/platform link pills (LinkedIn, X, etc.) in their own row directly below the episode title (not the bio) — not above, inline with, or sharing a row with other links (episode platform listen links stay beneath them in their own row). Confidence: 0.75
+- Keep the vertical spacing above guest social pills tight when they sit directly beneath a title — prefer a small margin (e.g., `mt-1.5`) over a larger one like `mt-3`. Confidence: 0.5
+- Metadata counts (e.g., "N episodes") belong with the imagery they describe — place them as a small caption directly beneath the image grid's column, not as a separate full-width row at the card bottom. Confidence: 0.6
+- In section header rows (e.g., season title + episode count), right-align the metadata count opposite the title on the same baseline — flex `justify-between` with `items-baseline` — rather than sitting adjacent to the label. Confidence: 0.6
+- Repeated UI elements should match the canonical rendering of the same element elsewhere in the app — e.g., a section label on the home page should be a pill "like the podcast page renders", reusing the same classes, icon, and text pattern rather than a divergent style. Confidence: 0.7
+- When rendering textual listings of season guests ("Guest Name (Episode Title), ..."), bold the guest names via inline `<strong>` elements while keeping the episode titles in regular text — don't flatten the listing into a plain joined string. Confidence: 0.7

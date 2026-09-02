@@ -35,6 +35,12 @@
   "durable_objects": {
     "bindings": [{ "name": "USER_SESSION_DO", "class_name": "UserSession" }],
   },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["UserSession"],
+    },
+  ],
   "queues": {
     "producers": [
       {

@@ -8,3 +8,4 @@
 - When LLM responses via AI Gateway consistently fail to parse as valid JSON even with cleanup helpers, prefer switching to a more capable model rather than adding increasingly complex parsing workarounds. Confidence: 0.65
 - When switching to a more capable model for AI Gateway analysis tasks, use `openai/gpt-5.4-nano` as the preferred model for reliable structured output. Confidence: 0.65
 - Include the JSON schema directly in the system prompt when requiring structured LLM output, explicitly instructing the model to respond with JSON matching that schema. Confidence: 0.70
+- Durable Objects use SQLite-backed storage: every DO binding in wrangler.jsonc must have a matching `migrations` entry with `new_sqlite_classes: ["<ClassName>"]` (tagged `v1`, `v2`, ... as classes are added) — wrangler warns at dev startup if it's missing. Confidence: 0.80

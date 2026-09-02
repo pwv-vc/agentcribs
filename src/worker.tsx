@@ -25,6 +25,8 @@ import { VerifyError } from "@/app/pages/verify-error";
 import { Terms } from "@/app/pages/terms";
 import { Privacy } from "@/app/pages/privacy";
 import { Home } from "@/app/pages/home";
+import { Podcasts } from "@/app/pages/podcasts/podcasts";
+import { PodcastDetail } from "@/app/pages/podcasts/podcast";
 import { NotFound } from "@/app/pages/not-found";
 import { EventsList } from "@/app/pages/community/events";
 import { EventDetail } from "@/app/pages/community/event-detail";
@@ -58,6 +60,10 @@ export const app = defineApp([
   render(Document, [
     layout(Layout, [
       route("/", Home),
+      route("/podcasts", Podcasts),
+      route("/podcasts/:id", ({ params, response }) => (
+        <PodcastDetail id={params.id} response={response} />
+      )),
       route("/terms", Terms),
       route("/privacy", Privacy),
       route("/apply", Apply),

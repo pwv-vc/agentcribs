@@ -2,11 +2,29 @@ import { CommunitySection } from "@/app/components/community-section";
 import { EventSection } from "@/app/components/event-section";
 import { FaqSection } from "@/app/components/faq-section";
 import { HeroSection } from "@/app/components/hero-section";
+import { PodcastSection } from "@/app/components/podcast-section";
 import { JsonLd } from "@/app/components/json-ld";
 import { Seo } from "@/app/components/seo";
 import { getFeaturedEvent, type Event } from "@/app/queries/events";
+import { getFeaturedPodcast } from "@/app/queries/podcasts";
+import { getFaqs, type Faq } from "@/app/queries/faqs";
 
-function buildSchema(featuredEvent: Event | null): Record<string, unknown> {
+function faqToPlainText(faq: Faq): string {
+  return faq.content
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function buildSchema(
+  featuredEvent: Event | null,
+  faqs: Faq[],
+): Record<string, unknown> {
   const graph: Array<Record<string, unknown>> = [
     {
       "@type": "Organization",
@@ -51,48 +69,14 @@ function buildSchema(featuredEvent: Event | null): Record<string, unknown> {
     {
       "@type": "FAQPage",
       "@id": "https://pwv.agentcribs.com/#faq",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "Who should apply to AgentCribs?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "People already building with AI agents, developer tools, command-line workflows, or agentic software development practices. The strongest fit is a technical founder, senior developer, or hands-on builder actively experimenting in real projects.",
-          },
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faqToPlainText(faq),
         },
-        {
-          "@type": "Question",
-          name: "Are AgentCribs events public?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "No. AgentCribs events are curated and space is limited. Apply to join AgentCribs first. Selected applicants receive a separate registration invite for events.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "How do applications work?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Applications are reviewed by our team. Selected applicants receive invitations to upcoming events and community opportunities. If you are not selected for a particular event, you remain on our list for future opportunities online and in person.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "What if I cannot attend an event?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "You should still apply. We will follow up with selected applicants about future AgentCribs opportunities online and in person.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Where are events held?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Event locations vary. Venue details will be shared with registered attendees for each event.",
-          },
-        },
-      ],
+      })),
     },
   ];
 
@@ -139,8 +123,12 @@ function buildSchema(featuredEvent: Event | null): Record<string, unknown> {
 }
 
 export const Home = async () => {
-  const featuredEvent = await getFeaturedEvent();
-  const schema = buildSchema(featuredEvent);
+  const [featuredEvent, featuredPodcast, faqs] = await Promise.all([
+    getFeaturedEvent(),
+    getFeaturedPodcast(),
+    getFaqs(),
+  ]);
+  const schema = buildSchema(featuredEvent, faqs);
 
   return (
     <>
@@ -151,6 +139,7 @@ export const Home = async () => {
       <JsonLd schema={schema} />
       <HeroSection />
       <CommunitySection />
+      <PodcastSection podcast={featuredPodcast} />
       <EventSection event={featuredEvent} />
       <FaqSection />
     </>

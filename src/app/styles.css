@@ -51,6 +51,7 @@ html {
   --color-pwv-teal: oklch(78% 0.165 192);
 
   --color-pwv-soft-green: oklch(92% 0.165 145);
+  --color-pwv-chartreuse: oklch(91.1% 0.13 120.84); /* #D5EF8A */
   --color-pwv-soft-teal: oklch(94% 0.115 192);
   --color-pwv-soft-yellow: oklch(94% 0.07 95);
   --color-pwv-soft-coral: oklch(86% 0.07 22);
@@ -67,6 +68,7 @@ html {
   --color-bg: oklch(97.5% 0.035 95);
   --color-bg-soft: oklch(100% 0 0);
   --color-bg-muted: oklch(90% 0 0);
+  --color-bg-deep: oklch(21% 0.06 145);
   --color-bg-secondary: oklch(97.5% 0.035 95);
   --color-text: oklch(8% 0 0);
   --color-text-secondary: oklch(28% 0.005 95);
@@ -136,6 +138,7 @@ html {
   --color-bg: oklch(8% 0 0);
   --color-bg-soft: oklch(12% 0.005 95);
   --color-bg-muted: oklch(15% 0.005 95);
+  --color-bg-deep: oklch(16% 0.045 145);
   --color-bg-secondary: oklch(12% 0.005 95);
   --color-text: oklch(94% 0.02 95);
   --color-text-secondary: oklch(82% 0.015 95);
@@ -239,28 +242,80 @@ p, li {
 }
 
 .semver-flourish {
-  --semver-branch-teal: var(--color-pwv-teal);
-  --semver-branch-lavender: oklch(60% 0.225 295);
-  --semver-branch-periwinkle: oklch(65% 0.18 250);
-  --semver-label: var(--color-pwv-teal);
-  --semver-main: var(--color-pwv-teal);
-  --semver-node: var(--color-pwv-teal);
+  --semver-branch-teal: oklch(58% 0.12 192);
+  --semver-branch-lavender: oklch(52% 0.16 295);
+  --semver-branch-periwinkle: oklch(55% 0.13 250);
+  --semver-label: var(--color-text-secondary);
+  --semver-main-start: oklch(70% 0.14 145);
+  --semver-main-mid: oklch(66% 0.15 168);
+  --semver-main-end: var(--color-pwv-teal);
   color: var(--color-text);
   margin-inline: auto;
   max-width: 920px;
-  opacity: 0.98;
+}
+
+/* Draw-in reveal, scroll driven */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .semver-flourish .draw {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: semver-draw linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 42%;
+    }
+
+    .semver-flourish .reveal-fade {
+      opacity: 0;
+      animation: semver-reveal linear forwards;
+      animation-timeline: view();
+      animation-range: entry 20% cover 50%;
+    }
+  }
+}
+
+@keyframes semver-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes semver-reveal {
+  to {
+    opacity: 1;
+  }
+}
+
+.semver-flourish .signal-group {
+  opacity: 0;
+}
+
+.semver-flourish .signal-on {
+  opacity: 1;
+  transition: opacity 600ms ease-out;
 }
 
 .semver-guide {
   fill: none;
-  opacity: 0.7;
+  opacity: 0.55;
   stroke: var(--color-border);
   stroke-width: 1.5;
 }
 
+.semver-gradient-start {
+  stop-color: var(--semver-main-start);
+}
+
+.semver-gradient-mid {
+  stop-color: var(--semver-main-mid);
+}
+.semver-gradient-end {
+  stop-color: var(--semver-main-end);
+}
+
 .semver-main-rail {
   fill: none;
-  stroke: var(--semver-main);
+  stroke: url(#semver-main-gradient);
   stroke-width: 4.5;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -270,7 +325,7 @@ p, li {
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 2.25;
+  stroke-width: 2.5;
 }
 
 .semver-merge-teal {
@@ -288,43 +343,40 @@ p, li {
   stroke: var(--semver-branch-periwinkle);
 }
 
-.semver-nodes {
-  fill: var(--semver-node);
+.semver-nodes circle {
+  fill: var(--color-bg);
+  stroke-width: 3.5;
+}
+
+.semver-nodes .node-teal {
+  stroke: var(--semver-branch-teal);
+}
+
+.semver-nodes .node-lavender {
+  stroke: var(--semver-branch-lavender);
+}
+
+.semver-nodes .node-periwinkle {
+  stroke: var(--semver-branch-periwinkle);
 }
 
 .semver-milestone {
-  opacity: 0.78;
+  fill: currentColor;
+  opacity: 0.85;
 }
 
 .semver-labels {
   fill: var(--semver-label);
   font-family: var(--font-mono);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .semver-signal {
-  fill: var(--semver-main);
-  opacity: 0.64;
-}
-
-.semver-main-signal {
-  filter: drop-shadow(0 0 10px oklch(78% 0.165 192 / 0.24));
-}
-
-.semver-merge-signal {
-  fill: var(--semver-branch-teal);
-  opacity: 0.65;
-}
-
-.semver-merge-signal-alt {
-  fill: var(--semver-branch-periwinkle);
-  opacity: 0.58;
-}
-
-.semver-branch-particle {
-  opacity: 0.45;
+  fill: var(--semver-main-end);
+  opacity: 0.7;
 }
 
 .semver-branch-particle-teal {
@@ -339,17 +391,47 @@ p, li {
   fill: var(--semver-branch-periwinkle);
 }
 
+.semver-main-comet {
+  fill: var(--semver-main-end);
+  filter: drop-shadow(0 0 8px oklch(78% 0.165 192 / 0.45));
+}
+
+.semver-ping {
+  fill: none;
+  stroke: var(--semver-main-end);
+  stroke-width: 2;
+  transform-origin: 908px 16px;
+  animation: semver-ping 4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes semver-ping {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.4);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
 .dark .semver-guide {
-  opacity: 0.62;
+  opacity: 0.5;
 }
 
 .dark .semver-flourish {
-  --semver-branch-teal: var(--color-pwv-soft-teal);
-  --semver-branch-lavender: var(--color-pwv-soft-lavender);
-  --semver-branch-periwinkle: var(--color-pwv-soft-periwinkle);
-  --semver-label: var(--color-pwv-soft-teal);
-  --semver-main: var(--color-pwv-teal);
-  --semver-node: var(--color-pwv-soft-teal);
+  --semver-branch-teal: var(--color-pwv-teal);
+  --semver-branch-lavender: oklch(72% 0.17 295);
+  --semver-branch-periwinkle: oklch(74% 0.13 250);
+  --semver-label: var(--color-text-secondary);
+  --semver-main-start: oklch(74% 0.15 145);
+  --semver-main-mid: oklch(76% 0.15 168);
+  --semver-main-end: oklch(86% 0.13 192);
+}
+
+.dark .semver-nodes circle {
+  fill: oklch(8% 0 0);
 }
 
 @media (max-width: 640px) {
@@ -371,8 +453,20 @@ p, li {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .semver-signal {
+  .semver-signal,
+  .semver-ping {
     display: none;
+  }
+
+  .semver-flourish .draw,
+  .semver-flourish .reveal-fade {
+    animation: none;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+
+  .semver-flourish .signal-on {
+    opacity: 1;
   }
 }
 

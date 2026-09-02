@@ -1,50 +1,37 @@
 import { CtaButton } from "@/app/shared/cta-button";
 import { BrandLink } from "@/app/components/links";
+import { getFaqs, type Faq } from "@/app/queries/faqs";
 
-function FaqItem({ question, answer }: { question: string; answer: string }) {
+function FaqItem({ faq }: { faq: Faq }) {
   return (
     <div className="border-t border-border py-9">
-      <h3 className="text-xl font-black leading-tight sm:text-2xl">{question}</h3>
-      <p className="mt-3 leading-relaxed text-text-secondary">{answer}</p>
+      <h3 className="text-xl font-black leading-tight sm:text-2xl">
+        {faq.question}
+      </h3>
+      <div
+        className="prose mt-3 max-w-none leading-relaxed text-text-secondary"
+        dangerouslySetInnerHTML={{ __html: faq.content }}
+      />
     </div>
   );
 }
 
-export function FaqSection() {
+export const FaqSection = async () => {
+  const faqs = await getFaqs();
+
   return (
     <section className="bg-bg">
       <div className="mx-auto max-w-[1040px] px-6 py-16 sm:px-8 sm:py-24">
-        <div className="max-w-[820px]">
+        <div>
           <h2 className="mb-9 text-4xl font-black leading-none sm:text-5xl">FAQ</h2>
 
-          <FaqItem
-            question="Who should apply?"
-            answer="People already building with AI agents, developer tools, command-line workflows, or agentic software development practices. The strongest fit is a technical founder, senior developer, or hands-on builder actively experimenting in real projects."
-          />
-
-          <FaqItem
-            question="Are AgentCribs events public?"
-            answer="No. AgentCribs events are curated and space is limited. Apply to join AgentCribs first. Selected applicants receive a separate registration invite for events."
-          />
-
-          <FaqItem
-            question="How do applications work?"
-            answer="Applications are reviewed by our team. Selected applicants receive invitations to upcoming events and community opportunities. If you are not selected for a particular event, you remain on our list for future opportunities online and in person."
-          />
-
-          <FaqItem
-            question="What if I cannot attend an event?"
-            answer="You should still apply. We will follow up with selected applicants about future AgentCribs opportunities online and in person."
-          />
-
-          <FaqItem
-            question="Where are events held?"
-            answer="Event locations vary. Venue details will be shared with registered attendees for each event."
-          />
+          {faqs.map((faq) => (
+            <FaqItem key={faq.id} faq={faq} />
+          ))}
         </div>
 
         <div className="mt-14 border-t border-border pt-14">
-          <div className="max-w-[820px]">
+          <div>
             <h2 className="text-4xl font-black leading-[1.1] sm:text-5xl sm:leading-none">
               Ready to join AgentCribs?
             </h2>
@@ -77,4 +64,4 @@ export function FaqSection() {
       </div>
     </section>
   );
-}
+};

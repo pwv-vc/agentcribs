@@ -102,7 +102,15 @@ export const EventDetail = async ({ id }: { id: string }) => {
           <BackLink href={link("/community/events")}>
             &larr; Back to events
           </BackLink>
-          <CtaButton href="/apply" label="Apply to join the waitlist" />
+          {event.lumaEventUrl ? (
+            <CtaButton href={event.lumaEventUrl} label="Register now" />
+          ) : event.waitlist ? (
+            <CtaButton href="/apply" label="Register" />
+          ) : (
+            <span className="inline-block border border-brand-green px-6 py-3 text-base font-black text-brand-green sm:px-8 sm:py-4 sm:text-lg">
+              Details coming soon
+            </span>
+          )}
         </div>
       </main>
     </>
