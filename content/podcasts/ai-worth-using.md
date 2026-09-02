@@ -44,12 +44,13 @@ hosts:
   - name: Tom Preston-Werner
     role: Investor at PWV, GitHub co-founder
     bio: >-
-      Tom co-founded GitHub and created Jekyll, SemVer, and TOML. At
+      Tom co-founded [GitHub](https://github.com/) and created Jekyll,
+      SemVer, and TOML. At
       [PWV](https://www.pwv.com/), he invests early in companies like
       [Cursor](https://www.cursor.com/),
-      [Poolside](https://www.poolside.ai/),
       [fal](https://www.fal.ai/),
-      [Ona](https://www.ona.com/), and
+      [Ona](https://www.ona.com/), 
+      [Poolside](https://www.poolside.ai/) and
       [Weights & Biases](https://www.wandb.ai/). On the show, he is back in the
       builder seat, installing the software and asking the questions that only
       come up once the terminal is open.

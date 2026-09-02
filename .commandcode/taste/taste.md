@@ -24,6 +24,7 @@ See [ui/taste.md](ui/taste.md)
 
 - Sends terse requests (e.g., just "fix" followed by pasted tool warning/error output, or "center cta button"/"center this"/"bold gues names"/"fix the &amp; in ..." with IDE-selected lines as the only context) and expects the direct, minimal edit applied to the referenced code — not exploration or extended explanation. Confidence: 0.93
 - Will supply exact URLs/factual values directly (e.g., pasted the trailer's YouTube watch URL after searches stalled) — when a specific external link or fact is needed and quick searches don't find it, ask the user rather than running long web search/fetch chains. Confidence: 0.6
+- Use the exact URL the user gives for a link — do not "improve" it by inferring a more specific variant. When asked to link a company name mentioned in a bio (e.g., "GitHub" with https://github.com/), the link targets the company's site, not a personal profile — do not substitute a person's handle (e.g., github.com/mojombo) just because their other social links use it. Confidence: 0.7
 - For copywriting requests, explicitly asks for a few short candidate options up front ("give me a few ideas of short call to action copy") — present multiple concise options with visual previews, then wire in the winner once they pick. Confidence: 0.6
 
 # dev-server
