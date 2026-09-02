@@ -19,7 +19,7 @@ const podcastHref = featuredPodcast
 export function Header() {
   return (
     <header className="border-b border-border bg-bg">
-      <div className="mx-auto flex max-w-[1040px] items-center justify-between px-6 py-5 sm:px-8">
+      <div className="mx-auto flex max-w-[1040px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-6 py-4 sm:flex-nowrap sm:gap-y-0 sm:px-8 sm:py-5">
         <a
           href="/"
           className="group flex items-baseline gap-3 text-text no-underline"
@@ -27,11 +27,11 @@ export function Header() {
           <span className="text-xl font-black tracking-normal transition-colors group-hover:text-brand-green sm:text-2xl">
             AgentCribs
           </span>
-          <span className="hidden font-mono text-xs uppercase text-text-secondary sm:inline">
+          <span className="font-mono text-xs uppercase text-text-secondary">
             by PWV
           </span>
         </a>
-        <nav className="flex items-center gap-5">
+        <nav className="flex w-full items-center justify-between py-2 sm:w-auto sm:flex-none sm:justify-end sm:gap-5 sm:py-0">
           <NavLink
             href={podcastHref}
             className="flex items-center gap-1.5"
@@ -48,7 +48,7 @@ export function Header() {
           </NavLink>
           <a
             href={link("/apply")}
-            className="border border-brand-green bg-brand-green px-5 py-2 text-sm font-black text-accent-text no-underline transition-colors hover:border-brand-green-hover hover:bg-brand-green-hover"
+            className="border border-brand-green bg-brand-green px-4 py-2 text-sm font-black text-accent-text no-underline transition-colors hover:border-brand-green-hover hover:bg-brand-green-hover sm:px-5"
           >
             Apply
           </a>
