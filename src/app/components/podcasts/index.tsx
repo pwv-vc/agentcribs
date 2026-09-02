@@ -1,4 +1,5 @@
 import { link } from "@/app/shared/links";
+import type { ReactNode } from "react";
 import type {
   Podcast,
   PodcastEpisode,
@@ -7,6 +8,40 @@ import type {
 } from "@/app/queries/podcasts";
 import { RadioFilledIcon } from "@/app/components/icons";
 import { PodcastLinks } from "./podcast-links";
+
+// Renders `[text](url)` markdown links as real anchors. Text is passed through
+// as React children (auto-escaped by React), so raw HTML never renders; links
+// open in a new tab.
+export function renderInlineLinks(text: string): ReactNode[] {
+  const nodes: ReactNode[] = [];
+  const pattern = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = pattern.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      nodes.push(text.slice(lastIndex, match.index));
+    }
+    nodes.push(
+      <a
+        key={match.index}
+        href={match[2]}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-medium text-pwv-green underline decoration-pwv-green/40 underline-offset-4 transition-colors hover:text-pwv-green-hover hover:decoration-pwv-green"
+      >
+        {match[1]}
+      </a>,
+    );
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    nodes.push(text.slice(lastIndex));
+  }
+
+  return nodes;
+}
 
 const STREAM_CUSTOMER = "customer-k7ms15mqb129fv5n";
 
@@ -20,10 +55,12 @@ function streamIframeSrc(videoId: string) {
 export function PodcastTrailer({
   videoId,
   label,
+  intro,
   className = "",
 }: {
   videoId: string;
   label?: string;
+  intro?: ReactNode;
   className?: string;
 }) {
   return (
@@ -38,6 +75,11 @@ export function PodcastTrailer({
           allowFullScreen
         />
       </div>
+      {intro && (
+        <figcaption className="mt-3 text-sm leading-relaxed text-pwv-white/60">
+          {intro}
+        </figcaption>
+      )}
     </figure>
   );
 }
@@ -114,7 +156,7 @@ export function PodcastHostCard({ host }: { host: PodcastHost }) {
         height={1329}
         loading="lazy"
         decoding="async"
-        className="aspect-[4/3] w-full object-cover object-top"
+        className="aspect-[4/3] w-full bg-pwv-chartreuse object-cover object-top"
       />
       <div className="flex flex-1 flex-col p-6">
         <h3 className="text-2xl font-black leading-tight text-pwv-white">
@@ -122,7 +164,7 @@ export function PodcastHostCard({ host }: { host: PodcastHost }) {
         </h3>
         <p className="mt-1 text-sm font-bold text-pwv-green">{host.role}</p>
         <p className="mt-3 text-sm leading-relaxed text-pwv-white/75">
-          {host.bio}
+          {renderInlineLinks(host.bio)}
         </p>
         {host.links && (
           <PodcastLinks

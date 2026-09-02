@@ -12,6 +12,8 @@ export { UserPlusIcon } from "./user-plus";
 export { CalendarIcon } from "./calendar";
 export { UsersIcon } from "./users";
 export { RadioIcon } from "./radio";
+export { TicketCheckIcon } from "./ticket-check";
+export { MicAudioLinesIcon } from "./mic-audio-lines";
 export { FileTextIcon } from "./file-text";
 export { TimerIcon } from "./timer";
 export { FlagIcon } from "./flag";

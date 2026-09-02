@@ -24,6 +24,7 @@ trailer:
     apple: https://podcasts.apple.com/us/podcast/ai-worth-using-podcast-official-trailer/id6805129805?i=1000786058791
 links:
   show: https://aiworthusing.com
+  youtube: https://www.youtube.com/@AIWorthUsing
   apple: https://podcasts.apple.com/us/podcast/id6805129805
   linkedin: https://linkedin.com/company/ai-worth-using
   x: https://x.com/aiworthusing
@@ -41,11 +42,17 @@ hosts:
       linkedin: https://linkedin.com/in/samodio
       x: https://x.com/sodio
   - name: Tom Preston-Werner
-    role: Co-founder, GitHub
+    role: Investor at PWV, GitHub co-founder
     bio: >-
-      Tom co-founded GitHub and created Jekyll, SemVer, and TOML. On the show, he
-      is back in the builder seat, installing the software and asking the
-      questions that only come up once the terminal is open.
+      Tom co-founded GitHub and created Jekyll, SemVer, and TOML. At
+      [PWV](https://www.pwv.com/), he invests early in companies like
+      [Cursor](https://www.cursor.com/),
+      [Poolside](https://www.poolside.ai/),
+      [fal](https://www.fal.ai/),
+      [Ona](https://www.ona.com/), and
+      [Weights & Biases](https://www.wandb.ai/). On the show, he is back in the
+      builder seat, installing the software and asking the questions that only
+      come up once the terminal is open.
     image: /podcast/hero-tom-web.png
     imageAlt: Tom Preston-Werner, co-host of AI Worth Using
     links:

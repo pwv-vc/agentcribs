@@ -1,9 +1,8 @@
 import { Seo } from "@/app/components/seo";
 import { JsonLd } from "@/app/components/json-ld";
 import { BackLink } from "@/app/components/links";
-import { RadioFilledIcon } from "@/app/components/icons";
+import { MicAudioLinesIcon } from "@/app/components/icons";
 import {
-  PodcastTrailer,
   PodcastSeasonSection,
   PodcastHostCard,
   PodcastLogo,
@@ -127,7 +126,7 @@ export const PodcastDetail = async ({
           {podcast.sponsor && (
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-2 rounded-full border border-pwv-green/40 bg-pwv-green/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-pwv-green">
-                <RadioFilledIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                <MicAudioLinesIcon className="h-3.5 w-3.5" aria-hidden="true" />
                 Sponsored by {podcast.sponsor}
               </span>
             </div>
@@ -150,29 +149,32 @@ export const PodcastDetail = async ({
 
           <p className="mt-8">
             <a
-              href={podcast.url}
+              href={podcast.links?.youtube ?? podcast.url}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block border border-brand-green bg-brand-green px-6 py-3 text-base font-black text-accent-text no-underline transition-colors hover:border-brand-green-hover hover:bg-brand-green-hover sm:px-8 sm:py-4 sm:text-lg"
             >
-              Learn about the show
+              Subscribe
             </a>
           </p>
 
-          {podcast.trailer && (
+          {podcast.hosts.length > 0 && (
             <div className="mt-10 max-w-[820px]">
-              <PodcastTrailer
-                videoId={podcast.trailer.videoId}
-                label={podcast.trailer.label}
-              />
-              <PodcastSubscribeLinks
-                links={podcast.trailer.links}
-                className="mt-3"
-                labels={{ youtube: podcast.trailer.label }}
-              />
+              <div className="grid gap-6 sm:grid-cols-2">
+                {podcast.hosts.map((host) => (
+                  <PodcastHostCard key={host.name} host={host} />
+                ))}
+              </div>
             </div>
           )}
+
+          <PodcastSubscribeLinks
+            links={podcast.links}
+            className="mt-8 max-w-[820px] text-left"
+          />
+
         </div>
+
       </section>
 
       <section className="border-t border-border bg-bg">
@@ -203,17 +205,6 @@ export const PodcastDetail = async ({
       <section className="border-t border-border bg-bg">
         <div className="mx-auto max-w-[1040px] px-6 py-16 sm:px-8 sm:py-24">
           <div className="max-w-[820px]">
-            <span className="label-text">The Hosts</span>
-            <h2 className="mt-2 text-4xl font-black leading-none sm:text-5xl">
-              {podcast.hosts.map((h) => h.name.split(" ")[0]).join(" and ")}
-            </h2>
-          </div>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2">
-            {podcast.hosts.map((host) => (
-              <PodcastHostCard key={host.name} host={host} />
-            ))}
-          </div>
-          <div className="mt-14 border-t border-border pt-14">
             <div
               className="prose max-w-[820px]"
               dangerouslySetInnerHTML={{ __html: podcast.content }}

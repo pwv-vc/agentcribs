@@ -8,10 +8,10 @@ import {
 } from "@/app/components/icons";
 
 const PLATFORMS = [
+  { key: "youtube", label: "YouTube", Icon: YoutubeIcon },
   { key: "show", label: "The Show", Icon: GlobeIcon },
   { key: "apple", label: "Apple Podcasts", Icon: AppleIcon },
   { key: "spotify", label: "Spotify", Icon: SpotifyIcon },
-  { key: "youtube", label: "YouTube", Icon: YoutubeIcon },
   { key: "linkedin", label: "LinkedIn", Icon: LinkedinIcon },
   { key: "x", label: "X", Icon: XIcon },
 ] as const;
@@ -84,15 +84,12 @@ export function PodcastSubscribeLinks({
 
   return (
     <div className={`text-center ${className}`}>
-      <p className="text-md font-extrabold uppercase tracking-widest text-pwv-white/60">
-        Watch. Listen. Subscribe.
-      </p>
       <PodcastLinks
         links={links}
         size="sm"
         onDark
         labels={labels}
-        className="mt-2 justify-center"
+        className="mt-5 justify-center"
       />
     </div>
   );

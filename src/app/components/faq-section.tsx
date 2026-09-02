@@ -22,7 +22,7 @@ export const FaqSection = async () => {
   return (
     <section className="bg-bg">
       <div className="mx-auto max-w-[1040px] px-6 py-16 sm:px-8 sm:py-24">
-        <div className="max-w-[820px]">
+        <div>
           <h2 className="mb-9 text-4xl font-black leading-none sm:text-5xl">FAQ</h2>
 
           {faqs.map((faq) => (
@@ -31,7 +31,7 @@ export const FaqSection = async () => {
         </div>
 
         <div className="mt-14 border-t border-border pt-14">
-          <div className="max-w-[820px]">
+          <div>
             <h2 className="text-4xl font-black leading-[1.1] sm:text-5xl sm:leading-none">
               Ready to join AgentCribs?
             </h2>

@@ -22,7 +22,7 @@ See [ui/taste.md](ui/taste.md)
 
 # communication
 
-- Sends terse requests (e.g., just "fix" followed by pasted tool warning/error output, or "center this" with IDE-selected lines as the only context) and expects the direct, minimal edit applied to the referenced code — not exploration or extended explanation. Confidence: 0.60
+- Sends terse requests (e.g., just "fix" followed by pasted tool warning/error output, or "center cta button"/"center this"/"bold gues names"/"fix the &amp; in ..." with IDE-selected lines as the only context) and expects the direct, minimal edit applied to the referenced code — not exploration or extended explanation. Confidence: 0.93
 - Will supply exact URLs/factual values directly (e.g., pasted the trailer's YouTube watch URL after searches stalled) — when a specific external link or fact is needed and quick searches don't find it, ask the user rather than running long web search/fetch chains. Confidence: 0.6
 - For copywriting requests, explicitly asks for a few short candidate options up front ("give me a few ideas of short call to action copy") — present multiple concise options with visual previews, then wire in the winner once they pick. Confidence: 0.6
 
@@ -57,12 +57,7 @@ See [data/taste.md](data/taste.md)
 - When using `react-youtube` (or any third-party library that extends `React.Component`), the importing file must have the `"use client"` directive — otherwise the dev server will fail with "Class extends value undefined is not a constructor or null". Confidence: 0.70
 
 # icons
-- Store all icon components in `src/app/components/icons/` with individual component files and a barrel export `index.ts`. Confidence: 0.70
-- For event format badges: use a house-heart icon (lucide-style) for "in person" and a web camera icon for "remote" format indicators. Confidence: 0.75
-- Use recognizable platform/brand icons alongside external links (Spotify, Apple Podcasts, YouTube, LinkedIn, X/socials) so link destinations are visually identifiable. Confidence: 0.75
-- Icon components accept `{ className?: string }` and use `fill="currentColor"` (brand/platform glyphs) or lucide-style `stroke="currentColor"` with `strokeWidth={2}` (generic UI icons like globe), on a 24×24 viewBox. Confidence: 0.70
-- Present external platform/social links as icon + label pill buttons (rounded-full, bordered, small text), with `target="_blank" rel="noopener noreferrer"` — applies both to collections of links and to single links; when a section shows a plain caption for something that already has a link in content frontmatter (e.g., a trailer's YouTube URL), replace the caption with the icon pill. Confidence: 0.80
-
+See [icons/taste.md](icons/taste.md)
 # slack
 
 - Use Slack `button` block elements with `type: "button"`, `text`, and a `url` property — do NOT use `action_id` (which triggers Slack interactivity warnings). Use a simple link button with `url` pointing to the app URL, without `action_id` or interactive component configuration. Confidence: 0.70
@@ -94,6 +89,14 @@ See [data/taste.md](data/taste.md)
 - Cache-bust images via a version query param (e.g., `?v=N`) so image updates propagate easily; bumping one number in content/config should refresh all references to those images. Confidence: 0.8
 - Make OG image dimensions content-driven too — expose `ogImageWidth`/`ogImageHeight` frontmatter fields rendered as `og:image:width`/`og:image:height` instead of hardcoding pixel sizes (1200×630, 1500×1500) in page components. Confidence: 0.75
 - Add `sameAs` arrays to JSON-LD structured data entities (e.g., `PodcastSeries`) from content-driven social/platform links (show URL, LinkedIn, X, Apple) for entity identity. Confidence: 0.70
+
+# screenshots
+See [screenshots/taste.md](screenshots/taste.md)
+sameAs` arrays to JSON-LD structured data entities (e.g., `PodcastSeries`) from content-driven social/platform links (show URL, LinkedIn, X, Apple) for entity identity. Confidence: 0.70
+
+# screenshots
+See [screenshots/taste.md](screenshots/taste.md)
+ow URL, LinkedIn, X, Apple) for entity identity. Confidence: 0.70
 
 # screenshots
 See [screenshots/taste.md](screenshots/taste.md)

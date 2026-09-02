@@ -51,6 +51,7 @@ html {
   --color-pwv-teal: oklch(78% 0.165 192);
 
   --color-pwv-soft-green: oklch(92% 0.165 145);
+  --color-pwv-chartreuse: oklch(91.1% 0.13 120.84); /* #D5EF8A */
   --color-pwv-soft-teal: oklch(94% 0.115 192);
   --color-pwv-soft-yellow: oklch(94% 0.07 95);
   --color-pwv-soft-coral: oklch(86% 0.07 22);
